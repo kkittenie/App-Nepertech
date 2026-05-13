@@ -1,52 +1,312 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.app')
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+@section('content')
+
+    <div class="auth-page-wrap">
+
+        {{-- Animated background --}}
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+        <div class="bg-noise"></div>
+        <div class="particles" id="particles"></div>
+
+        <div class="auth-card">
+
+            {{-- ===== LEFT PANEL ===== --}}
+            <div class="auth-left">
+                <div class="left-noise"></div>
+                <div class="left-ring left-ring-1"></div>
+                <div class="left-ring left-ring-2"></div>
+                <div class="left-ring left-ring-3"></div>
+
+                <div class="left-content">
+                    <span class="left-eyebrow">Bergabung Bersama Kami</span>
+                    <h2 class="left-title">Rumah bagi setiap<br><em>talenta digital</em></h2>
+                    <div class="left-accent-line"></div>
+                    <p class="left-desc">
+                        Daftarkan diri dan dapatkan akses ke ekosistem
+                        Teaching Factory profesional SMKN 1 Cirebon.
+                    </p>
+                    <div class="left-features">
+                        <div class="left-feature">
+                            <div class="left-feature-icon">🎯</div>
+                            <span>Proyek industri nyata</span>
+                        </div>
+                        <div class="left-feature">
+                            <div class="left-feature-icon">🤖</div>
+                            <span>Teknologi AI &amp; IoT terkini</span>
+                        </div>
+                        <div class="left-feature">
+                            <div class="left-feature-icon">🏆</div>
+                            <span>Standar profesional industri</span>
+                        </div>
+                        <div class="left-feature">
+                            <div class="left-feature-icon">🌐</div>
+                            <span>Jaringan talenta digital</span>
+                        </div>
+                        <div class="left-feature">
+                            <div class="left-feature-icon">📜</div>
+                            <span>Sertifikasi kompetensi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="left-bottom">© {{ date('Y') }} TEFA · BLUD SMKN 1 Cirebon</div>
+            </div>
+
+            {{-- ===== RIGHT PANEL ===== --}}
+            <div class="auth-right">
+                <div class="auth-heading">Buat Akun</div>
+                <p class="auth-sub">
+                    Sudah punya akun?
+                    <a href="{{ route('login') }}">Masuk →</a>
+                </p>
+
+                {{-- Progress bar --}}
+                <div class="reg-progress">
+                    <div class="reg-progress-label">
+                        <span>Kelengkapan profil</span>
+                        <span id="progressPct">0%</span>
+                    </div>
+                    <div class="reg-progress-track">
+                        <div class="reg-progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
+
+                    {{-- Name row --}}
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label class="auth-form-label" for="first_name">Nama Depan</label>
+                            <div class="auth-input-wrap">
+                                <input type="text" id="first_name" name="first_name"
+                                    class="auth-input no-right-icon @error('first_name') is-invalid @enderror"
+                                    placeholder="cth. Budi" value="{{ old('first_name') }}" data-track autofocus>
+                                <i class="fas fa-user auth-input-icon"></i>
+                            </div>
+                            @error('first_name')
+                                <span class="auth-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="auth-form-group">
+                            <label class="auth-form-label" for="last_name">Nama Belakang</label>
+                            <div class="auth-input-wrap">
+                                <input type="text" id="last_name" name="last_name"
+                                    class="auth-input no-right-icon @error('last_name') is-invalid @enderror"
+                                    placeholder="cth. Santoso" value="{{ old('last_name') }}" data-track>
+                                <i class="fas fa-user auth-input-icon"></i>
+                            </div>
+                            @error('last_name')
+                                <span class="auth-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- Username & Email row --}}
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label class="auth-form-label" for="username">Username</label>
+                            <div class="auth-input-wrap">
+                                <input type="text" id="username" name="username"
+                                    class="auth-input no-right-icon @error('username') is-invalid @enderror"
+                                    placeholder="username" value="{{ old('username') }}" data-track>
+                                <i class="fas fa-at auth-input-icon"></i>
+                            </div>
+                            @error('username')
+                                <span class="auth-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="auth-form-group">
+                            <label class="auth-form-label" for="email">Email</label>
+                            <div class="auth-input-wrap">
+                                <input type="email" id="email" name="email"
+                                    class="auth-input no-right-icon @error('email') is-invalid @enderror"
+                                    placeholder="kamu@email.com" value="{{ old('email') }}" autocomplete="email" data-track>
+                                <i class="fas fa-envelope auth-input-icon"></i>
+                            </div>
+                            @error('email')
+                                <span class="auth-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- Password row --}}
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label class="auth-form-label" for="password">Password</label>
+                            <div class="auth-input-wrap">
+                                <input type="password" id="password" name="password"
+                                    class="auth-input @error('password') is-invalid @enderror" placeholder="Min. 8 karakter"
+                                    autocomplete="new-password" data-track oninput="checkStrength(this.value)">
+                                <i class="fas fa-lock auth-input-icon"></i>
+                                <button class="auth-toggle-pw" type="button" onclick="togglePw('password', 'eye1')">
+                                    <i class="fas fa-eye-slash" id="eye1"></i>
+                                </button>
+                            </div>
+                            <div class="pw-strength" id="pwStrength">
+                                <div class="pw-bar" id="bar1"></div>
+                                <div class="pw-bar" id="bar2"></div>
+                                <div class="pw-bar" id="bar3"></div>
+                                <div class="pw-bar" id="bar4"></div>
+                            </div>
+                            @error('password')
+                                <span class="auth-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="auth-form-group">
+                            <label class="auth-form-label" for="password_confirmation">Konfirmasi Password</label>
+                            <div class="auth-input-wrap">
+                                <input type="password" id="password_confirmation" name="password_confirmation"
+                                    class="auth-input" placeholder="Ulangi password" autocomplete="new-password" data-track>
+                                <i class="fas fa-lock auth-input-icon"></i>
+                                <button class="auth-toggle-pw" type="button"
+                                    onclick="togglePw('password_confirmation', 'eye2')">
+                                    <i class="fas fa-eye-slash" id="eye2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Bidang Minat --}}
+                    <div class="minat-section-label">
+                        Bidang Minat <span class="minat-optional">Opsional</span>
+                    </div>
+                    <div class="minat-grid">
+                        <label class="minat-option">
+                            <input type="radio" name="minat" value="web" {{ old('minat') === 'web' ? 'checked' : '' }}>
+                            <div class="minat-card">
+                                <span class="minat-emoji">🌐</span>
+                                <span>Web Dev</span>
+                            </div>
+                        </label>
+                        <label class="minat-option">
+                            <input type="radio" name="minat" value="mobile" {{ old('minat') === 'mobile' ? 'checked' : '' }}>
+                            <div class="minat-card">
+                                <span class="minat-emoji">📱</span>
+                                <span>Mobile</span>
+                            </div>
+                        </label>
+                        <label class="minat-option">
+                            <input type="radio" name="minat" value="ai" {{ old('minat') === 'ai' ? 'checked' : '' }}>
+                            <div class="minat-card">
+                                <span class="minat-emoji">🤖</span>
+                                <span>AI / ML</span>
+                            </div>
+                        </label>
+                        <label class="minat-option">
+                            <input type="radio" name="minat" value="iot" {{ old('minat') === 'iot' ? 'checked' : '' }}>
+                            <div class="minat-card">
+                                <span class="minat-emoji">📡</span>
+                                <span>IoT</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    {{-- Terms --}}
+                    <div class="auth-terms-row">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">
+                            Saya menyetujui
+                            <a href="{{ url('/syarat-ketentuan') }}">Syarat &amp; Ketentuan</a>
+                            dan
+                            <a href="{{ url('/privasi') }}">Kebijakan Privasi</a>
+                            Nepertech.
+                        </label>
+                    </div>
+
+                    {{-- Submit --}}
+                    <button type="submit" class="auth-btn-submit">
+                        Buat Akun <i class="fas fa-arrow-right"></i>
+                    </button>
+
+                </form>
+            </div>
+
         </div>
+    </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@endsection
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+@push('scripts')
+    <script>
+        /* ---- Floating particles ---- */
+        (function () {
+            const container = document.getElementById('particles');
+            const style = document.createElement('style');
+            style.textContent = `
+            @keyframes particleRise {
+                0%   { transform: translateY(0) scale(1); opacity: .12 }
+                80%  { opacity: .04 }
+                100% { transform: translateY(-105vh) scale(.4); opacity: 0 }
+            }
+        `;
+            document.head.appendChild(style);
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            for (let i = 0; i < 18; i++) {
+                const p = document.createElement('div');
+                const size = Math.random() * 6 + 3;
+                const x = Math.random() * 100;
+                const delay = Math.random() * 12;
+                const dur = Math.random() * 20 + 15;
+                const opacity = Math.random() * .2 + .04;
+                p.style.cssText = `
+                position: absolute; border-radius: 50%;
+                background: rgba(44,107,158,.2);
+                width: ${size}px; height: ${size}px;
+                left: ${x}%; bottom: -${size}px;
+                opacity: ${opacity};
+                animation: particleRise ${dur}s linear ${delay}s infinite;
+            `;
+                container.appendChild(p);
+            }
+        })();
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        /* ---- Stagger form groups on load ---- */
+        (function () {
+            document.querySelectorAll('.auth-form-group').forEach((g, i) => {
+                g.style.animation = `fadeUpItem .55s var(--ease) ${.6 + i * .08}s forwards`;
+            });
+        })();
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+        /* ---- Live progress tracker ---- */
+        function updateProgress() {
+            const inputs = document.querySelectorAll('[data-track]');
+            let filled = 0;
+            inputs.forEach(inp => { if (inp.value.trim()) filled++; });
+            const pct = Math.round((filled / inputs.length) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressPct').textContent = pct + '%';
+        }
+        document.querySelectorAll('[data-track]').forEach(inp => {
+            inp.addEventListener('input', updateProgress);
+        });
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+        /* ---- Password strength indicator ---- */
+        function checkStrength(val) {
+            const bars = [1, 2, 3, 4].map(n => document.getElementById('bar' + n));
+            bars.forEach(b => { b.className = 'pw-bar'; });
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+            for (let i = 0; i < score; i++) bars[i].classList.add('filled-' + score);
+        }
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        /* ---- Password visibility toggle ---- */
+        function togglePw(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye-slash';
+            }
+        }
+    </script>
+@endpush
