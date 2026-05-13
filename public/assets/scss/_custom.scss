@@ -1,14 +1,14 @@
 .overlay {
-	position: fixed;
-	inset: 0;
-	background: rgba(0,0,0,.45);
-	backdrop-filter: blur(1px);
-	display: none;
-	z-index: 1030;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(1px);
+    display: none;
+    z-index: 1030;
 }
 
 .overlay.show {
-	display: block;
+    display: block;
 }
 
 /* =========================
@@ -16,100 +16,102 @@
 ========================= */
 
 .sidebar {
-	width: 240px;
-	height: 100vh;
+    width: 240px;
+    height: 100vh;
 
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1030;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1030;
 
-	background: #ffffff;
+    background: #ffffff;
 
-	border-right: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
 
-	transition: width .3s ease, left .3s ease;
+    transition:
+        width 0.3s ease,
+        left 0.3s ease;
 
-	/* =========================
+    /* =========================
 	   LOGO AREA
 	========================= */
 
-	.logo-area {
-		width: 100%;
-		height: 50px;
+    .logo-area {
+        width: 100%;
+        height: 50px;
 
-		display: flex;
-		align-items: center;
+        display: flex;
+        align-items: center;
 
-		padding: 0 20px !important;
-		margin-bottom: 8px !important; 
+        padding: 0 20px !important;
+        margin-bottom: 8px !important;
 
-		background: #ffffff;
+        background: #ffffff;
 
-		border-bottom: 1px solid #e2e8f0;
-	}
+        border-bottom: 1px solid #e2e8f0;
+    }
 
-	.logo-title {
-		font-family: 'Inter', sans-serif;
-		font-size: 10px;
-		font-weight: 800;
+    .logo-title {
+        font-family: "Inter", sans-serif;
+        font-size: 10px;
+        font-weight: 800;
 
-		letter-spacing: -0.04em;
+        letter-spacing: -0.04em;
 
-		color: #0a2540;
+        color: #0a2540;
 
-		margin-left: 4px;
+        margin-left: 4px;
 
-		span {
-			color: #2c6b9e;
-		}
-	}
+        span {
+            color: #2c6b9e;
+        }
+    }
 
-	/* =========================
+    /* =========================
 	   NAVIGATION
 	========================= */
 
-	.nav-link {
-		display: grid;
-		grid-template-columns: 35px 1fr;
+    .nav-link {
+        display: grid;
+        grid-template-columns: 35px 1fr;
 
-		align-items: center;
+        align-items: center;
 
-		padding: 14px 20px;
-		margin: 6px 12px;
+        padding: 14px 20px;
+        margin: 6px 12px;
 
-		column-gap: 14px;
+        column-gap: 14px;
 
-		border-radius: 14px;
+        border-radius: 14px;
 
-		font-size: 15px;
-		font-weight: 600;
-	}
+        font-size: 15px;
+        font-weight: 600;
+    }
 
-	/* ICON */
-	.nav-link i {
-		font-size: 22px;
+    /* ICON */
+    .nav-link i {
+        font-size: 22px;
 
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-	/* TEXT */
-	.nav-link .nav-text {
-		display: block;
-	}
+    /* TEXT */
+    .nav-link .nav-text {
+        display: block;
+    }
 
-	/* ACCOUNT TITLE */
-	small.nav-text {
-		color: #94a3b8;
+    /* ACCOUNT TITLE */
+    small.nav-text {
+        color: #94a3b8;
 
-		font-size: 12px;
-		font-weight: 700;
+        font-size: 12px;
+        font-weight: 700;
 
-		letter-spacing: 1px;
-		text-transform: uppercase;
-	}
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
 }
 
 /* =========================
@@ -117,28 +119,28 @@
 ========================= */
 
 .sidebar.collapsed {
-	width: 70px;
+    width: 70px;
 
-	.logo-area {
-		padding: 0 16px !important;
-		justify-content: center;
-	}
+    .logo-area {
+        padding: 0 16px !important;
+        justify-content: center;
+    }
 
-	.nav-link {
-		padding: 14px 18px;
-		margin: 6px 8px;
-		justify-content: center;
+    .nav-link {
+        padding: 14px 18px;
+        margin: 6px 8px;
+        justify-content: center;
 
-		i {
-			margin-right: 0;
-		}
-	}
+        i {
+            margin-right: 0;
+        }
+    }
 
-	.nav-text,
-	.logo-title,
-	small {
-		display: none;
-	}
+    .nav-text,
+    .logo-title,
+    small {
+        display: none;
+    }
 }
 
 /* =========================
@@ -146,15 +148,15 @@
 ========================= */
 
 .topbar {
-	height: 70px;
+    height: 70px;
 
-	margin-left: 240px;
+    margin-left: 240px;
 
-	transition: margin-left .3s ease;
+    transition: margin-left 0.3s ease;
 }
 
 .topbar.full {
-	margin-left: 70px;
+    margin-left: 70px;
 }
 
 /* =========================
@@ -162,13 +164,13 @@
 ========================= */
 
 .content {
-	margin-left: 240px;
+    margin-left: 240px;
 
-	transition: margin-left .3s ease;
+    transition: margin-left 0.3s ease;
 }
 
 .content.full {
-	margin-left: 70px;
+    margin-left: 70px;
 }
 
 /* =========================
@@ -176,30 +178,20 @@
 ========================= */
 
 @media (max-width: 992px) {
+    .sidebar {
+        left: -240px;
+    }
 
-	.sidebar {
-		left: -240px;
-	}
+    .sidebar.mobile-show {
+        left: 0;
+    }
 
-	.sidebar.mobile-show {
-		left: 0;
-	}
+    .topbar {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
 
-	.topbar {
-		margin-left: 0 !important;
-		width: 100% !important;
-	}
-
-	.content {
-		margin-left: 0 !important;
-	}
+    .content {
+        margin-left: 0 !important;
+    }
 }
-
-/* =========================
-   IMPORTS
-========================= */
-
-@import "./avatar";
-@import "./button";
-@import "./icon-shape";
-@import "./utilities";
