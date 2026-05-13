@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
+<<<<<<< HEAD
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\InventoryController;
@@ -30,6 +32,16 @@ Route::middleware('guest')->group(function () {
         ->name('register.process');
 
 });
+=======
+Route::get('/', [HomeController::class, 'beranda']);
+Route::get('/profil', [HomeController::class, 'profil']);
+Route::get('/layanan', [HomeController::class, 'layanan']);
+Route::get('/fasilitas', [HomeController::class, 'fasilitas']);
+Route::get('/galeri', [HomeController::class, 'galeri']);
+Route::get('/kontak', [HomeController::class, 'kontak']);
+Route::get('/pendaftaran', [HomeController::class, 'pendaftaran'])
+    ->middleware('auth');
+>>>>>>> 2ea55c39820059a9ac9ce1ce4c889bd8ce38a487
 
 Route::post('/logout',
     [AuthController::class, 'logout'])
@@ -39,6 +51,7 @@ Route::post('/logout',
 
 
 Route::middleware('auth')->group(function () {
+<<<<<<< HEAD
 
     Route::get('/',
         [DashboardAdminController::class, 'index'])
@@ -102,3 +115,13 @@ Route::middleware('auth')->group(function () {
     });
 
 });
+=======
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])
+        ->name('profile.photo');
+});
+
+require __DIR__ . '/auth.php';
+>>>>>>> 2ea55c39820059a9ac9ce1ce4c889bd8ce38a487
