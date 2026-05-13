@@ -1,0 +1,64 @@
+.icon-xxs {
+  width: $icon-size-xxs;
+  height: $icon-size-xxs;
+}
+
+.icon-xs {
+  width: $icon-size-xs;
+  height: $icon-size-xs;
+}
+
+.icon-sm {
+  width: $icon-size-sm;
+  height: $icon-size-sm;
+}
+
+.icon-md {
+  width: $icon-size-md;
+  height: $icon-size-md;
+}
+
+.icon-lg {
+  width: $icon-size-lg;
+  height: $icon-size-lg;
+}
+
+.icon-xl {
+  width: $icon-size-xl;
+  height: $icon-size-xl;
+}
+
+.icon-xxl {
+  width: $icon-size-xxl;
+  height: $icon-size-xxl;
+}
+
+.icon-xxxl {
+  width: $icon-size-xxxl;
+  height: $icon-size-xxxl;
+}
+
+.icon-shape {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 18px;
+
+  background: rgba($primary, .08);
+
+  color: $primary;
+
+  transition: all .3s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, $primary, $info);
+    color: $white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba($primary, .15);
+    -webkit-transform: translateY(-3px);
+    -moz-transform: translateY(-3px);
+    -ms-transform: translateY(-3px);
+    -o-transform: translateY(-3px);
+}
+}

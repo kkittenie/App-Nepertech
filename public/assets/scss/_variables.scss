@@ -1,0 +1,223 @@
+/* =========================
+   CUSTOM BOOTSTRAP THEME
+   Elegant Navy Blue Theme
+========================= */
+
+/* ==================== COLORS ==================== */
+
+/* Gray Scale */
+$gray-50:  #fafafa !default;
+$gray-100: #f7f9fc !default;
+$gray-200: #e2e8f0 !default;
+$gray-300: #d4d4d4 !default;
+$gray-400: #a3a3a3 !default;
+$gray-500: #737373 !default;
+$gray-600: #4a5568 !default;
+$gray-700: #334155 !default;
+$gray-800: #1e293b !default;
+$gray-900: #0a2540 !default;
+$gray-950: #071b30 !default;
+
+/* Main Colors */
+$navy-primary: #0a2540 !default;
+$navy-deep: #071b30 !default;
+$blue-accent: #2c6b9e !default;
+$blue-light: #4a90c4 !default;
+
+$green:  #00C951 !default;
+$yellow: #F0B100 !default;
+$red:    #FB2C36 !default;
+
+/* Bootstrap Theme */
+$primary:   $navy-primary !default;
+$secondary: $gray-600 !default;
+$success:   $green !default;
+$info:      $blue-accent !default;
+$warning:   $yellow !default;
+$danger:    $red !default;
+$light:     $gray-100 !default;
+$dark:      $gray-950 !default;
+
+/* ==================== BODY ==================== */
+
+$body-bg:       #ffffff !default;
+$body-color:    #0d1117 !default;
+
+$text-muted:    #4a5568 !default;
+
+$link-color:              $navy-primary !default;
+$link-hover-color:        $blue-accent !default;
+$link-decoration:         none !default;
+$link-hover-decoration:   none !default;
+
+/* ==================== BORDERS ==================== */
+
+$border-color:              #e2e8f0 !default;
+$border-color-translucent:  rgba(226, 232, 240, 0.5) !default;
+
+$border-radius-sm: 12px !default;
+$border-radius:    20px !default;
+$border-radius-lg: 28px !default;
+$border-radius-xl: 40px !default;
+
+$enable-rounded: true !default;
+
+/* ==================== SHADOWS ==================== */
+
+$box-shadow-sm: 0 4px 24px rgba(10, 37, 64, 0.07) !default;
+$box-shadow:    0 16px 40px rgba(10, 37, 64, 0.12) !default;
+$box-shadow-lg: 0 32px 64px rgba(10, 37, 64, 0.16) !default;
+
+/* ==================== TYPOGRAPHY ==================== */
+
+$font-family-base: 'Inter', sans-serif !default;
+
+$font-size-root: null !default;
+$font-size-base: 0.875rem !default;
+$font-size-sm:   $font-size-base * .85 !default;
+$font-size-lg:   $font-size-base * 1.25 !default;
+
+$font-weight-normal: 400 !default;
+$font-weight-semibold: 600 !default;
+$font-weight-bold: 700 !default;
+
+$headings-font-family: 'Inter', sans-serif !default;
+$headings-font-weight: 700 !default;
+$headings-line-height: 1.2 !default;
+$headings-color: $navy-primary !default;
+
+$h1-font-size: $font-size-base * 3.5 !default;
+$h2-font-size: $font-size-base * 2.6 !default;
+$h3-font-size: $font-size-base * 2 !default;
+$h4-font-size: $font-size-base * 1.6 !default;
+$h5-font-size: $font-size-base * 1.3 !default;
+$h6-font-size: $font-size-base !default;
+
+/* ==================== SPACING ==================== */
+
+$spacer: 1rem !default;
+
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 2,
+  6: $spacer * 2.5,
+  7: $spacer * 3,
+  8: $spacer * 4,
+  9: $spacer * 5,
+  10: $spacer * 6,
+  11: $spacer * 8,
+) !default;
+
+/* ==================== GRID ==================== */
+
+$grid-gutter-width: 2rem !default;
+
+/* ==================== BUTTONS ==================== */
+
+$btn-padding-y: 0.75rem !default;
+$btn-padding-x: 1.5rem !default;
+
+$btn-font-family: 'Inter', sans-serif !default;
+$btn-font-weight: 600 !default;
+
+$btn-border-radius: 999px !default;
+$btn-border-radius-sm: 999px !default;
+$btn-border-radius-lg: 999px !default;
+
+$btn-transition: all .3s cubic-bezier(0.22, 1, 0.36, 1) !default;
+
+/* ==================== INPUTS ==================== */
+
+$input-padding-y: 0.75rem !default;
+$input-padding-x: 1rem !default;
+
+$input-bg: #ffffff !default;
+$input-color: #0d1117 !default;
+
+$input-border-color: #e2e8f0 !default;
+$input-border-radius: 14px !default;
+
+$input-focus-border-color: $blue-accent !default;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba(44, 107, 158, 0.15) !default;
+
+/* ==================== CARDS ==================== */
+
+$card-border-color: #e2e8f0 !default;
+$card-border-radius: 28px !default;
+
+$card-bg: #ffffff !default;
+
+$card-box-shadow: 0 4px 24px rgba(10, 37, 64, 0.07) !default;
+
+$card-cap-bg: transparent !default;
+
+/* ==================== NAVBAR ==================== */
+
+$navbar-padding-y: 1rem !default;
+
+$navbar-light-color: #0d1117 !default;
+$navbar-light-hover-color: $navy-primary !default;
+$navbar-light-active-color: $navy-primary !default;
+
+$navbar-light-brand-color: $navy-primary !default;
+$navbar-light-brand-hover-color: $blue-accent !default;
+
+/* ==================== TABLE ==================== */
+
+$table-border-color: #e2e8f0 !default;
+$table-striped-bg: rgba(10, 37, 64, 0.02) !default;
+
+$table-th-font-weight: 600 !default;
+
+/* ==================== MODAL ==================== */
+
+$modal-content-border-radius: 28px !default;
+$modal-content-border-color: #e2e8f0 !default;
+$modal-content-box-shadow-sm-up: 0 32px 64px rgba(10, 37, 64, 0.16) !default;
+
+/* ==================== DROPDOWN ==================== */
+
+$dropdown-border-color: #e2e8f0 !default;
+$dropdown-border-radius: 18px !default;
+
+$dropdown-link-hover-bg: rgba(10, 37, 64, 0.04) !default;
+
+/* ==================== ACCORDION ==================== */
+
+$accordion-border-radius: 20px !default;
+$accordion-border-color: #e2e8f0 !default;
+
+$accordion-button-active-bg: rgba(44, 107, 158, 0.08) !default;
+$accordion-button-active-color: $navy-primary !default;
+
+/* ==================== BADGE ==================== */
+
+$badge-border-radius: 999px !default;
+$badge-font-weight: 600 !default;
+
+/* ==================== ALERT ==================== */
+
+$alert-border-radius: 20px !default;
+
+/* ==================== LIST GROUP ==================== */
+
+$list-group-border-radius: 20px !default;
+$list-group-border-color: #e2e8f0 !default;
+
+/* ==================== OFFCANVAS ==================== */
+
+$offcanvas-border-color: #e2e8f0 !default;
+
+/* ==================== TOOLTIP ==================== */
+
+$tooltip-border-radius: 12px !default;
+
+/* ==================== ENABLE ==================== */
+
+$enable-negative-margins: true !default;
+$enable-shadows: true !default;
+$enable-gradients: false !default;
