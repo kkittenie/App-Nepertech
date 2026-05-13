@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.landing')
 
 @section('content')
 
@@ -95,7 +95,7 @@
                         <span class="section-tag" style="margin-bottom:8px">Akun</span>
                         <h2 class="pd-section-title">Profil <span class="gradient-text">Saya</span></h2>
                     </div>
-                    <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-arrow">
+                    <a href="{{ route('profile') }}" class="btn btn-primary btn-arrow">
                         Edit Profil <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -281,7 +281,7 @@
                                 <span class="pd-info-val">••••••••••••</span>
                             </div>
                         </div>
-                        <a href="{{ route('profile.edit') }}" class="btn btn-outline btn-arrow" style="font-size:13px;padding:9px 20px">
+                        <a href="{{ route('profile') }}" class="btn btn-outline btn-arrow" style="font-size:13px;padding:9px 20px">
                             Ubah <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -312,7 +312,7 @@
                         Perbarui informasi profil dan kelola preferensi akunmu.
                     </p>
                     <div style="display:flex;gap:14px;flex-wrap:wrap">
-                        <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-arrow">
+                        <a href="{{ route('profile') }}" class="btn btn-primary btn-arrow">
                             Edit Profil <i class="fas fa-arrow-right"></i>
                         </a>
                         <form method="POST" action="{{ route('logout') }}">

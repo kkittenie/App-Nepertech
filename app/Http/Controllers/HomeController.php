@@ -39,7 +39,7 @@ class HomeController extends Controller
     public function pendaftaran()
     {
         if (auth()->check()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('profile');
         }
 
         return view('auth.register');

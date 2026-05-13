@@ -86,8 +86,8 @@
 
             @auth
                 <li>
-                    <a href="{{ route('dashboard') }}"
-                        class="nav-profile-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('profile') }}"
+                        class="nav-profile-link {{ request()->is('profile') ? 'active' : '' }}">
 
                         <i class="fas fa-user-circle"></i>
 

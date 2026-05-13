@@ -2838,3 +2838,662 @@ section {
     display: none !important;
     width: 0 !important;
 }
+
+/* ==================== MOBILE RESPONSIVE ADDITIONS ==================== */
+/* Add these rules to your existing CSS file (or include as a separate file) */
+
+/* ---- HERO SECTION (Mobile) ---- */
+@media (max-width: 768px) {
+    .hero {
+        padding: 90px 0 60px;
+        min-height: 100svh;
+        align-items: flex-start;
+    }
+
+    .hero-inner {
+        padding: 0 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        margin-top: 0;
+    }
+
+    .hero-content {
+        max-width: 100%;
+        width: 100%;
+        text-align: left;
+        margin-top: 0;
+    }
+
+    .hero-accent-line {
+        margin-top: 16px;
+        margin-bottom: 8px;
+    }
+
+    .hero-eyebrow {
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .hero-badge {
+        font-size: 11px;
+        padding: 6px 14px;
+    }
+
+    h1.hero-title {
+        font-size: clamp(32px, 9vw, 48px);
+        line-height: 1.05;
+        margin-bottom: 14px;
+    }
+
+    .hero-sub {
+        font-size: 15px;
+        margin-bottom: 20px;
+        line-height: 1.65;
+    }
+
+    .hero-buttons {
+        gap: 12px;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 24px;
+        font-size: 15px;
+    }
+
+    .hero-stats {
+        margin-top: 32px;
+        padding: 18px 16px;
+        width: 100%;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        gap: 0;
+    }
+
+    .stat-item {
+        padding: 0 10px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .stat-item:first-child {
+        padding-left: 0;
+    }
+    .stat-item:last-child {
+        padding-right: 0;
+    }
+
+    .stat-number {
+        font-size: 26px;
+    }
+
+    .stat-label {
+        font-size: 10px;
+        letter-spacing: 0.8px;
+    }
+
+    .stat-divider {
+        display: block;
+        height: 36px;
+        width: 1px;
+    }
+
+    /* Hide the floating visual on small screens */
+    .hero-visual {
+        display: none;
+    }
+
+    .hero-scroll-hint {
+        bottom: 24px;
+    }
+}
+
+@media (max-width: 400px) {
+    .stat-divider {
+        display: none;
+    }
+    .hero-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0;
+        text-align: center;
+    }
+    .stat-item {
+        padding: 0 6px;
+        align-items: center;
+    }
+}
+
+/* ---- NAVBAR (Mobile) ---- */
+@media (max-width: 900px) {
+    .navbar,
+    .navbar.scrolled {
+        padding: 14px 20px;
+    }
+
+    /* Overlay behind open menu */
+    .nav-links.active::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(7, 27, 48, 0.45);
+        z-index: -1;
+        backdrop-filter: blur(4px);
+    }
+
+    .nav-links {
+        padding: 88px 28px 40px;
+        width: 82%;
+        max-width: 320px;
+        box-shadow: -24px 0 80px rgba(0, 0, 0, 0.18);
+        gap: 22px;
+    }
+
+    .nav-link {
+        font-size: 16px;
+    }
+
+    .btn-nav-cta {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+/* ---- BUTTONS (Mobile) ---- */
+@media (max-width: 480px) {
+    .btn {
+        padding: 12px 22px;
+        font-size: 14px;
+    }
+}
+
+/* ---- CONTAINER (Mobile) ---- */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+}
+
+/* ---- SECTION SPACING (Mobile) ---- */
+@media (max-width: 768px) {
+    section {
+        padding: 60px 0;
+    }
+
+    .section-header {
+        margin-bottom: 36px;
+    }
+
+    .section-desc {
+        font-size: 15px;
+    }
+
+    h2 {
+        font-size: clamp(24px, 6vw, 36px);
+    }
+}
+
+/* ---- GRID (Mobile) ---- */
+@media (max-width: 640px) {
+    .grid-3 {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+    .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+/* ---- CARDS (Mobile) ---- */
+@media (max-width: 768px) {
+    .card {
+        padding: 28px 24px;
+        border-radius: var(--radius-md);
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+    }
+
+    .card-news-img {
+        height: 180px;
+    }
+}
+
+/* ---- PAGE HERO (Mobile) ---- */
+@media (max-width: 768px) {
+    .page-hero {
+        padding: 110px 20px 56px;
+    }
+
+    .page-hero h1 {
+        font-size: clamp(28px, 8vw, 44px);
+    }
+
+    .page-hero-sub {
+        font-size: 15px;
+    }
+}
+
+/* ---- PROFIL SAMBUTAN (Mobile) ---- */
+@media (max-width: 768px) {
+    .profil-sambutan {
+        gap: 28px;
+        padding: 28px 20px;
+        border-radius: var(--radius-lg);
+    }
+
+    .sambutan-icon-wrap {
+        width: 72px;
+        height: 72px;
+    }
+
+    .sambutan-icon-wrap i {
+        font-size: 30px;
+    }
+
+    .profil-sambutan blockquote {
+        font-size: 15px;
+    }
+}
+
+/* ---- CTA SECTION (Mobile) ---- */
+@media (max-width: 768px) {
+    .cta-section {
+        margin: 20px 16px 40px;
+        border-radius: 24px;
+    }
+
+    .cta-inner {
+        padding: 48px 24px;
+    }
+
+    .cta-inner h2 {
+        font-size: clamp(22px, 6vw, 32px);
+    }
+
+    .cta-inner p {
+        font-size: 15px;
+    }
+
+    .cta-inner .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-inner .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
+}
+
+/* ---- GALLERY (Mobile) ---- */
+@media (max-width: 640px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .gallery-item {
+        border-radius: var(--radius-sm);
+    }
+}
+
+/* ---- KONTAK GRID (Mobile) ---- */
+@media (max-width: 768px) {
+    .kontak-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+
+    .map-wrap {
+        min-height: 240px;
+    }
+}
+
+/* ---- REGISTRATION (Mobile) ---- */
+@media (max-width: 640px) {
+    .reg-card {
+        padding: 0;
+    }
+
+    .step-indicators {
+        gap: 0;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        justify-content: flex-start;
+        scrollbar-width: none;
+    }
+
+    .step-indicators::-webkit-scrollbar {
+        display: none;
+    }
+
+    .step-connector {
+        width: 24px;
+        flex-shrink: 0;
+    }
+
+    .step-dot-wrap span {
+        font-size: 10px;
+    }
+
+    .program-options {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .form-nav {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .form-nav .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ---- FOOTER (Mobile) ---- */
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 640px) {
+    .footer {
+        padding: 48px 0 24px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        margin-bottom: 36px;
+    }
+
+    .footer-col p,
+    .footer-col a {
+        font-size: 15px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+        font-size: 12px;
+    }
+}
+
+/* ---- NILAI CAROUSEL (Mobile) ---- */
+@media (max-width: 768px) {
+    .nilai-carousel-section {
+        padding: 56px 0;
+    }
+
+    .nilai-card {
+        flex: 0 0 calc(85vw - 32px);
+        padding: 28px 24px 24px;
+    }
+
+    .nilai-card-number {
+        font-size: 64px;
+    }
+}
+
+/* ---- PROFILE DASHBOARD (Mobile) ---- */
+@media (max-width: 768px) {
+    .pd-shell {
+        grid-template-columns: 1fr;
+        margin-top: 60px;
+    }
+
+    .pd-sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--gray-border);
+        padding: 20px 16px;
+    }
+
+    .pd-profile-card {
+        padding: 22px 16px 18px;
+    }
+
+    .pd-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .pd-nav-item {
+        padding: 8px 12px;
+        font-size: 13px;
+        border-radius: 99px;
+        flex: 0 0 auto;
+    }
+
+    .pd-nav-chevron,
+    .pd-nav-divider {
+        display: none;
+    }
+
+    .pd-main {
+        padding: 20px 16px;
+    }
+
+    .pd-kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .pd-kpi-card {
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .pd-kpi-val {
+        font-size: 14px;
+    }
+
+    .pd-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pd-info-item:nth-child(odd) {
+        padding-right: 0;
+        border-right: none;
+    }
+
+    .pd-info-item:nth-child(even) {
+        padding-left: 0;
+    }
+
+    .pd-info-item:nth-last-child(-n + 2) {
+        border-bottom: 1px solid var(--gray-border);
+    }
+
+    .pd-info-item:last-child {
+        border-bottom: none;
+    }
+
+    .pd-identity-banner {
+        padding: 22px 20px;
+        border-radius: var(--radius-lg);
+    }
+
+    .pd-id-inner {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .pd-id-badges {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .pd-cta-banner {
+        padding: 22px 20px;
+        border-radius: var(--radius-lg);
+    }
+
+    .pd-cta-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .pd-layanan-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .pd-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 420px) {
+    .pd-layanan-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pd-kpi-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ---- VISI MISI (Mobile) ---- */
+@media (max-width: 640px) {
+    .visi-misi-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+}
+
+/* ---- PRICE TABLE (Mobile) ---- */
+@media (max-width: 480px) {
+    .price-row {
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-start;
+        padding: 14px 0;
+    }
+
+    .price-val {
+        font-size: 15px;
+    }
+}
+
+/* ---- TOUCH / TAP IMPROVEMENTS ---- */
+@media (hover: none) {
+    /* Remove hover-only transforms on touch devices */
+    .card:hover {
+        transform: none;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .card:hover::before {
+        opacity: 0;
+    }
+
+    .btn-primary:hover,
+    .btn-outline:hover,
+    .btn-cta:hover {
+        transform: none;
+    }
+
+    /* Increase tap target sizes */
+    .nav-link,
+    .card-link,
+    .footer-col a {
+        padding: 4px 0;
+        display: inline-block;
+    }
+
+    .social-links a {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* ---- SAFE AREA (iPhone notch / home bar) ---- */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .footer {
+        padding-bottom: calc(32px + env(safe-area-inset-bottom));
+    }
+
+    .hero {
+        padding-top: calc(90px + env(safe-area-inset-top));
+    }
+}
+
+/* ---- PREVENT CONTENT OVERFLOW ---- */
+img,
+video,
+iframe,
+embed,
+object {
+    max-width: 100%;
+    height: auto;
+}
+
+.map-wrap iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+    display: block;
+}
+
+/* ---- TYPOGRAPHY SCALE ADJUSTMENTS ---- */
+@media (max-width: 480px) {
+    h3 {
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 14.5px;
+    }
+
+    .section-tag {
+        font-size: 10px;
+    }
+}
+
+/* ---- SMOOTH SCROLL ---- */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Disable smooth scroll for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
