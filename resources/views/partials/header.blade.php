@@ -75,8 +75,8 @@
 
             @guest
                 <li>
-                    <a href="{{ url('/pendaftaran') }}"
-                        class="nav-link btn-nav-cta {{ request()->is('pendaftaran') ? 'active' : '' }}">
+                    <a href="{{ url('/register') }}"
+                        class="nav-link btn-nav-cta {{ request()->is('register') ? 'active' : '' }}">
 
                         Daftar
 

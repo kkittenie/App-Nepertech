@@ -37,11 +37,9 @@ Route::middleware('guest')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [HomeController::class, 'beranda'])
-    ->name('home');
+Route::get('/', [HomeController::class, 'beranda'])->name('home');
 
-Route::get('/profil', [HomeController::class, 'profil'])
-    ->name('profil');
+Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
 
 Route::get('/layanan', [HomeController::class, 'layanan']);
 Route::get('/fasilitas', [HomeController::class, 'fasilitas']);
@@ -83,6 +81,7 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::get('/dashboard', [DashboardAdminController::class, 'index'])
+        ->middleware('admin')
         ->name('dashboard');
 
 

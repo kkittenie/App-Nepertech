@@ -17,21 +17,36 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
+        $request->validate([
+            'login' => ['required'],
             'password' => ['required'],
         ]);
 
+        $field = filter_var($request->login, FILTER_VALIDATE_EMAIL)
+            ? 'email'
+            : 'username';
+
         $remember = $request->boolean('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
+        if (
+            Auth::attempt([
+                $field => $request->login,
+                'password' => $request->password,
+            ], $remember)
+        ) {
+
             $request->session()->regenerate();
-            return redirect()->intended(route('profile'));
+
+            if (auth()->user()->role === 'admin') {
+                return redirect('/dashboard');
+            }
+
+            return redirect('/profile');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            'login' => 'The provided credentials do not match our records.',
+        ])->onlyInput('login');
     }
 
     public function showRegister()
@@ -42,16 +57,18 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name'                  => ['required', 'string', 'max:255'],
-            'email'                 => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password'              => ['required', 'confirmed', Password::defaults()],
-            'terms'                 => ['accepted'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+            'terms' => ['accepted'],
         ]);
 
         $user = User::create([
-            'name'     => $validated['name'],
-            'email'    => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'role' => 'user',
         ]);
 
         Auth::login($user);

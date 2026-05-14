@@ -11,12 +11,23 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(AdminSeeder::class);
+
         // Create demo user
         User::firstOrCreate(
             ['email' => 'demo@inapp.com'],
             [
-                'name'     => 'Shrina Tesla',
-                'email'    => 'demo@inapp.com',
+                'first_name' => 'Shrina',
+                'last_name' => 'Tesla',
+
+                'name' => 'Shrina Tesla',
+
+                'username' => 'shrina',
+
+                'role' => 'user',
+
+                'email' => 'demo@inapp.com',
+
                 'password' => Hash::make('password'),
             ]
         );
