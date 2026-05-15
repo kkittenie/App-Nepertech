@@ -1,11 +1,11 @@
 <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
 
-    {{-- Desktop toggle --}}
+
     <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
         <i class="ti ti-layout-sidebar-left-expand"></i>
     </button>
 
-    {{-- Mobile toggle --}}
+ 
     <button id="mobileBtn" class="btn btn-light btn-icon btn-sm d-lg-none me-2">
         <i class="ti ti-layout-sidebar-left-expand"></i>
     </button>
@@ -13,7 +13,7 @@
     <div>
         <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
 
-            {{-- Bell / Notification --}}
+            
             <li>
                 <a class="position-relative btn-icon btn-sm btn-light btn rounded-circle"
                    data-bs-toggle="dropdown" aria-expanded="false" href="#" role="button">
@@ -73,7 +73,7 @@
                 </div>
             </li>
 
-            {{-- Avatar / Profile Dropdown --}}
+          
             <li class="ms-3 dropdown">
                 <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="{{ asset('assets/images/avatar/avatar-1.jpg') }}" alt=""
@@ -92,8 +92,8 @@
                         <a href="{{ route('dashboard') }}" class="">
                             <span>Home</span>
                         </a>
-                        <a href="{{ route('inventory.index') }}" class="">
-                            <span>Inventory</span>
+                        <a href="{{ route('products.index') }}" class="">
+                            <span>Produk</span>
                         </a>
                         <a href="#" class="">
                             <span>Account Settings</span>

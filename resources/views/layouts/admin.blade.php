@@ -52,11 +52,7 @@
             @yield('content')
         </div>
 
-        <footer class="text-center py-3">
-            <p class="mb-0">
-                Copyright &copy; {{ date('Y') }} InApp Inventory Dashboard
-            </p>
-        </footer>
+
     </div>
 
     {{-- CURSOR (kalau dipakai) --}}

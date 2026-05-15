@@ -3,7 +3,7 @@
 
 @section('content')
 
-    {{-- Page Header --}}
+
     <div class="row">
         <div class="col-12">
             <div class="mb-6">
@@ -13,12 +13,9 @@
         </div>
     </div>
 
-    {{-- =====================
-         ROW 1 — Stat Cards (4 cards)
-    ===================== --}}
     <div class="row g-3 mb-3">
 
-        {{-- Total Sales --}}
+      
         <div class="col-lg-3 col-12">
             <div class="card p-4 bg-primary bg-opacity-10 border border-primary border-opacity-25 rounded-2">
                 <div class="d-flex gap-3">
@@ -361,7 +358,7 @@
             <div class="card h-100">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3">
                     <h4 class="mb-0 h5">Low Stock Products</h4>
-                    <a href="{{ route('inventory.index') }}"
+                    <a href="{{ route('products.index') }}"
                        class="small text-primary text-decoration-underline">View All</a>
                 </div>
                 <ul class="list-group list-group-flush">
