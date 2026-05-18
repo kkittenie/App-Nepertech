@@ -8,21 +8,31 @@
 
         <div class="container">
 
-            <span class="section-tag animate-fade-up">
-                Support
-            </span>
+            <div>
+                <span class="section-tag animate-fade-up">
+                    Support
+                </span>
 
-            <h1 class="animate-fade-up" style="animation-delay:.15s">
+                <h1 class="animate-fade-up" style="animation-delay:.15s">
+                    Hubungi Kami
+                </h1>
 
-                Hubungi Kami
+                <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
+                    Tim Nepertech siap membantu Anda
+                </p>
+            </div>
 
-            </h1>
-
-            <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
-
-                Tim Nepertech siap membantu Anda
-
-            </p>
+            <div class="page-hero-visual" aria-hidden="true">
+                <div class="page-hero-ring page-hero-ring-1"></div>
+                <div class="page-hero-ring page-hero-ring-2"></div>
+                <div class="page-hero-center"><i class="fas fa-headset"></i></div>
+                <div class="page-hero-float page-hero-float-1"><i class="fas fa-envelope"></i> Email</div>
+                <div class="page-hero-float page-hero-float-2"><i class="fas fa-phone"></i> Telepon</div>
+                <div class="page-hero-float page-hero-float-3"><i class="fas fa-map-marker-alt"></i> Cirebon</div>
+                <div class="page-hero-dot page-hero-dot-1"></div>
+                <div class="page-hero-dot page-hero-dot-2"></div>
+                <div class="page-hero-dot page-hero-dot-3"></div>
+            </div>
 
         </div>
 

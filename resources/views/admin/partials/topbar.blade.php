@@ -1,117 +1,119 @@
-<nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
+<nav id="topbar" class="topbar">
 
+    {{-- Left side --}}
+    <div class="topbar-left">
+        {{-- Desktop collapse toggle --}}
+        <button id="toggleBtn" class="topbar-btn d-none d-lg-inline-flex" title="Toggle sidebar">
+            <i class="ti ti-layout-sidebar-left-expand"></i>
+        </button>
 
-    <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
-        <i class="ti ti-layout-sidebar-left-expand"></i>
-    </button>
+        {{-- Mobile hamburger --}}
+        <button id="mobileBtn" class="topbar-btn d-lg-none" title="Open menu">
+            <i class="ti ti-menu-2"></i>
+        </button>
 
- 
-    <button id="mobileBtn" class="btn btn-light btn-icon btn-sm d-lg-none me-2">
-        <i class="ti ti-layout-sidebar-left-expand"></i>
-    </button>
+        {{-- Breadcrumb / page title --}}
+        <div class="topbar-title d-none d-md-block">
+            <span>@yield('title', 'Dashboard')</span>
+        </div>
+    </div>
 
-    <div>
-        <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
+    {{-- Right side --}}
+    <div class="topbar-right">
 
-            
-            <li>
-                <a class="position-relative btn-icon btn-sm btn-light btn rounded-circle"
-                   data-bs-toggle="dropdown" aria-expanded="false" href="#" role="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                         stroke-linejoin="round"
-                         class="icon icon-tabler icons-tabler-outline icon-tabler-bell">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/>
-                        <path d="M9 17v1a3 3 0 0 0 6 0v-1"/>
-                    </svg>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
-                        2
-                        <span class="visually-hidden">unread messages</span>
-                    </span>
-                </a>
+        {{-- Search (desktop only) --}}
+        <form action="{{ route('products.index') }}" method="GET" class="topbar-search d-none d-md-flex">
+            <i class="ti ti-search"></i>
+            <input type="text" name="search" placeholder="Cari produk..." class="topbar-search-input" value="{{ request('search') }}">
+        </form>
 
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-0">
-                    <ul class="list-unstyled p-0 m-0">
-                        <li class="p-3 border-bottom">
-                            <div class="d-flex gap-3">
-                                <img src="{{ asset('assets/images/avatar/avatar-1.jpg') }}" alt=""
-                                     class="avatar avatar-sm rounded-circle">
-                                <div class="flex-grow-1 small">
-                                    <p class="mb-0">New order received</p>
-                                    <p class="mb-1">Order #12345 has been placed</p>
-                                    <div class="text-secondary">5 minutes ago</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="p-3 border-bottom">
-                            <div class="d-flex gap-3">
-                                <img src="{{ asset('assets/images/avatar/avatar-4.jpg') }}" alt=""
-                                     class="avatar avatar-sm rounded-circle">
-                                <div class="flex-grow-1 small">
-                                    <p class="mb-0">New user registered</p>
-                                    <p class="mb-1">User @john_doe has signed up</p>
-                                    <div class="text-secondary">30 minutes ago</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="p-3 border-bottom">
-                            <div class="d-flex gap-3">
-                                <img src="{{ asset('assets/images/avatar/avatar-2.jpg') }}" alt=""
-                                     class="avatar avatar-sm rounded-circle">
-                                <div class="flex-grow-1 small">
-                                    <p class="mb-0">Payment confirmed</p>
-                                    <p class="mb-1">Payment of $299 has been received</p>
-                                    <div class="text-secondary">1 hour ago</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="px-4 py-3 text-center">
-                            <a href="#" class="text-primary">View all notifications</a>
-                        </li>
-                    </ul>
+        {{-- Notifications --}}
+        <div class="dropdown">
+            <button class="topbar-btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="ti ti-bell"></i>
+                <span class="topbar-badge">2</span>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-end topbar-dropdown p-0">
+                <div class="topbar-dropdown-header">
+                    <span class="fw-semibold">Notifications</span>
+                    <span class="topbar-dropdown-badge">2 new</span>
                 </div>
-            </li>
-
-          
-            <li class="ms-3 dropdown">
-                <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ asset('assets/images/avatar/avatar-1.jpg') }}" alt=""
-                         class="avatar avatar-sm rounded-circle">
-                </a>
-                <div class="dropdown-menu dropdown-menu-end p-0" style="min-width:200px">
-                    <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
-                        <img src="{{ asset('assets/images/avatar/avatar-1.jpg') }}" alt=""
-                             class="avatar avatar-md rounded-circle">
-                        <div>
-                            <h4 class="mb-0 small">{{ auth()->user()->name }}</h4>
-                            <p class="mb-0 small text-muted">{{ auth()->user()->email }}</p>
+                <ul class="list-unstyled m-0">
+                    <li class="topbar-dropdown-item">
+                        <div class="topbar-dropdown-icon bg-primary-subtle text-primary">
+                            <i class="ti ti-package"></i>
                         </div>
-                    </div>
-                    <div class="p-3 d-flex flex-column gap-1 small lh-lg">
-                        <a href="{{ route('dashboard') }}" class="">
-                            <span>Home</span>
-                        </a>
-                        <a href="{{ route('products.index') }}" class="">
-                            <span>Produk</span>
-                        </a>
-                        <a href="#" class="">
-                            <span>Account Settings</span>
-                        </a>
-                    </div>
-                    <div class="border-top p-2">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit"
-                                    class="btn btn-sm btn-light w-100 text-danger">
-                                <i class="ti ti-logout me-1"></i> Logout
-                            </button>
-                        </form>
+                        <div class="topbar-dropdown-content">
+                            <p>New product added</p>
+                            <small>5 minutes ago</small>
+                        </div>
+                    </li>
+                    <li class="topbar-dropdown-item">
+                        <div class="topbar-dropdown-icon bg-success-subtle text-success">
+                            <i class="ti ti-user-plus"></i>
+                        </div>
+                        <div class="topbar-dropdown-content">
+                            <p>New user registered</p>
+                            <small>30 minutes ago</small>
+                        </div>
+                    </li>
+                </ul>
+                <div class="topbar-dropdown-footer">
+                    <a href="#">View all notifications</a>
+                </div>
+            </div>
+        </div>
+
+        {{-- User menu --}}
+        <div class="dropdown">
+            <button class="topbar-user-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="topbar-user-avatar">
+                    @if(auth()->user()->photo)
+                        <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                    @else
+                        {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                    @endif
+                </div>
+                <span class="topbar-user-name d-none d-md-inline">{{ auth()->user()->name ?? 'Admin' }}</span>
+                <i class="ti ti-chevron-down d-none d-md-inline" style="font-size:14px; opacity:0.5;"></i>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-end topbar-dropdown p-0" style="min-width:220px">
+                <div class="topbar-dropdown-header">
+                    <div>
+                        <p class="fw-semibold mb-0">{{ auth()->user()->name ?? 'Admin' }}</p>
+                        <small class="text-muted">{{ auth()->user()->email ?? '' }}</small>
                     </div>
                 </div>
-            </li>
+                <ul class="list-unstyled m-0">
+                    <li>
+                        <a class="topbar-dropdown-link" href="{{ route('dashboard') }}">
+                            <i class="ti ti-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a class="topbar-dropdown-link" href="{{ route('products.index') }}">
+                            <i class="ti ti-box"></i> Produk
+                        </a>
+                    </li>
+                    <li>
+                        <a class="topbar-dropdown-link" href="{{ route('home') }}">
+                            <i class="ti ti-world"></i> Website
+                        </a>
+                    </li>
+                </ul>
+                <div class="topbar-dropdown-footer">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="topbar-logout-btn">
+                            <i class="ti ti-logout"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-        </ul>
     </div>
 
 </nav>

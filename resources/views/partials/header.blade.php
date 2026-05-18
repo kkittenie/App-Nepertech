@@ -86,12 +86,25 @@
 
             @auth
                 <li>
-                    <a href="{{ route('profile') }}"
-                        class="nav-profile-link {{ request()->is('profile') ? 'active' : '' }}">
-
-                        <i class="fas fa-user-circle"></i>
-
-                    </a>
+                    @if(auth()->user()->role === 'admin')
+                        <a href="{{ route('dashboard') }}"
+                            class="nav-profile-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                            @if(auth()->user()->photo)
+                                <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Profile" class="nav-avatar-img">
+                            @else
+                                <span class="nav-avatar-initials">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                            @endif
+                        </a>
+                    @else
+                        <a href="{{ route('profile') }}"
+                            class="nav-profile-link {{ request()->is('profile') ? 'active' : '' }}">
+                            @if(auth()->user()->photo)
+                                <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Profile" class="nav-avatar-img">
+                            @else
+                                <span class="nav-avatar-initials">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                            @endif
+                        </a>
+                    @endif
                 </li>
             @endauth
 

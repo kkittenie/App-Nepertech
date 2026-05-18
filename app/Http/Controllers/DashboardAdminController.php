@@ -2,23 +2,63 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\User;
 
 class DashboardAdminController extends Controller
 {
     public function index()
     {
-        $stats = [
-            'total_products' => Product::count(),
-        ];
+        $totalProducts  = Product::count();
+        $totalCategories = Category::count();
+        $totalUsers     = User::count();
 
-        $recentProducts = Product::latest()->take(5)->get();
+        // Sum of all product prices as a simple "catalog value"
+        $catalogValue = Product::sum('price');
 
-        $topProducts = Product::orderByDesc('price')->take(5)->get();
+        // Top products by price (simulate "top selling")
+        $topProducts = Product::with('category')
+            ->orderByDesc('price')
+            ->take(5)
+            ->get();
+
+        // Low-priced products (simulate "low stock" — cheapest items)
+        $lowPriceProducts = Product::with('category')
+            ->orderBy('price')
+            ->take(5)
+            ->get();
+
+        // Recent products
+        $recentProducts = Product::with('category')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Category breakdown for donut chart
+        $categoryBreakdown = Category::withCount('products')->get();
+
+        // Monthly product additions (for bar chart)
+        $monthlyData = Product::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->whereYear('created_at', date('Y'))
+            ->groupByRaw('MONTH(created_at)')
+            ->pluck('count', 'month')
+            ->toArray();
+
+        $monthlyProducts = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $monthlyProducts[] = $monthlyData[$i] ?? 0;
+        }
 
         return view('admin.index', compact(
-            'stats',
-            'recentProducts',
+            'totalProducts',
+            'totalCategories',
+            'totalUsers',
+            'catalogValue',
             'topProducts',
+            'lowPriceProducts',
+            'recentProducts',
+            'categoryBreakdown',
+            'monthlyProducts',
         ));
     }
 }

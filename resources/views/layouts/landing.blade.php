@@ -7,6 +7,10 @@
 
     <title>@yield('title', 'Nepertech')</title>
 
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon_io/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/favicon_io/apple-touch-icon.png') }}">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Fonts --}}
@@ -20,10 +24,8 @@
     <link rel="stylesheet" href="{{ asset('css/landing/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
     <link rel="stylesheet" href="{{ asset('css/auth/register.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
     @stack('styles')
-
 
 </head>
 
@@ -31,20 +33,18 @@
     <div class="cursor-dot" id="cursorDot"></div>
     <div class="cursor-ring" id="cursorRing"></div>
 
-    {{-- JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-
     @include('partials.header')
 
     @yield('content')
 
+    @include('partials.footer')
+
+    {{-- JS — loaded AFTER all DOM content --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 
     @stack('scripts')
-
-    @include('partials.footer')
 
 </body>
 

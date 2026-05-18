@@ -7,17 +7,31 @@
 
         <div class="container">
 
-            <span class="section-tag animate-fade-up">
-                About Us
-            </span>
+            <div>
+                <span class="section-tag animate-fade-up">
+                    About Us
+                </span>
 
-            <h1 class="animate-fade-up" style="animation-delay:.15s">
-                Profil Nepertech
-            </h1>
+                <h1 class="animate-fade-up" style="animation-delay:.15s">
+                    Profil Nepertech
+                </h1>
 
-            <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
-                Teaching Factory Software Development · BLUD SMKN 1 Cirebon
-            </p>
+                <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
+                    Teaching Factory Software Development · BLUD SMKN 1 Cirebon
+                </p>
+            </div>
+
+            <div class="page-hero-visual" aria-hidden="true">
+                <div class="page-hero-ring page-hero-ring-1"></div>
+                <div class="page-hero-ring page-hero-ring-2"></div>
+                <div class="page-hero-center"><i class="fas fa-building"></i></div>
+                <div class="page-hero-float page-hero-float-1"><i class="fas fa-users"></i> TEFA Team</div>
+                <div class="page-hero-float page-hero-float-2"><i class="fas fa-award"></i> Profesional</div>
+                <div class="page-hero-float page-hero-float-3"><i class="fas fa-school"></i> SMKN 1</div>
+                <div class="page-hero-dot page-hero-dot-1"></div>
+                <div class="page-hero-dot page-hero-dot-2"></div>
+                <div class="page-hero-dot page-hero-dot-3"></div>
+            </div>
 
         </div>
     </section>

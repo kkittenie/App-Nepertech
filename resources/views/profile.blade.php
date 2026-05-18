@@ -22,9 +22,13 @@
             <div class="pd-profile-card">
                 <div class="pd-avatar-wrap">
                     <div class="pd-avatar">
-                        <span class="pd-avatar-initials">
-                            {{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name ?? '', 0, 1)) }}
-                        </span>
+                        @if($user->photo)
+                            <img src="{{ asset('storage/' . $user->photo) }}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                        @else
+                            <span class="pd-avatar-initials">
+                                {{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name ?? '', 0, 1)) }}
+                            </span>
+                        @endif
                     </div>
                     <div class="pd-avatar-ring"></div>
                     <div class="pd-avatar-ring pd-avatar-ring-2"></div>
@@ -106,7 +110,11 @@
                     <div class="pd-id-orb pd-id-orb-2"></div>
                     <div class="pd-id-inner">
                         <div class="pd-id-avatar">
-                            {{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name ?? '', 0, 1)) }}
+                            @if($user->photo)
+                                <img src="{{ asset('storage/' . $user->photo) }}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                            @else
+                                {{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name ?? '', 0, 1)) }}
+                            @endif
                         </div>
                         <div>
                             <div class="hero-badge" style="margin-bottom:12px;width:fit-content;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.12)">
@@ -224,23 +232,23 @@
                         </a>
                     </div>
                     <div class="pd-layanan-grid">
-                        @foreach([
-                            ['num'=>'01','icon'=>'fa-globe','title'=>'Website Dev','desc'=>'Website profesional, responsif, dan SEO-friendly.'],
-                            ['num'=>'02','icon'=>'fa-mobile-alt','title'=>'Mobile App','desc'=>'Aplikasi mobile Android & iOS yang inovatif.'],
-                            ['num'=>'03','icon'=>'fa-desktop','title'=>'Desktop Dev','desc'=>'Aplikasi desktop custom dan stabil untuk bisnis.'],
-                            ['num'=>'04','icon'=>'fa-robot','title'=>'AI Solutions','desc'=>'Aplikasi berbasis AI yang relevan dengan pasar.'],
-                            ['num'=>'05','icon'=>'fa-network-wired','title'=>'IoT & Embedded','desc'=>'Solusi IoT terintegrasi untuk otomasi sistem.'],
-                        ] as $lay)
+                        @forelse($categories as $cat)
                         <div class="card card-hover" style="padding:28px;position:relative;overflow:hidden">
-                            <div class="card-program-num">{{ $lay['num'] }}</div>
-                            <div class="card-icon-wrap" style="margin-bottom:16px"><i class="fas {{ $lay['icon'] }}"></i></div>
-                            <h3 style="margin-bottom:8px;font-size:16px">{{ $lay['title'] }}</h3>
-                            <p style="margin-bottom:16px;font-size:13.5px">{{ $lay['desc'] }}</p>
+                            <div class="card-program-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
+                            <div class="card-icon-wrap" style="margin-bottom:16px"><i class="fas fa-layer-group"></i></div>
+                            <h3 style="margin-bottom:8px;font-size:16px">{{ $cat->name }}</h3>
+                            <p style="margin-bottom:16px;font-size:13.5px">{{ $cat->products_count }} produk tersedia dalam kategori ini.</p>
                             <a href="{{ url('/layanan') }}" class="card-link" style="font-size:13px">
                                 Detail <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
-                        @endforeach
+                        @empty
+                        <div class="card card-hover" style="padding:28px">
+                            <div class="card-icon-wrap" style="margin-bottom:16px"><i class="fas fa-info-circle"></i></div>
+                            <h3 style="margin-bottom:8px;font-size:16px">Segera Hadir</h3>
+                            <p style="font-size:13.5px">Layanan sedang disiapkan.</p>
+                        </div>
+                        @endforelse
                     </div>
                 </div>
 
@@ -306,22 +314,77 @@
                         <h2 class="pd-section-title">Pengaturan <span class="gradient-text">Akun</span></h2>
                     </div>
                 </div>
+
+                {{-- Photo Form --}}
+                <div class="pd-content-card" style="margin-bottom:24px">
+                    <div class="pd-card-label"><i class="fas fa-camera"></i> Foto Profil</div>
+                    <form method="POST" action="{{ route('profile.photo') }}" enctype="multipart/form-data">
+                        @csrf
+                        <div style="display:flex; gap:20px; align-items:center; margin-bottom:20px;">
+                            <div style="width:80px; height:80px; border-radius:50%; overflow:hidden; background:var(--gray-border); flex-shrink:0;">
+                                @if($user->photo)
+                                    <img src="{{ asset('storage/' . $user->photo) }}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">
+                                @else
+                                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:24px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                <input type="file" name="photo" id="photo" class="form-control" accept="image/jpeg,image/png,image/webp" required style="max-width:300px; margin-bottom:10px;">
+                                <p style="font-size:13px; color:var(--text-muted); margin:0;">Maksimal ukuran 2MB (JPG, PNG, WEBP)</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Foto</button>
+                    </form>
+                </div>
+
+                {{-- Profile Info Form --}}
                 <div class="pd-content-card">
-                    <div class="pd-card-label"><i class="fas fa-cog"></i> Kelola Akun</div>
-                    <p style="color:var(--text-muted);font-size:14.5px;margin-bottom:28px">
-                        Perbarui informasi profil dan kelola preferensi akunmu.
-                    </p>
-                    <div style="display:flex;gap:14px;flex-wrap:wrap">
-                        <a href="{{ route('profile') }}" class="btn btn-primary btn-arrow">
-                            Edit Profil <i class="fas fa-arrow-right"></i>
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-outline" style="border-color:#b91c1c;color:#b91c1c">
-                                <i class="fas fa-sign-out-alt"></i> Keluar
+                    <div class="pd-card-label"><i class="fas fa-user-edit"></i> Edit Informasi Akun</div>
+                    
+                    <form method="POST" action="{{ route('profile.update') }}">
+                        @csrf
+                        @method('patch')
+
+                        <div class="form-group" style="margin-bottom:16px;">
+                            <label for="name" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Nama Tampilan</label>
+                            <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" class="form-control" required style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;">
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                            <div>
+                                <label for="first_name" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Nama Depan</label>
+                                <input type="text" name="first_name" id="first_name" value="{{ old('first_name', $user->first_name) }}" class="form-control" required style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;">
+                            </div>
+                            <div>
+                                <label for="last_name" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Nama Belakang</label>
+                                <input type="text" name="last_name" id="last_name" value="{{ old('last_name', $user->last_name) }}" class="form-control" style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;">
+                            </div>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                            <div>
+                                <label for="username" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Username</label>
+                                <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" class="form-control" required style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;">
+                            </div>
+                            <div>
+                                <label for="email" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Email</label>
+                                <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" class="form-control" required style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:24px;">
+                            <label for="minat" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Minat / Keahlian</label>
+                            <input type="text" name="minat" id="minat" value="{{ old('minat', $user->minat) }}" class="form-control" style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;" placeholder="Contoh: Web Developer, UI/UX Designer">
+                        </div>
+
+                        <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+                            <button type="submit" class="btn btn-primary btn-arrow">
+                                Simpan Perubahan <i class="fas fa-check"></i>
                             </button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </section>
 

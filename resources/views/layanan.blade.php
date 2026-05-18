@@ -8,22 +8,36 @@
 
         <div class="container">
 
-            <span class="section-tag animate-fade-up">
-                Products & Services
-            </span>
+            <div>
+                <span class="section-tag animate-fade-up">
+                    Products & Services
+                </span>
 
-            <h1 class="animate-fade-up" style="animation-delay:.15s">
+                <h1 class="animate-fade-up" style="animation-delay:.15s">
 
-                Layanan Kami
+                    Layanan Kami
 
-            </h1>
+                </h1>
 
-            <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
+                <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
 
-                Solusi teknologi lengkap dari
-                tim TEFA profesional
+                    {{ $categories->count() }} layanan & {{ $products->count() }} produk dari
+                    tim TEFA profesional
 
-            </p>
+                </p>
+            </div>
+
+            <div class="page-hero-visual" aria-hidden="true">
+                <div class="page-hero-ring page-hero-ring-1"></div>
+                <div class="page-hero-ring page-hero-ring-2"></div>
+                <div class="page-hero-center"><i class="fas fa-cogs"></i></div>
+                <div class="page-hero-float page-hero-float-1"><i class="fas fa-code"></i> Development</div>
+                <div class="page-hero-float page-hero-float-2"><i class="fas fa-robot"></i> AI & IoT</div>
+                <div class="page-hero-float page-hero-float-3"><i class="fas fa-mobile-alt"></i> Mobile</div>
+                <div class="page-hero-dot page-hero-dot-1"></div>
+                <div class="page-hero-dot page-hero-dot-2"></div>
+                <div class="page-hero-dot page-hero-dot-3"></div>
+            </div>
 
         </div>
 
@@ -36,23 +50,22 @@
 
             <div class="grid-3">
 
-                <!-- CARD 1 -->
-                <div class="card card-program reveal" style="transition-delay:0s">
+                @forelse($categories as $cat)
+                <div class="card card-program reveal" style="transition-delay:{{ $loop->index * 0.12 }}s">
 
                     <div class="card-program-num">
-                        01
+                        {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
                     </div>
 
                     <div class="card-icon-wrap">
-                        <i class="fas fa-globe"></i>
+                        <i class="fas fa-layer-group"></i>
                     </div>
 
-                    <h3>Website Development</h3>
+                    <h3>{{ $cat->name }}</h3>
 
                     <p>
-                        Pembuatan website profesional,
-                        modern, responsif, dan sesuai
-                        kebutuhan bisnis maupun instansi.
+                        {{ $cat->products_count }} produk tersedia.
+                        Dikerjakan oleh tim TEFA profesional.
                     </p>
 
                     <div class="cert-badge">
@@ -61,110 +74,15 @@
                     </div>
 
                 </div>
-
-                <!-- CARD 2 -->
-                <div class="card card-program reveal" style="transition-delay:.12s">
-
-                    <div class="card-program-num">
-                        02
-                    </div>
-
+                @empty
+                <div class="card card-program reveal">
                     <div class="card-icon-wrap">
-                        <i class="fas fa-mobile-alt"></i>
+                        <i class="fas fa-info-circle"></i>
                     </div>
-
-                    <h3>Mobile App</h3>
-
-                    <p>
-                        Pengembangan aplikasi Android
-                        dan iOS dengan tampilan modern
-                        serta performa optimal.
-                    </p>
-
-                    <div class="cert-badge">
-                        <i class="fas fa-check-circle"></i>
-                        Dikerjakan Tim TEFA Profesional
-                    </div>
-
+                    <h3>Segera Hadir</h3>
+                    <p>Layanan sedang disiapkan.</p>
                 </div>
-
-                <!-- CARD 3 -->
-                <div class="card card-program reveal" style="transition-delay:.24s">
-
-                    <div class="card-program-num">
-                        03
-                    </div>
-
-                    <div class="card-icon-wrap">
-                        <i class="fas fa-desktop"></i>
-                    </div>
-
-                    <h3>Desktop Development</h3>
-
-                    <p>
-                        Solusi aplikasi desktop custom
-                        yang stabil, aman, dan mudah
-                        digunakan.
-                    </p>
-
-                    <div class="cert-badge">
-                        <i class="fas fa-check-circle"></i>
-                        Dikerjakan Tim TEFA Profesional
-                    </div>
-
-                </div>
-
-                <!-- CARD 4 -->
-                <div class="card card-program reveal" style="transition-delay:.36s">
-
-                    <div class="card-program-num">
-                        04
-                    </div>
-
-                    <div class="card-icon-wrap">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
-
-                    <h3>Game Development</h3>
-
-                    <p>
-                        Pengembangan game edukasi
-                        maupun hiburan dengan konsep
-                        kreatif dan interaktif.
-                    </p>
-
-                    <div class="cert-badge">
-                        <i class="fas fa-check-circle"></i>
-                        Dikerjakan Tim TEFA Profesional
-                    </div>
-
-                </div>
-
-                <!-- CARD 5 -->
-                <div class="card card-program reveal" style="transition-delay:.48s">
-
-                    <div class="card-program-num">
-                        05
-                    </div>
-
-                    <div class="card-icon-wrap">
-                        <i class="fas fa-robot"></i>
-                    </div>
-
-                    <h3>AI & IoT Solutions</h3>
-
-                    <p>
-                        Solusi berbasis Artificial
-                        Intelligence dan Internet of
-                        Things yang inovatif.
-                    </p>
-
-                    <div class="cert-badge">
-                        <i class="fas fa-check-circle"></i>
-                        Dikerjakan Tim TEFA Profesional
-                    </div>
-
-                </div>
+                @endforelse
 
             </div>
 

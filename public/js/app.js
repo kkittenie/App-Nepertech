@@ -297,14 +297,34 @@ window.addEventListener("scroll", () => {
     }
 });
 
-const menuIcon = document.getElementById("menuIcon");
-const navLinks = document.getElementById("navLinks");
+document.addEventListener("DOMContentLoaded", () => {
+    // ── Burger menu toggle ──
+    const menuIcon = document.getElementById("menuIcon");
+    const navLinks = document.getElementById("navLinks");
 
-if (menuIcon && navLinks) {
-    menuIcon.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-    });
-}
+    if (menuIcon && navLinks) {
+        menuIcon.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            menuIcon.classList.toggle("active");
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("active");
+                menuIcon.classList.remove("active");
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!navLinks.contains(e.target) && !menuIcon.contains(e.target)) {
+                navLinks.classList.remove("active");
+                menuIcon.classList.remove("active");
+            }
+        });
+    }
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     initRevealObserver();

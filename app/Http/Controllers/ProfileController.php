@@ -17,8 +17,11 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $categories = \App\Models\Category::withCount('products')->get();
+
         return view('profile', [
             'user' => $request->user(),
+            'categories' => $categories,
         ]);
     }
 

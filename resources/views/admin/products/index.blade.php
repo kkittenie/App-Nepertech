@@ -27,20 +27,22 @@
 </div>
 @endif
 
-<div class="container-fluid py-4">
-    <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-4">
+    {{-- Page Header --}}
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Inventaris Produk</h1>
+            <p class="page-subtitle">Kelola semua data produk dengan mudah.</p>
+        </div>
+        <div class="page-header-actions">
+            <a href="{{ route('products.create') }}" class="btn-add">
+                <i class="ti ti-plus"></i> Tambah Produk
+            </a>
+        </div>
+    </div>
 
-          
-            <div class="d-flex justify-content-between align-items-start mb-4">
-                <div>
-                    <h3 class="fw-bold mb-1" style="color:#0a2540">Inventaris Produk</h3>
-                    <p class="text-muted mb-0 small">Kelola semua data produk dengan mudah.</p>
-                </div>
-                <a href="{{ route('products.create') }}" class="btn-add">
-                    + Tambah Produk
-                </a>
-            </div>
+    {{-- Main Card --}}
+    <div class="main-card bg-white">
+        <div class="p-4">
 
          
             <div class="filter-tabs">
@@ -161,7 +163,6 @@
 
         </div>
     </div>
-</div>
 
 @endsection
 

@@ -8,21 +8,31 @@
 
         <div class="container">
 
-            <span class="section-tag animate-fade-up">
-                Dokumentasi
-            </span>
+            <div>
+                <span class="section-tag animate-fade-up">
+                    Dokumentasi
+                </span>
 
-            <h1 class="animate-fade-up" style="animation-delay:.15s">
+                <h1 class="animate-fade-up" style="animation-delay:.15s">
+                    Galeri Kegiatan
+                </h1>
 
-                Galeri Kegiatan
+                <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
+                    Momen inspiratif tim Nepertech
+                </p>
+            </div>
 
-            </h1>
-
-            <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
-
-                Momen inspiratif tim Nepertech
-
-            </p>
+            <div class="page-hero-visual" aria-hidden="true">
+                <div class="page-hero-ring page-hero-ring-1"></div>
+                <div class="page-hero-ring page-hero-ring-2"></div>
+                <div class="page-hero-center"><i class="fas fa-camera"></i></div>
+                <div class="page-hero-float page-hero-float-1"><i class="fas fa-image"></i> Gallery</div>
+                <div class="page-hero-float page-hero-float-2"><i class="fas fa-video"></i> Moments</div>
+                <div class="page-hero-float page-hero-float-3"><i class="fas fa-star"></i> Highlights</div>
+                <div class="page-hero-dot page-hero-dot-1"></div>
+                <div class="page-hero-dot page-hero-dot-2"></div>
+                <div class="page-hero-dot page-hero-dot-3"></div>
+            </div>
 
         </div>
 

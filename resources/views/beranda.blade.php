@@ -45,18 +45,18 @@
 
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <span class="stat-number" data-target="5" data-suffix="+">5+</span>
+                        <span class="stat-number" data-target="{{ $totalCategories }}" data-suffix="+">{{ $totalCategories }}+</span>
                         <span class="stat-label">Jenis Layanan</span>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
-                        <span class="stat-number" data-target="100" data-suffix="+">100+</span>
-                        <span class="stat-label">Siswa Aktif</span>
+                        <span class="stat-number" data-target="{{ $totalProducts }}" data-suffix="+">{{ $totalProducts }}+</span>
+                        <span class="stat-label">Produk Digital</span>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
-                        <span class="stat-number" data-target="10" data-suffix="th">10th</span>
-                        <span class="stat-label">Pengalaman</span>
+                        <span class="stat-number" data-target="{{ $totalUsers }}" data-suffix="+">{{ $totalUsers }}+</span>
+                        <span class="stat-label">Pengguna Aktif</span>
                     </div>
                 </div>
 
@@ -168,56 +168,35 @@
                 <span class="section-tag">Produk & Layanan</span>
                 <h2>Solusi <span class="gradient-text">Teknologi Lengkap</span></h2>
                 <p class="section-desc">
-                    Lima lini layanan dirancang untuk memenuhi kebutuhan teknologi bisnis Anda secara menyeluruh.
+                    {{ $categories->count() }} lini layanan dirancang untuk memenuhi kebutuhan teknologi bisnis Anda secara menyeluruh.
                 </p>
             </div>
 
             <div class="grid-3">
 
-                <div class="card card-program reveal" style="transition-delay:.0s">
-                    <div class="card-program-num">01</div>
+                @forelse($categories as $cat)
+                <div class="card card-program reveal" style="transition-delay:{{ $loop->index * 0.12 }}s">
+                    <div class="card-program-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
                     <div class="card-icon-wrap">
-                        <i class="fas fa-globe"></i>
+                        <i class="fas fa-layer-group"></i>
                     </div>
-                    <h3>Website Development</h3>
+                    <h3>{{ $cat->name }}</h3>
                     <p>
-                        Perancangan dan pengembangan website profesional,
-                        responsif, dan SEO-friendly.
+                        {{ $cat->products_count }} produk tersedia dalam kategori ini.
                     </p>
                     <a href="{{ url('/layanan') }}" class="card-link">
                         Detail <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-
-                <div class="card card-program reveal" style="transition-delay:.12s">
-                    <div class="card-program-num">02</div>
+                @empty
+                <div class="card card-program reveal">
                     <div class="card-icon-wrap">
-                        <i class="fas fa-mobile-alt"></i>
+                        <i class="fas fa-info-circle"></i>
                     </div>
-                    <h3>Mobile App</h3>
-                    <p>
-                        Aplikasi mobile inovatif dan intuitif
-                        untuk Android & iOS.
-                    </p>
-                    <a href="{{ url('/layanan') }}" class="card-link">
-                        Detail <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <h3>Segera Hadir</h3>
+                    <p>Layanan sedang disiapkan. Nantikan update terbaru.</p>
                 </div>
-
-                <div class="card card-program reveal" style="transition-delay:.24s">
-                    <div class="card-program-num">03</div>
-                    <div class="card-icon-wrap">
-                        <i class="fas fa-desktop"></i>
-                    </div>
-                    <h3>Desktop Development</h3>
-                    <p>
-                        Aplikasi desktop custom yang stabil
-                        dan andal untuk bisnis.
-                    </p>
-                    <a href="{{ url('/layanan') }}" class="card-link">
-                        Detail <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
+                @endforelse
 
             </div>
         </div>

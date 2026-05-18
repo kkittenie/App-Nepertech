@@ -8,21 +8,31 @@
 
         <div class="container">
 
-            <span class="section-tag animate-fade-up">
-                Infrastruktur
-            </span>
+            <div>
+                <span class="section-tag animate-fade-up">
+                    Infrastruktur
+                </span>
 
-            <h1 class="animate-fade-up" style="animation-delay:.15s">
+                <h1 class="animate-fade-up" style="animation-delay:.15s">
+                    Fasilitas Lengkap
+                </h1>
 
-                Fasilitas Lengkap
+                <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
+                    Didukung sarana modern & nyaman
+                </p>
+            </div>
 
-            </h1>
-
-            <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
-
-                Didukung sarana modern & nyaman
-
-            </p>
+            <div class="page-hero-visual" aria-hidden="true">
+                <div class="page-hero-ring page-hero-ring-1"></div>
+                <div class="page-hero-ring page-hero-ring-2"></div>
+                <div class="page-hero-center"><i class="fas fa-server"></i></div>
+                <div class="page-hero-float page-hero-float-1"><i class="fas fa-wifi"></i> High-Speed</div>
+                <div class="page-hero-float page-hero-float-2"><i class="fas fa-laptop"></i> Modern Lab</div>
+                <div class="page-hero-float page-hero-float-3"><i class="fas fa-microchip"></i> IoT Lab</div>
+                <div class="page-hero-dot page-hero-dot-1"></div>
+                <div class="page-hero-dot page-hero-dot-2"></div>
+                <div class="page-hero-dot page-hero-dot-3"></div>
+            </div>
 
         </div>
 

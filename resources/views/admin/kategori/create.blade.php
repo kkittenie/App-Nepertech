@@ -56,7 +56,7 @@
                 <div class="hint-chips" id="hintChips">
                     <span class="hint-chip" data-val="Website Development">Website Development</span>
                     <span class="hint-chip" data-val="Desain Grafis">Desain Grafis</span>
-                    <span class="hint-chip" data-val="Social Media">IoT</span>
+                    <span class="hint-chip" data-val="IoT">IoT</span>
                     <span class="hint-chip" data-val="Copywriting">Copywriting</span>
                     <span class="hint-chip" data-val="Video Editing">Video Editing</span>
                 </div>
