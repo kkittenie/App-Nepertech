@@ -9,6 +9,8 @@ class Product extends Model
 {
     protected $fillable = [
         'name',
+        'subtitle',
+        'subjudul_atas',
         'slug',
         'category_id',
         'harga_jual',
@@ -16,7 +18,10 @@ class Product extends Model
         'harga_sewa_tahunan',
         'link',
         'description',
+        'subjudul_bawah',
+        'deskripsi_bawah',
         'display_image',
+        'hero_image',
     ];
 
     protected static function boot()

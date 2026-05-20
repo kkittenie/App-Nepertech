@@ -153,6 +153,14 @@ p {
     transition: all 0.1s ease;
 }
 
+/* Light up cursor on dark backgrounds */
+.cursor-on-dark .cursor-dot {
+    box-shadow: 0 0 12px rgba(126, 200, 240, 0.95), 0 0 24px rgba(126, 200, 240, 0.5);
+}
+.cursor-on-dark .cursor-ring {
+    box-shadow: 0 0 16px rgba(126, 200, 240, 0.35);
+}
+
 @media (max-width: 768px) {
     .cursor-dot,
     .cursor-ring {
@@ -916,7 +924,7 @@ section {
     right: 4%;
     top: 50%;
     transform: translateY(-50%);
-    margin-top: -190px;
+    margin-top: -150px;
     width: 440px;
     height: 440px;
     display: flex;
@@ -930,7 +938,7 @@ section {
         width: 320px;
         height: 320px;
         right: 2%;
-        margin-top: -140px;
+        margin-top: -100px;
     }
     .hero-center-icon {
         width: 70px;

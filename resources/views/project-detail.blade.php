@@ -11,7 +11,11 @@
     {{-- ── IMMERSIVE HERO ── --}}
     <section class="pd-hero" id="pdHero">
         <div class="pd-hero-bg">
-            @if($product->display_image)
+            @if($product->hero_image)
+            <img src="{{ asset('storage/' . $product->hero_image) }}"
+                 alt="{{ $product->name }}"
+                 class="pd-hero-bg-img">
+            @elseif($product->display_image)
             <img src="{{ asset('storage/' . $product->display_image) }}"
                  alt="{{ $product->name }}"
                  class="pd-hero-bg-img">
@@ -22,30 +26,24 @@
         <div class="pd-hero-content">
             <a href="{{ route('project') }}" class="pd-back-link animate-fade-up">
                 <span class="pd-back-icon"><i class="fas fa-arrow-left"></i></span>
-                <span>Kembali ke Project</span>
+                <span>Kembali ke Produk</span>
             </a>
 
-            @if($product->category)
-            <div class="pd-hero-tags animate-fade-up" style="animation-delay:.1s">
-                <span class="pd-hero-tag">{{ $product->category->name }}</span>
-                @if($product->harga_sewa_bulanan)
-                <span class="pd-hero-tag pd-hero-tag--accent">Sewa Tersedia</span>
-                @endif
-            </div>
-            @endif
 
             <h1 class="pd-hero-title animate-fade-up" style="animation-delay:.18s">
                 {{ $product->name }}
             </h1>
 
+            @if($product->subtitle)
             <p class="pd-hero-subtitle animate-fade-up" style="animation-delay:.26s">
-                {{ Str::limit($product->description, 160) }}
+                {{ $product->subtitle }}
             </p>
+            @endif
 
             <div class="pd-hero-actions animate-fade-up" style="animation-delay:.34s">
                 @if($product->link)
                 <a href="{{ $product->link }}" target="_blank" class="pd-hero-btn pd-hero-btn--primary">
-                    <span>Kunjungi Project</span>
+                    <span>Kunjungi Produk</span>
                     <i class="fas fa-arrow-right"></i>
                 </a>
                 @endif
@@ -59,34 +57,149 @@
         </div>
     </section>
 
-    {{-- ── PROJECT OVERVIEW ── --}}
+    {{-- ── TOP DESCRIPTION (Left-only, no sidebar) ── --}}
     <section class="pd-overview">
-        <div class="container">
-            <div class="pd-overview-grid">
-
-                {{-- Left: Description --}}
-                <div class="pd-overview-main reveal">
-                    <div class="pd-section-label">
-                        <span class="pd-label-line"></span>
-                        <span class="pd-label-text">Tentang Project</span>
-                    </div>
-                    <h2 class="pd-section-title">{{ $product->name }}</h2>
-                    <div class="pd-description">
-                        {!! nl2br(e($product->description)) !!}
-                    </div>
-
-                    @if($product->link)
-                    <a href="{{ $product->link }}" target="_blank" class="pd-visit-link">
-                        <span class="pd-visit-text">Kunjungi Project</span>
-                        <span class="pd-visit-icon">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-                    @endif
+        <div class="container pd-overview-grid">
+            <div class="pd-overview-main reveal">
+                <div class="pd-section-label">
+                    <span class="pd-label-line"></span>
+                    <span class="pd-label-text">Tentang Produk</span>
+                </div>
+                <h2 class="pd-section-title">{{ $product->subjudul_atas ?: $product->name }}</h2>
+                <div class="pd-description">
+                    {!! nl2br(e($product->description)) !!}
                 </div>
 
-                {{-- Right: Meta Info --}}
-                <div class="pd-overview-sidebar reveal">
+                @if($product->link)
+                <a href="{{ $product->link }}" target="_blank" class="pd-visit-link" style="margin-top: 32px">
+                    <span class="pd-visit-text">Kunjungi Produk</span>
+                    <span class="pd-visit-icon">
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
+                </a>
+                @endif
+            </div>
+
+            <div class="pd-overview-sidebar reveal" style="transition-delay: .15s">
+                <div class="pd-sidebar-card" style="background: var(--primary); color: white; border-color: transparent;">
+                    <h3 class="pd-sidebar-title" style="color: white; border-color: rgba(255,255,255,0.1);">Mulai Proyek Anda</h3>
+                    <p style="font-size: 14px; line-height: 1.6; margin-bottom: 24px; color: rgba(255,255,255,0.8);">
+                        Tertarik dengan solusi teknologi seperti ini? Tim TEFA Nepertech siap membantu mewujudkan ide bisnis Anda menjadi kenyataan.
+                    </p>
+                    <a href="{{ url('/kontak') }}" class="btn btn-primary" style="background: white; color: var(--primary); width: 100%; justify-content: center;">
+                        Konsultasi Gratis <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ── DISPLAY IMAGE + GALLERY THUMBNAILS ── --}}
+    <section class="pd-gallery-section">
+        <div class="container">
+            <div class="pd-gallery-wrap reveal">
+
+                {{-- Display Image (the main product display_image) --}}
+                @if($product->display_image)
+                <div class="pd-display-image">
+                    <div class="pd-display-frame">
+                        <img src="{{ asset('storage/' . $product->display_image) }}"
+                             alt="{{ $product->name }}"
+                             onclick="showLightbox(this.src)">
+                    </div>
+                </div>
+                @endif
+
+                {{-- Exactly 3 Gallery Thumbnails --}}
+                @if($product->images->count() > 0)
+                <div class="pd-thumb-row">
+                    @foreach($product->images->take(3) as $img)
+                    <button class="pd-thumb-item"
+                            data-index="{{ $loop->index }}"
+                            onclick="openGalleryPreview({{ $loop->index }})"
+                            aria-label="View image {{ $loop->iteration }}">
+                        <img src="{{ asset('storage/' . $img->image_path) }}"
+                             alt="{{ $product->name }} — {{ $loop->iteration }}"
+                             loading="lazy">
+                        <div class="pd-thumb-overlay">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                    </button>
+                    @endforeach
+                </div>
+                @endif
+
+            </div>
+        </div>
+    </section>
+
+    {{-- ── GALLERY PREVIEW OVERLAY (opens when clicking a thumbnail) ── --}}
+    @if($product->images->count() > 0)
+    <div class="pd-preview-overlay" id="galleryPreview">
+        <div class="pd-preview-backdrop" onclick="closeGalleryPreview()"></div>
+        <div class="pd-preview-container">
+            {{-- Close button --}}
+            <button class="pd-preview-close" onclick="closeGalleryPreview()" aria-label="Close preview">
+                <i class="fas fa-times"></i>
+            </button>
+
+            {{-- Main preview image --}}
+            <div class="pd-preview-image-wrap">
+                <img src="" alt="" id="previewMainImg">
+            </div>
+
+            {{-- Counter --}}
+            <div class="pd-preview-counter">
+                <span id="previewCurrent">1</span> / <span id="previewTotal">{{ $product->images->count() }}</span>
+            </div>
+
+            {{-- Navigation --}}
+            @if($product->images->count() > 1)
+            <button class="pd-preview-nav pd-preview-nav--prev" id="previewPrev" aria-label="Previous">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="pd-preview-nav pd-preview-nav--next" id="previewNext" aria-label="Next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            @endif
+
+            {{-- Thumbnail strip inside preview --}}
+            <div class="pd-preview-thumbs">
+                @foreach($product->images as $img)
+                <button class="pd-preview-thumb {{ $loop->first ? 'active' : '' }}"
+                        data-index="{{ $loop->index }}"
+                        data-src="{{ asset('storage/' . $img->image_path) }}"
+                        data-alt="{{ $product->name }} — {{ $loop->iteration }}">
+                    <img src="{{ asset('storage/' . $img->image_path) }}"
+                         alt="{{ $product->name }} — {{ $loop->iteration }}"
+                         loading="lazy">
+                </button>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if($product->deskripsi_bawah)
+    {{-- ── DETAILED DESCRIPTION (Below gallery) ── --}}
+    <section class="pd-detail-desc">
+        <div class="container">
+            <div class="pd-detail-desc-grid reveal">
+                <div class="pd-detail-desc-content">
+                    <div class="pd-section-label">
+                        <span class="pd-label-line"></span>
+                        <span class="pd-label-text">Detail Lengkap</span>
+                    </div>
+                    @if($product->subjudul_bawah)
+                    <h2 class="pd-section-title" style="font-size: 2rem; margin-bottom: 24px;">{{ $product->subjudul_bawah }}</h2>
+                    @endif
+                    <div class="pd-detail-desc-text">
+                        {!! nl2br(e($product->deskripsi_bawah)) !!}
+                    </div>
+                </div>
+
+                {{-- Meta sidebar --}}
+                <div class="pd-detail-meta">
                     <div class="pd-meta-block">
                         <span class="pd-meta-label">Kategori</span>
                         <span class="pd-meta-value">{{ $product->category->name ?? '—' }}</span>
@@ -99,143 +212,8 @@
                         <span class="pd-meta-label">Ditambahkan</span>
                         <span class="pd-meta-value">{{ $product->created_at->format('d M Y') }}</span>
                     </div>
-                    @if($product->harga_jual)
-                    <div class="pd-meta-block pd-meta-block--highlight">
-                        <span class="pd-meta-label">Harga Jual</span>
-                        <span class="pd-meta-value pd-meta-value--price">Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</span>
-                    </div>
-                    @endif
-                    @if($product->harga_sewa_bulanan)
-                    <div class="pd-meta-block">
-                        <span class="pd-meta-label">Sewa / Bulan</span>
-                        <span class="pd-meta-value">Rp {{ number_format($product->harga_sewa_bulanan, 0, ',', '.') }}</span>
-                    </div>
-                    @endif
-                    @if($product->harga_sewa_tahunan)
-                    <div class="pd-meta-block">
-                        <span class="pd-meta-label">Sewa / Tahun</span>
-                        <span class="pd-meta-value">Rp {{ number_format($product->harga_sewa_tahunan, 0, ',', '.') }}</span>
-                    </div>
-                    @endif
                 </div>
             </div>
-        </div>
-    </section>
-
-    {{-- ── FEATURED COVER IMAGE ── --}}
-    @if($product->display_image)
-    <section class="pd-cover-section">
-        <div class="pd-cover-container">
-            <div class="pd-cover-frame reveal">
-                <img src="{{ asset('storage/' . $product->display_image) }}"
-                     alt="{{ $product->name }}"
-                     class="pd-cover-img"
-                     onclick="showLightbox(this.src)">
-            </div>
-        </div>
-    </section>
-    @endif
-
-    {{-- ── DYNAMIC IMAGE SHOWCASE ── --}}
-    @if($product->images->count() > 0)
-    <section class="pd-showcase">
-        <div class="container">
-            <div class="pd-showcase-header reveal">
-                <div class="pd-section-label">
-                    <span class="pd-label-line"></span>
-                    <span class="pd-label-text">Galeri</span>
-                </div>
-                <h2 class="pd-section-title">Screenshot & Preview</h2>
-                <p class="pd-showcase-subtitle">Explore the visual journey of this project</p>
-            </div>
-        </div>
-
-        <div class="pd-showcase-flow">
-            @foreach($product->images as $idx => $img)
-                @php
-                    $pattern = $idx % 5;
-                @endphp
-
-                @if($pattern === 0)
-                    {{-- Pattern A: Full-width immersive --}}
-                    <div class="pd-showcase-block pd-block-full reveal">
-                        <div class="pd-showcase-img-wrap pd-img-cinematic"
-                             onclick="showLightbox(this.querySelector('img').src)">
-                            <img src="{{ asset('storage/' . $img->image_path) }}"
-                                 alt="{{ $product->name }} — {{ $loop->iteration }}"
-                                 loading="lazy">
-                            <div class="pd-img-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                        </div>
-                    </div>
-
-                @elseif($pattern === 1)
-                    {{-- Pattern B: Offset left with breathing room --}}
-                    <div class="pd-showcase-block pd-block-offset-left reveal">
-                        <div class="container">
-                            <div class="pd-offset-wrap pd-offset-left">
-                                <div class="pd-showcase-img-wrap"
-                                     onclick="showLightbox(this.querySelector('img').src)">
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                         alt="{{ $product->name }} — {{ $loop->iteration }}"
-                                         loading="lazy">
-                                    <div class="pd-img-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                @elseif($pattern === 2)
-                    {{-- Pattern C: Offset right --}}
-                    <div class="pd-showcase-block pd-block-offset-right reveal">
-                        <div class="container">
-                            <div class="pd-offset-wrap pd-offset-right">
-                                <div class="pd-showcase-img-wrap"
-                                     onclick="showLightbox(this.querySelector('img').src)">
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                         alt="{{ $product->name }} — {{ $loop->iteration }}"
-                                         loading="lazy">
-                                    <div class="pd-img-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                @elseif($pattern === 3)
-                    {{-- Pattern D: Two-up side by side --}}
-                    <div class="pd-showcase-block pd-block-duo reveal">
-                        <div class="container">
-                            <div class="pd-duo-grid">
-                                <div class="pd-showcase-img-wrap"
-                                     onclick="showLightbox(this.querySelector('img').src)">
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                         alt="{{ $product->name }} — {{ $loop->iteration }}"
-                                         loading="lazy">
-                                    <div class="pd-img-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                                </div>
-                                @if(!$loop->last && isset($product->images[$idx + 1]))
-                                    {{-- Peek-ahead: use the next image for the second slot --}}
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                @elseif($pattern === 4)
-                    {{-- Pattern E: Contained centered --}}
-                    <div class="pd-showcase-block pd-block-centered reveal">
-                        <div class="container">
-                            <div class="pd-centered-wrap">
-                                <div class="pd-showcase-img-wrap"
-                                     onclick="showLightbox(this.querySelector('img').src)">
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                         alt="{{ $product->name }} — {{ $loop->iteration }}"
-                                         loading="lazy">
-                                    <div class="pd-img-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            @endforeach
         </div>
     </section>
     @endif
@@ -250,7 +228,7 @@
                         <span class="pd-label-line"></span>
                         <span class="pd-label-text">Harga</span>
                     </div>
-                    <h2 class="pd-pricing-title">Investasi untuk<br>project Anda</h2>
+                    <h2 class="pd-pricing-title">Investasi untuk<br>proyek Anda</h2>
                     <p class="pd-pricing-desc">Pilih model yang sesuai dengan kebutuhan bisnis Anda.</p>
                 </div>
                 <div class="pd-pricing-cards">
@@ -295,10 +273,10 @@
                 <div class="pd-next-overlay"></div>
             </div>
             <div class="pd-next-content">
-                <span class="pd-next-label reveal">Project Selanjutnya</span>
+                <span class="pd-next-label reveal">Produk Selanjutnya</span>
                 <h2 class="pd-next-title reveal">{{ $nextProduct->name }}</h2>
                 <span class="pd-next-arrow reveal">
-                    <span>Lihat Project</span>
+                    <span>Lihat Produk</span>
                     <i class="fas fa-long-arrow-alt-right"></i>
                 </span>
             </div>
@@ -310,7 +288,7 @@
             <div class="pd-all-inner reveal">
                 <a href="{{ route('project') }}" class="pd-all-link">
                     <i class="fas fa-th-large"></i>
-                    <span>Lihat Semua Project</span>
+                    <span>Lihat Semua Produk</span>
                     <i class="fas fa-arrow-right pd-all-arrow"></i>
                 </a>
             </div>
@@ -323,62 +301,137 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    gsap.registerPlugin(ScrollTrigger);
+
     // ── Parallax Hero ──
     const hero = document.getElementById('pdHero');
     const heroBgImg = hero ? hero.querySelector('.pd-hero-bg-img') : null;
 
     if (heroBgImg) {
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const heroH = hero.offsetHeight;
-            if (scrollY < heroH * 1.5) {
-                const parallax = scrollY * 0.35;
-                heroBgImg.style.transform = `scale(1.1) translateY(${parallax}px)`;
-                hero.querySelector('.pd-hero-content').style.transform = `translateY(${scrollY * 0.15}px)`;
-                hero.querySelector('.pd-hero-content').style.opacity = 1 - (scrollY / heroH) * 0.8;
+        gsap.to(heroBgImg, {
+            yPercent: 35,
+            ease: "none",
+            scrollTrigger: {
+                trigger: hero,
+                start: "top top",
+                end: "bottom top",
+                scrub: true
             }
-        }, { passive: true });
+        });
+        
+        gsap.to(hero.querySelector('.pd-hero-content'), {
+            yPercent: 15,
+            opacity: 0.2,
+            ease: "none",
+            scrollTrigger: {
+                trigger: hero,
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
     }
-
-    // ── Image hover tilt ──
-    document.querySelectorAll('.pd-showcase-img-wrap').forEach(wrap => {
-        wrap.addEventListener('mousemove', (e) => {
-            const rect = wrap.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            wrap.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
-        });
-        wrap.addEventListener('mouseleave', () => {
-            wrap.style.transform = 'perspective(800px) rotateY(0) rotateX(0)';
-        });
-    });
-
-    // ── Reveal observer for showcase blocks ──
-    const showcaseObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                showcaseObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
-
-    document.querySelectorAll('.pd-showcase-block.reveal').forEach(el => {
-        showcaseObserver.observe(el);
-    });
 
     // ── Next project parallax ──
     const nextSection = document.getElementById('pdNext');
     const nextBgImg = nextSection ? nextSection.querySelector('.pd-next-bg-img') : null;
     if (nextBgImg) {
-        window.addEventListener('scroll', () => {
-            const rect = nextSection.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-                nextBgImg.style.transform = `scale(1.15) translateY(${(progress - 0.5) * -60}px)`;
+        gsap.to(nextBgImg, {
+            yPercent: 20,
+            ease: "none",
+            scrollTrigger: {
+                trigger: nextSection,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
             }
-        }, { passive: true });
+        });
     }
 });
+
+// ── Gallery Preview System ──
+(function() {
+    const overlay = document.getElementById('galleryPreview');
+    if (!overlay) return;
+
+    const mainImg = document.getElementById('previewMainImg');
+    const currentEl = document.getElementById('previewCurrent');
+    const prevBtn = document.getElementById('previewPrev');
+    const nextBtn = document.getElementById('previewNext');
+    const thumbs = overlay.querySelectorAll('.pd-preview-thumb');
+    const totalImages = thumbs.length;
+    let currentIndex = 0;
+
+    function setImage(index) {
+        if (index < 0) index = totalImages - 1;
+        if (index >= totalImages) index = 0;
+        currentIndex = index;
+
+        const thumb = thumbs[index];
+        const src = thumb.dataset.src;
+        const alt = thumb.dataset.alt;
+
+        // Animate
+        mainImg.style.opacity = '0';
+        mainImg.style.transform = 'scale(0.95)';
+
+        setTimeout(() => {
+            mainImg.src = src;
+            mainImg.alt = alt;
+            mainImg.style.opacity = '1';
+            mainImg.style.transform = 'scale(1)';
+        }, 180);
+
+        // Update thumbs
+        thumbs.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+
+        // Update counter
+        if (currentEl) currentEl.textContent = index + 1;
+
+        // Scroll thumb into view
+        thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    // Open preview
+    window.openGalleryPreview = function(index) {
+        currentIndex = index;
+        const thumb = thumbs[index];
+        mainImg.src = thumb.dataset.src;
+        mainImg.alt = thumb.dataset.alt;
+        mainImg.style.opacity = '1';
+        mainImg.style.transform = 'scale(1)';
+
+        thumbs.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        if (currentEl) currentEl.textContent = index + 1;
+
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    // Close preview
+    window.closeGalleryPreview = function() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+    };
+
+    // Thumb clicks inside preview
+    thumbs.forEach((thumb, i) => {
+        thumb.addEventListener('click', () => setImage(i));
+    });
+
+    // Nav buttons
+    if (prevBtn) prevBtn.addEventListener('click', () => setImage(currentIndex - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => setImage(currentIndex + 1));
+
+    // Keyboard
+    document.addEventListener('keydown', (e) => {
+        if (!overlay.classList.contains('open')) return;
+        if (e.key === 'ArrowLeft') setImage(currentIndex - 1);
+        if (e.key === 'ArrowRight') setImage(currentIndex + 1);
+        if (e.key === 'Escape') closeGalleryPreview();
+    });
+})();
 </script>
 @endpush

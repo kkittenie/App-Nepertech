@@ -6,34 +6,27 @@
     const text = document.getElementById("cursorText");
     if (!dot || !ring) return;
 
-    let mouseX = window.innerWidth / 2,
-        mouseY = window.innerHeight / 2;
-    let ringX = mouseX,
-        ringY = mouseY;
-
     let activated = false;
+
+    // Use GSAP for high performance smooth cursor following
+    const xToDot = gsap.quickTo(dot, "x", { duration: 0.08, ease: "power2.out" });
+    const yToDot = gsap.quickTo(dot, "y", { duration: 0.08, ease: "power2.out" });
+    const xToRing = gsap.quickTo(ring, "x", { duration: 0.32, ease: "power3.out" });
+    const yToRing = gsap.quickTo(ring, "y", { duration: 0.32, ease: "power3.out" });
+
+    gsap.set(dot, { xPercent: -50, yPercent: -50 });
+    gsap.set(ring, { xPercent: -50, yPercent: -50 });
+
     document.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        xToDot(e.clientX);
+        yToDot(e.clientY);
+        xToRing(e.clientX);
+        yToRing(e.clientY);
         if (!activated) {
             activated = true;
-            ringX = mouseX;
-            ringY = mouseY;
             document.body.classList.add("cursor-active");
         }
     });
-
-    function tick() {
-        dot.style.transform = `translate(${mouseX}px,${mouseY}px) translate(-50%,-50%)`;
-        ringX += (mouseX - ringX) * 0.14;
-        ringY += (mouseY - ringY) * 0.14;
-        ring.style.transform = `translate(${ringX}px,${ringY}px) translate(-50%,-50%)`;
-        if (text) {
-            text.style.transform = `translate(${ringX}px,${ringY}px) translate(-50%,-50%)`;
-        }
-        requestAnimationFrame(tick);
-    }
-    tick();
 
     const observer = new MutationObserver(() => {
         document
@@ -65,6 +58,32 @@
         });
     });
     observer.observe(document.body, { childList: true, subtree: true });
+
+    // Hover detection for dark elements to "light up"
+    let isOnDark = false;
+    document.addEventListener("mouseover", (e) => {
+        const target = e.target;
+        if (!target) return;
+        const darkEl = target.closest(
+            '.hero, .page-hero, .pd-hero, .pd-next-section, .project-cta-inner, .cta-section, .footer, .btn-primary, .pd-preview-overlay, .pd-all-link, .project-filter-btn.active, #globalLightbox'
+        );
+        if (darkEl) {
+            if (!isOnDark) {
+                isOnDark = true;
+                document.body.classList.add("cursor-on-dark");
+                gsap.to(dot, { backgroundColor: "#7ec8f0", scale: 1.5, duration: 0.3 });
+                gsap.to(ring, { borderColor: "#7ec8f0", duration: 0.3 });
+            }
+        } else {
+            if (isOnDark) {
+                isOnDark = false;
+                document.body.classList.remove("cursor-on-dark");
+                gsap.to(dot, { backgroundColor: "", scale: 1, duration: 0.3 });
+                gsap.to(ring, { borderColor: "", duration: 0.3 });
+            }
+        }
+    });
+
     document.addEventListener("mousedown", () => {
         document.body.classList.add("cursor-click");
         setTimeout(() => document.body.classList.remove("cursor-click"), 150);
@@ -297,128 +316,7 @@ function initStaggered() {
     });
 }
 
-// ==================== GSAP GLOBAL ANIMATIONS ====================
-function initGSAPAnimations() {
-    if (typeof gsap === 'undefined') return;
-    gsap.registerPlugin(ScrollTrigger);
 
-    // ── Beranda Hero ──
-    const heroSection = document.querySelector('.hero');
-    if (heroSection) {
-        const cssAnimatedEls = heroSection.querySelectorAll(
-            '.hero-accent-line, .hero-eyebrow, .hero-title, .hero-sub, .hero-buttons, .hero-stats, .hero-visual, .hero-scroll-hint'
-        );
-        cssAnimatedEls.forEach(el => {
-            el.style.animation = 'none';
-        });
-
-        gsap.set(cssAnimatedEls, { opacity: 1 });
-
-        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-        heroTl
-            .fromTo('.hero-accent-line', { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.6 }, 0.1)
-            .fromTo('.hero-eyebrow', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.6 }, 0.2)
-            .fromTo('.hero-title', { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.85 }, 0.3)
-            .fromTo('.hero-sub', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7 }, 0.45)
-            .fromTo('.hero-buttons', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, 0.55)
-            .fromTo('.hero-stats', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7 }, 0.7)
-            .fromTo('.hero-visual', { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.9 }, 0.3)
-            .fromTo('.hero-scroll-hint', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, 1.0);
-    }
-
-    // ── Scroll-triggered reveals for all non-hero sections ──
-    gsap.utils.toArray('section:not(.hero):not(.page-hero)').forEach(section => {
-        const headers = section.querySelectorAll('.section-header, .section-tag');
-        if (headers.length) {
-            headers.forEach(h => h.classList.remove('reveal'));
-            gsap.from(headers, {
-                y: 40, opacity: 0, duration: 0.8,
-                stagger: 0.1,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: section,
-                    start: 'top 80%',
-                    toggleActions: 'play none none none'
-                }
-            });
-        }
-
-        const cards = section.querySelectorAll('.card, .card-program');
-        if (cards.length) {
-            cards.forEach(c => c.classList.remove('reveal'));
-            gsap.from(cards, {
-                y: 60, opacity: 0, duration: 0.7,
-                stagger: 0.1,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: section,
-                    start: 'top 75%',
-                    toggleActions: 'play none none none'
-                }
-            });
-        }
-    });
-
-    // ── Page hero parallax ──
-    const pageHeroBg = document.querySelector('.page-hero-bg');
-    if (pageHeroBg) {
-        gsap.to(pageHeroBg, {
-            yPercent: 30,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: '.page-hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1.5
-            }
-        });
-    }
-
-    // ── Footer entrance ──
-    const footer = document.querySelector('.footer');
-    if (footer) {
-        gsap.from('.footer-grid > *', {
-            y: 30, opacity: 0, duration: 0.6,
-            stagger: 0.08,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: footer,
-                start: 'top 88%',
-                toggleActions: 'play none none none'
-            }
-        });
-    }
-
-    // ── CTA section ──
-    const ctaSection = document.querySelector('.cta-section');
-    if (ctaSection) {
-        gsap.from(ctaSection, {
-            y: 40, opacity: 0, scale: 0.97,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: ctaSection,
-                start: 'top 82%',
-                toggleActions: 'play none none none'
-            }
-        });
-    }
-
-    // ── Gallery items ──
-    gsap.utils.toArray('.gallery-item').forEach((item, i) => {
-        gsap.from(item, {
-            y: 40, opacity: 0, scale: 0.95,
-            duration: 0.6,
-            delay: (i % 4) * 0.08,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: item,
-                start: 'top 88%',
-                toggleActions: 'play none none none'
-            }
-        });
-    });
-}
 
 // ==================== NAVBAR SCROLL ====================
 window.addEventListener("scroll", () => {
@@ -458,7 +356,6 @@ document.addEventListener("DOMContentLoaded", () => {
     animateCounters();
     initNilaiCarousel();
     initMultiStep();
-    initGSAPAnimations();
 
     // Gallery lightbox
     document.querySelectorAll(".gallery-item").forEach((item) => {

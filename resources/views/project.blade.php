@@ -14,10 +14,6 @@
 
         <div class="container">
             <div>
-                <span class="section-tag animate-fade-up">
-                    Portfolio
-                </span>
-
                 <h1 class="animate-fade-up" style="animation-delay:.15s">
                     Karya & <span class="gradient-text">Produk Kami</span>
                 </h1>
@@ -66,9 +62,8 @@
             <div class="project-grid" id="projectGrid">
                 @forelse($products as $product)
                 <a href="{{ route('project.detail', $product->slug) }}"
-                   class="project-card produk-card reveal"
-                   data-category="{{ $product->category_id }}"
-                   style="transition-delay:{{ ($loop->index % 6) * 0.08 }}s">
+                   class="project-card produk-card"
+                   data-category="{{ $product->category_id }}">
 
                     <div class="project-card-img">
                         @if($product->display_image)
@@ -133,12 +128,12 @@
     </section>
 
     {{-- ── CTA SECTION ── --}}
-    <section class="project-cta reveal">
+    <section class="project-cta">
         <div class="container">
             <div class="project-cta-inner">
                 <div class="project-cta-content">
                     <h2>Punya Proyek yang Perlu Dikerjakan?</h2>
-                    <p>Tim TEFA kami siap membantu mewujudkan ide digital Anda menjadi kenyataan.</p>
+                    <p>Tim TEFA kami siap membantu mewujudkan id digital Anda menjadi kenyataan.</p>
                 </div>
                 <a href="{{ url('/kontak') }}" class="project-cta-btn">
                     Hubungi Kami
@@ -159,34 +154,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Staggered grid entrance
         gsap.utils.toArray('.project-card').forEach((item) => {
-            gsap.from(item, {
-                y: 60, opacity: 0, duration: 0.8,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: item,
-                    start: 'top 88%',
-                    toggleActions: 'play none none none'
-                }
-            });
-        });
+            // Temporarily kill CSS transitions so they do not fight with GSAP
+            item.style.transition = 'none';
 
-        // Parallax on card images
-        document.querySelectorAll('.project-card-img img').forEach(img => {
-            gsap.to(img, {
-                yPercent: -8,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: img.closest('.project-card'),
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 1.2
+            gsap.fromTo(item, 
+                { y: 50, opacity: 0 },
+                {
+                    y: 0, opacity: 1, duration: 0.75,
+                    ease: 'power3.out',
+                    clearProps: 'transform,opacity,transition', // restore CSS transitions for hover behavior
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 88%',
+                        toggleActions: 'play none none none'
+                    }
                 }
-            });
+            );
         });
 
         // CTA section entrance
         gsap.from('.project-cta-inner', {
-            y: 50, opacity: 0, duration: 0.9,
+            y: 40, opacity: 0, duration: 0.8,
             ease: 'power3.out',
             scrollTrigger: {
                 trigger: '.project-cta',

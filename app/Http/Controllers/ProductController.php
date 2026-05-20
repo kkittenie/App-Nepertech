@@ -36,13 +36,18 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name'               => 'required|string|max:255',
+            'subtitle'           => 'nullable|string|max:255',
+            'subjudul_atas'      => 'nullable|string|max:255',
             'category_id'        => 'required|exists:categories,id',
             'harga_jual'         => 'required|numeric|min:0',
             'harga_sewa_bulanan' => 'nullable|numeric|min:0',
             'harga_sewa_tahunan' => 'nullable|numeric|min:0',
             'link'               => 'nullable|url',
             'description'        => 'required|string',
+            'subjudul_bawah'     => 'nullable|string|max:255',
+            'deskripsi_bawah'    => 'nullable|string',
             'display_image'      => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'hero_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'gallery_images'     => 'nullable|array',
             'gallery_images.*'   => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
@@ -50,6 +55,11 @@ class ProductController extends Controller
         // Handle display image
         if ($request->hasFile('display_image')) {
             $validated['display_image'] = $request->file('display_image')->store('products', 'public');
+        }
+
+        // Handle hero image
+        if ($request->hasFile('hero_image')) {
+            $validated['hero_image'] = $request->file('hero_image')->store('products/heroes', 'public');
         }
 
         // Remove gallery_images from validated data before creating product
@@ -83,13 +93,18 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name'               => 'required|string|max:255',
+            'subtitle'           => 'nullable|string|max:255',
+            'subjudul_atas'      => 'nullable|string|max:255',
             'category_id'        => 'required|exists:categories,id',
             'harga_jual'         => 'required|numeric|min:0',
             'harga_sewa_bulanan' => 'nullable|numeric|min:0',
             'harga_sewa_tahunan' => 'nullable|numeric|min:0',
             'link'               => 'nullable|url',
             'description'        => 'required|string',
+            'subjudul_bawah'     => 'nullable|string|max:255',
+            'deskripsi_bawah'    => 'nullable|string',
             'display_image'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'hero_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'gallery_images'     => 'nullable|array',
             'gallery_images.*'   => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
@@ -100,6 +115,14 @@ class ProductController extends Controller
                 Storage::disk('public')->delete($product->display_image);
             }
             $validated['display_image'] = $request->file('display_image')->store('products', 'public');
+        }
+
+        // Handle hero image
+        if ($request->hasFile('hero_image')) {
+            if ($product->hero_image) {
+                Storage::disk('public')->delete($product->hero_image);
+            }
+            $validated['hero_image'] = $request->file('hero_image')->store('products/heroes', 'public');
         }
 
         // Remove gallery_images from validated data
@@ -141,6 +164,11 @@ class ProductController extends Controller
         // Delete display image
         if ($product->display_image) {
             Storage::disk('public')->delete($product->display_image);
+        }
+
+        // Delete hero image
+        if ($product->hero_image) {
+            Storage::disk('public')->delete($product->hero_image);
         }
 
         // Delete gallery images

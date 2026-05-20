@@ -9,10 +9,6 @@
         <div class="container">
 
             <div>
-                <span class="section-tag animate-fade-up">
-                    Products & Services
-                </span>
-
                 <h1 class="animate-fade-up" style="animation-delay:.15s">
 
                     Layanan Kami
@@ -157,6 +153,23 @@
                         Dukungan teknis dan layanan
                         after-sales yang responsif untuk
                         memastikan produk berjalan optimal.
+                    </p>
+
+                </div>
+
+                <!-- CARD 4 -->
+                <div class="card reveal" style="transition-delay:.36s">
+
+                    <div class="card-icon-wrap">
+                        <i class="fas fa-award"></i>
+                    </div>
+
+                    <h3>Produk Digital Premium</h3>
+
+                    <p>
+                        Kami juga menghadirkan produk digital unggulan 
+                        berkualitas tinggi dengan desain modern dan performa 
+                        andal yang siap mendongkrak bisnis Anda.
                     </p>
 
                 </div>

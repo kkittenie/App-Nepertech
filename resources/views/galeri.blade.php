@@ -9,10 +9,6 @@
         <div class="container">
 
             <div>
-                <span class="section-tag animate-fade-up">
-                    Dokumentasi
-                </span>
-
                 <h1 class="animate-fade-up" style="animation-delay:.15s">
                     Galeri Kegiatan
                 </h1>

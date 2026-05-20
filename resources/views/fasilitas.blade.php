@@ -9,10 +9,6 @@
         <div class="container">
 
             <div>
-                <span class="section-tag animate-fade-up">
-                    Infrastruktur
-                </span>
-
                 <h1 class="animate-fade-up" style="animation-delay:.15s">
                     Fasilitas Lengkap
                 </h1>

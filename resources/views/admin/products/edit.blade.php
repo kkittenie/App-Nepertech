@@ -89,6 +89,19 @@
                         @enderror
                     </div>
 
+                    <div class="col-12">
+                        <label class="form-label">Subtitle (Subjudul Hero)</label>
+                        <input type="text"
+                               name="subtitle"
+                               class="form-control {{ $errors->has('subtitle') ? 'is-invalid' : '' }}"
+                               placeholder="Muncul di bawah nama produk pada halaman detail (opsional)"
+                               value="{{ old('subtitle', $product->subtitle) }}"
+                               maxlength="255">
+                        @error('subtitle')
+                            <div class="invalid-feedback"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
             </div>
 
@@ -206,6 +219,45 @@
             </div>
 
             <div class="form-section">
+                <p class="section-label">Hero Background</p>
+                <p class="text-muted small mb-3">Gambar latar belakang hero di halaman detail (opsional, resolusi tinggi disarankan).</p>
+
+                @if($product->hero_image)
+                <div class="current-image-card" style="margin-bottom:12px">
+                    <img src="{{ asset('storage/' . $product->hero_image) }}" alt="Hero" id="currentHeroImg">
+                    <div class="current-image-info">
+                        <p>{{ basename($product->hero_image) }}</p>
+                        <span>Upload baru untuk mengganti</span>
+                    </div>
+                </div>
+                @endif
+
+                <div class="upload-zone" id="heroUploadZone">
+                    <input type="file"
+                           name="hero_image"
+                           id="heroImageInput"
+                           accept="image/*">
+                    <div class="upload-icon">
+                        <i class="ti ti-panorama-horizontal"></i>
+                    </div>
+                    <p class="fw-semibold mb-1" style="color:#0a2540; font-size:14px;">
+                        Klik atau seret gambar hero ke sini
+                    </p>
+                    <p class="text-muted mb-0" style="font-size:12px;">
+                        PNG, JPG, WEBP hingga 4MB — Opsional
+                    </p>
+                    <div class="new-preview" id="heroNewPreview">
+                        <img id="heroPreviewImg" src="#" alt="Preview hero">
+                        <p class="text-muted mt-2 mb-0" style="font-size:12px;" id="heroPreviewName"></p>
+                    </div>
+                </div>
+
+                @error('hero_image')
+                    <div class="invalid-feedback d-flex mt-2"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-section">
                 <p class="section-label">Foto Galeri Produk</p>
 
                 @if($product->images->count() > 0)
@@ -253,18 +305,58 @@
             </div>
 
             <div class="form-section">
-                <p class="section-label">Deskripsi</p>
-                <label class="form-label">Detail Produk <span style="color:#ef4444">*</span></label>
-                <textarea name="description"
-                          id="descTextarea"
-                          class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}"
-                          placeholder="Jelaskan produk, fitur utama, dan keunggulannya..."
-                          maxlength="1000"
-                          required>{{ old('description', $product->description) }}</textarea>
-                <div class="char-counter" id="charCounter">0 / 1000</div>
-                @error('description')
-                    <div class="invalid-feedback"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
-                @enderror
+                <p class="section-label">Deskripsi & Subjudul</p>
+
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin-bottom:24px;">
+                    <p class="fw-bold mb-3" style="color:#0f172a; font-size:14px;"><i class="ti ti-layout-top" style="margin-right:6px"></i>Bagian Atas (Sebelum Gambar Galeri)</p>
+                    
+                    <label class="form-label">Subjudul Atas</label>
+                    <input type="text"
+                           name="subjudul_atas"
+                           class="form-control mb-3 {{ $errors->has('subjudul_atas') ? 'is-invalid' : '' }}"
+                           placeholder="Contoh: Tentang Produk Ini..."
+                           value="{{ old('subjudul_atas', $product->subjudul_atas) }}"
+                           maxlength="255">
+                    @error('subjudul_atas')
+                        <div class="invalid-feedback d-block mb-3"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                    @enderror
+
+                    <label class="form-label">Deskripsi Atas <span style="color:#ef4444">*</span></label>
+                    <textarea name="description"
+                              id="descTextarea"
+                              class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}"
+                              placeholder="Penjelasan utama project..."
+                              maxlength="1000"
+                              required>{{ old('description', $product->description) }}</textarea>
+                    <div class="char-counter" id="charCounter">0 / 1000</div>
+                    @error('description')
+                        <div class="invalid-feedback d-block"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px;">
+                    <p class="fw-bold mb-3" style="color:#0f172a; font-size:14px;"><i class="ti ti-layout-bottom" style="margin-right:6px"></i>Bagian Bawah (Setelah Gambar Galeri)</p>
+                    
+                    <label class="form-label">Subjudul Bawah</label>
+                    <input type="text"
+                           name="subjudul_bawah"
+                           class="form-control mb-3 {{ $errors->has('subjudul_bawah') ? 'is-invalid' : '' }}"
+                           placeholder="Contoh: Detail & Fitur..."
+                           value="{{ old('subjudul_bawah', $product->subjudul_bawah) }}"
+                           maxlength="255">
+                    @error('subjudul_bawah')
+                        <div class="invalid-feedback d-block mb-3"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                    @enderror
+
+                    <label class="form-label">Deskripsi Bawah</label>
+                    <textarea name="deskripsi_bawah"
+                              class="form-control {{ $errors->has('deskripsi_bawah') ? 'is-invalid' : '' }}"
+                              placeholder="Penjelasan detail tambahan setelah galeri..."
+                              rows="4">{{ old('deskripsi_bawah', $product->deskripsi_bawah) }}</textarea>
+                    @error('deskripsi_bawah')
+                        <div class="invalid-feedback d-block"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
 
             <div class="form-section" style="background:#fafbfc;">
@@ -326,6 +418,38 @@
                 currentImg.style.transition = 'opacity 0.3s ease';
                 currentImg.style.opacity = '0.4';
             }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ── Hero Image Preview ──
+    const heroInput   = document.getElementById('heroImageInput');
+    const heroZone    = document.getElementById('heroUploadZone');
+    const heroNewPrev = document.getElementById('heroNewPreview');
+    const heroImg     = document.getElementById('heroPreviewImg');
+    const heroName    = document.getElementById('heroPreviewName');
+
+    if (heroInput && heroZone) {
+        heroInput.addEventListener('change', handleHeroFile);
+        heroZone.addEventListener('dragover', e => { e.preventDefault(); heroZone.classList.add('drag-over'); });
+        heroZone.addEventListener('dragleave', () => heroZone.classList.remove('drag-over'));
+        heroZone.addEventListener('drop', e => {
+            e.preventDefault();
+            heroZone.classList.remove('drag-over');
+            if (e.dataTransfer.files[0]) { heroInput.files = e.dataTransfer.files; handleHeroFile(); }
+        });
+    }
+
+    function handleHeroFile() {
+        const file = heroInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            heroImg.src = e.target.result;
+            heroName.textContent = '✓ ' + file.name;
+            heroNewPrev.style.display = 'block';
+            const currentHeroImg = document.getElementById('currentHeroImg');
+            if (currentHeroImg) { currentHeroImg.style.opacity = '0.4'; }
         };
         reader.readAsDataURL(file);
     }

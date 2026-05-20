@@ -12,13 +12,6 @@
 
                 <div class="hero-accent-line"></div>
 
-                <div class="hero-eyebrow">
-                    <div class="hero-badge">
-                        <span class="hero-badge-dot"></span>
-                        TEFA · BLUD SMKN 1 Cirebon
-                    </div>
-                </div>
-
                 <h1 class="hero-title">
                     Solusi Teknologi untuk<br>
                     <span class="hero-title-highlight">Masa Depan</span>
