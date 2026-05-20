@@ -30,7 +30,7 @@
                 <a href="#">Profil</a>
                 <a href="#">Visi & Misi</a>
                 <a href="#">Nilai Perusahaan</a>
-                <a href="#">Galeri</a>
+                <a href="{{ url('/project') }}">Project</a>
                 <a href="#">Kontak</a>
             </div>
             <div class="footer-col">

@@ -75,24 +75,56 @@
                 <p class="section-label">Harga &amp; Tautan</p>
                 <div class="row g-3">
 
-                    <div class="col-md-5">
-                        <label class="form-label">Harga <span style="color:#ef4444">*</span></label>
+                    <div class="col-md-4">
+                        <label class="form-label">Harga Jual (Lepas) <span style="color:#ef4444">*</span></label>
                         <div class="price-input-wrapper">
                             <span class="price-prefix">Rp</span>
                             <input type="number"
-                                   name="price"
+                                   name="harga_jual"
                                    class="form-control"
                                    placeholder="0"
-                                   value="{{ old('price') }}"
+                                   value="{{ old('harga_jual') }}"
                                    min="0"
                                    required>
                         </div>
-                        @error('price')
+                        @error('harga_jual')
                             <div class="invalid-feedback"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <div class="col-md-7">
+                    <div class="col-md-4">
+                        <label class="form-label">Harga Sewa / Bulan</label>
+                        <div class="price-input-wrapper">
+                            <span class="price-prefix">Rp</span>
+                            <input type="number"
+                                   name="harga_sewa_bulanan"
+                                   class="form-control"
+                                   placeholder="0"
+                                   value="{{ old('harga_sewa_bulanan') }}"
+                                   min="0">
+                        </div>
+                        @error('harga_sewa_bulanan')
+                            <div class="invalid-feedback"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Harga Sewa / Tahun</label>
+                        <div class="price-input-wrapper">
+                            <span class="price-prefix">Rp</span>
+                            <input type="number"
+                                   name="harga_sewa_tahunan"
+                                   class="form-control"
+                                   placeholder="0"
+                                   value="{{ old('harga_sewa_tahunan') }}"
+                                   min="0">
+                        </div>
+                        @error('harga_sewa_tahunan')
+                            <div class="invalid-feedback"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-12">
                         <label class="form-label">Link Produk</label>
                         <input type="url"
                                name="link"
@@ -110,12 +142,13 @@
 
           
             <div class="form-section">
-                <p class="section-label">Gambar Produk</p>
+                <p class="section-label">Display Picture (Cover)</p>
+                <p class="text-muted small mb-3">Gambar utama yang akan ditampilkan di halaman project.</p>
 
-                <div class="upload-zone" id="uploadZone">
+                <div class="upload-zone" id="displayUploadZone">
                     <input type="file"
-                           name="image"
-                           id="imageInput"
+                           name="display_image"
+                           id="displayImageInput"
                            accept="image/*">
                     <div class="upload-icon">
                         <i class="ti ti-photo-up"></i>
@@ -124,15 +157,47 @@
                         Klik atau seret gambar ke sini
                     </p>
                     <p class="text-muted mb-0" style="font-size:12px;">
-                        PNG, JPG, WEBP hingga 2MB
+                        PNG, JPG, WEBP hingga 2MB — <strong>Wajib</strong>
                     </p>
-                    <div class="upload-preview" id="uploadPreview">
-                        <img id="previewImg" src="#" alt="Preview">
-                        <p class="text-muted mt-2 mb-0" style="font-size:12px;" id="previewName"></p>
+                    <div class="upload-preview" id="displayPreview">
+                        <img id="displayPreviewImg" src="#" alt="Preview">
+                        <p class="text-muted mt-2 mb-0" style="font-size:12px;" id="displayPreviewName"></p>
                     </div>
                 </div>
 
-                @error('image')
+                @error('display_image')
+                    <div class="invalid-feedback d-flex"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                @enderror
+            </div>
+
+           
+            <div class="form-section">
+                <p class="section-label">Foto Galeri Produk</p>
+                <p class="text-muted small mb-3">Upload foto tambahan untuk galeri (opsional, bisa lebih dari 1).</p>
+
+                <div class="upload-zone" id="galleryUploadZone">
+                    <input type="file"
+                           name="gallery_images[]"
+                           id="galleryImageInput"
+                           accept="image/*"
+                           multiple>
+                    <div class="upload-icon">
+                        <i class="ti ti-photos"></i>
+                    </div>
+                    <p class="fw-semibold mb-1" style="color:#0a2540; font-size:14px;">
+                        Klik atau seret beberapa gambar ke sini
+                    </p>
+                    <p class="text-muted mb-0" style="font-size:12px;">
+                        PNG, JPG, WEBP hingga 2MB per file — Pilih beberapa sekaligus
+                    </p>
+                </div>
+
+                <div class="gallery-preview-grid" id="galleryPreviewGrid"></div>
+
+                @error('gallery_images')
+                    <div class="invalid-feedback d-flex"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                @enderror
+                @error('gallery_images.*')
                     <div class="invalid-feedback d-flex"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
                 @enderror
             </div>
@@ -177,43 +242,80 @@
 
 @push('scripts')
 <script>
-    // ── Image Upload Preview ──
-    const imageInput  = document.getElementById('imageInput');
-    const uploadZone  = document.getElementById('uploadZone');
-    const uploadPrev  = document.getElementById('uploadPreview');
-    const previewImg  = document.getElementById('previewImg');
-    const previewName = document.getElementById('previewName');
+    // ── Display Image Preview ──
+    const displayInput = document.getElementById('displayImageInput');
+    const displayZone  = document.getElementById('displayUploadZone');
+    const displayPrev  = document.getElementById('displayPreview');
+    const displayImg   = document.getElementById('displayPreviewImg');
+    const displayName  = document.getElementById('displayPreviewName');
 
-    imageInput.addEventListener('change', handleFile);
+    displayInput.addEventListener('change', handleDisplayFile);
 
-    uploadZone.addEventListener('dragover', e => {
+    displayZone.addEventListener('dragover', e => {
         e.preventDefault();
-        uploadZone.classList.add('drag-over');
+        displayZone.classList.add('drag-over');
     });
-
-    uploadZone.addEventListener('dragleave', () => {
-        uploadZone.classList.remove('drag-over');
-    });
-
-    uploadZone.addEventListener('drop', e => {
+    displayZone.addEventListener('dragleave', () => displayZone.classList.remove('drag-over'));
+    displayZone.addEventListener('drop', e => {
         e.preventDefault();
-        uploadZone.classList.remove('drag-over');
+        displayZone.classList.remove('drag-over');
         if (e.dataTransfer.files[0]) {
-            imageInput.files = e.dataTransfer.files;
-            handleFile();
+            displayInput.files = e.dataTransfer.files;
+            handleDisplayFile();
         }
     });
 
-    function handleFile() {
-        const file = imageInput.files[0];
+    function handleDisplayFile() {
+        const file = displayInput.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = e => {
-            previewImg.src = e.target.result;
-            previewName.textContent = file.name;
-            uploadPrev.style.display = 'block';
+            displayImg.src = e.target.result;
+            displayName.textContent = file.name;
+            displayPrev.style.display = 'block';
         };
         reader.readAsDataURL(file);
+    }
+
+    // ── Gallery Images Preview ──
+    const galleryInput = document.getElementById('galleryImageInput');
+    const galleryZone  = document.getElementById('galleryUploadZone');
+    const galleryGrid  = document.getElementById('galleryPreviewGrid');
+
+    galleryInput.addEventListener('change', handleGalleryFiles);
+
+    galleryZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        galleryZone.classList.add('drag-over');
+    });
+    galleryZone.addEventListener('dragleave', () => galleryZone.classList.remove('drag-over'));
+    galleryZone.addEventListener('drop', e => {
+        e.preventDefault();
+        galleryZone.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) {
+            galleryInput.files = e.dataTransfer.files;
+            handleGalleryFiles();
+        }
+    });
+
+    function handleGalleryFiles() {
+        galleryGrid.innerHTML = '';
+        const files = galleryInput.files;
+        if (!files.length) return;
+
+        Array.from(files).forEach((file, i) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const thumb = document.createElement('div');
+                thumb.className = 'gallery-thumb';
+                thumb.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview ${i+1}">
+                    <span class="gallery-thumb-name">${file.name}</span>
+                `;
+                galleryGrid.appendChild(thumb);
+            };
+            reader.readAsDataURL(file);
+        });
     }
 
     // ── Char Counter ──

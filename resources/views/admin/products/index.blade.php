@@ -2,10 +2,7 @@
 
 @section('title', 'Manajemen Produk')
 
-
-
 @section('content')
-
 
 @if(session('success'))
 <div class="toast-alert toast-success" id="toastAlert">
@@ -68,9 +65,10 @@
                             <th>Gambar</th>
                             <th>Nama Produk</th>
                             <th>Kategori</th>
-                            <th>Harga</th>
-                            <th>Link</th>
-                            <th>Deskripsi</th>
+                            <th>Harga Jual</th>
+                            <th>Sewa/Bln</th>
+                            <th>Sewa/Thn</th>
+                            <th>Galeri</th>
                             <th class="text-end">Aksi</th>
                         </tr>
                     </thead>
@@ -83,8 +81,8 @@
                             <td class="text-muted small">{{ $loop->iteration }}</td>
 
                             <td>
-                                @if($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}"
+                                @if($product->display_image)
+                                    <img src="{{ asset('storage/' . $product->display_image) }}"
                                          class="product-img" alt="{{ $product->name }}">
                                 @else
                                     <div class="product-img-placeholder">
@@ -106,22 +104,27 @@
                             </td>
 
                             <td class="fw-semibold small">
-                                Rp {{ number_format($product->price, 0, ',', '.') }}
+                                Rp {{ number_format($product->harga_jual, 0, ',', '.') }}
                             </td>
 
-                            <td class="link-cell">
-                                @if($product->link)
-                                    <a href="{{ $product->link }}" target="_blank" title="{{ $product->link }}">
-                                        <i class="ti ti-external-link" style="font-size:13px"></i>
-                                        {{ Str::limit($product->link, 22) }}
-                                    </a>
+                            <td class="small">
+                                @if($product->harga_sewa_bulanan)
+                                    Rp {{ number_format($product->harga_sewa_bulanan, 0, ',', '.') }}
                                 @else
-                                    <span class="text-muted small">—</span>
+                                    <span class="text-muted">—</span>
                                 @endif
                             </td>
 
-                            <td class="text-muted small">
-                                {{ Str::limit($product->description, 38) }}
+                            <td class="small">
+                                @if($product->harga_sewa_tahunan)
+                                    Rp {{ number_format($product->harga_sewa_tahunan, 0, ',', '.') }}
+                                @else
+                                    <span class="text-muted">—</span>
+                                @endif
+                            </td>
+
+                            <td class="small text-muted">
+                                {{ $product->images->count() }} foto
                             </td>
 
                             <td class="text-end">

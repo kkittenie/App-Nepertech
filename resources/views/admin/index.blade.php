@@ -132,8 +132,8 @@
                     @forelse($topProducts as $product)
                     <li class="admin-list-item">
                         <div class="admin-list-img">
-                            @if($product->image)
-                                <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
+                            @if($product->display_image)
+                                <img src="{{ asset('storage/' . $product->display_image) }}" alt="{{ $product->name }}">
                             @else
                                 <div class="img-placeholder">
                                     <i class="ti ti-package"></i>
@@ -145,7 +145,7 @@
                             <span class="admin-list-meta">{{ $product->category->name ?? 'Uncategorized' }}</span>
                         </div>
                         <div class="admin-list-value">
-                            Rp {{ number_format($product->price, 0, ',', '.') }}
+                            Rp {{ number_format($product->harga_jual, 0, ',', '.') }}
                         </div>
                     </li>
                     @empty
@@ -172,8 +172,8 @@
                     @forelse($lowPriceProducts as $product)
                     <li class="admin-list-item">
                         <div class="admin-list-img">
-                            @if($product->image)
-                                <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
+                            @if($product->display_image)
+                                <img src="{{ asset('storage/' . $product->display_image) }}" alt="{{ $product->name }}">
                             @else
                                 <div class="img-placeholder">
                                     <i class="ti ti-package"></i>
@@ -185,7 +185,7 @@
                             <span class="admin-list-meta">{{ $product->category->name ?? 'Uncategorized' }}</span>
                         </div>
                         <div class="admin-list-value admin-list-value--low">
-                            Rp {{ number_format($product->price, 0, ',', '.') }}
+                            Rp {{ number_format($product->harga_jual, 0, ',', '.') }}
                         </div>
                     </li>
                     @empty
@@ -212,8 +212,8 @@
                     @forelse($recentProducts as $product)
                     <li class="admin-list-item">
                         <div class="admin-list-img">
-                            @if($product->image)
-                                <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
+                            @if($product->display_image)
+                                <img src="{{ asset('storage/' . $product->display_image) }}" alt="{{ $product->name }}">
                             @else
                                 <div class="img-placeholder">
                                     <i class="ti ti-package"></i>

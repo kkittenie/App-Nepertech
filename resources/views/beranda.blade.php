@@ -20,10 +20,8 @@
                 </div>
 
                 <h1 class="hero-title">
-                    Solusi Teknologi oleh<br>
-                    <span class="gradient-text">
-                        Talenta <em>Masa Depan</em>
-                    </span>
+                    Solusi Teknologi untuk<br>
+                    <span class="hero-title-highlight">Masa Depan</span>
                 </h1>
 
                 <p class="hero-sub">
@@ -56,7 +54,7 @@
                     <div class="stat-divider"></div>
                     <div class="stat-item">
                         <span class="stat-number" data-target="{{ $totalUsers }}" data-suffix="+">{{ $totalUsers }}+</span>
-                        <span class="stat-label">Pengguna Aktif</span>
+                        <span class="stat-label">Konsumen</span>
                     </div>
                 </div>
 

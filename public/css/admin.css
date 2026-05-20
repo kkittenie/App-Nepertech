@@ -432,3 +432,85 @@ textarea.form-control { resize: vertical; min-height: 120px; line-height: 1.6; }
 @media (max-width: 991.98px) { .d-lg-none { display: inline-flex !important; } .d-none.d-lg-inline-flex { display: none !important; } }
 @media (min-width: 768px) { .d-none.d-md-block { display: block !important; } .d-none.d-md-flex { display: flex !important; } .d-none.d-md-inline { display: inline !important; } }
 @media (max-width: 767.98px) { .d-none.d-md-block { display: none !important; } .d-none.d-md-flex { display: none !important; } .d-none.d-md-inline { display: none !important; } }
+
+/* ===================== GALLERY UPLOAD ===================== */
+.gallery-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+.gallery-thumb {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid var(--gray-border);
+    background: #fafbfc;
+    animation: fadeUp .3s var(--ease) both;
+}
+.gallery-thumb img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+}
+.gallery-thumb-name {
+    display: block;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 4px 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Existing gallery grid (edit page) */
+.existing-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+}
+.existing-gallery-item {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--gray-border);
+    background: #fafbfc;
+    position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.existing-gallery-item:has(input:checked) {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+}
+.existing-gallery-item img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+}
+.gallery-delete-check {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.gallery-delete-check:hover {
+    color: #dc2626;
+}
+.gallery-delete-check input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #ef4444;
+    cursor: pointer;
+}
+.gallery-delete-check input:checked + span {
+    color: #dc2626;
+    font-weight: 600;
+}
+

@@ -41,9 +41,27 @@ class HomeController extends Controller
         return view('fasilitas');
     }
 
-    public function galeri()
+    public function project()
     {
-        return view('galeri');
+        $categories = Category::withCount('products')->get();
+        $products   = Product::with('category', 'images')->latest()->get();
+
+        return view('project', compact('categories', 'products'));
+    }
+
+    public function projectDetail($slug)
+    {
+        $product = Product::with('category', 'images')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        // Get next product for "Next Project" section
+        $nextProduct = Product::where('id', '>', $product->id)->orderBy('id')->first();
+        if (!$nextProduct) {
+            $nextProduct = Product::where('id', '!=', $product->id)->orderBy('id')->first();
+        }
+
+        return view('project-detail', compact('product', 'nextProduct'));
     }
 
     public function kontak()

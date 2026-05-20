@@ -171,8 +171,8 @@
                                 <td class="text-muted">{{ $idx + 1 }}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        @if($product->image)
-                                            <img src="{{ Storage::url($product->image) }}" class="report-product-img" alt="">
+                                        @if($product->display_image)
+                                            <img src="{{ asset('storage/' . $product->display_image) }}" class="report-product-img" alt="">
                                         @else
                                             <div class="report-product-img-placeholder">
                                                 <i class="ti ti-package"></i>
@@ -184,7 +184,7 @@
                                 <td>
                                     <span class="badge-category">{{ $product->category->name ?? '—' }}</span>
                                 </td>
-                                <td class="fw-semibold">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                                <td class="fw-semibold">Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</td>
                                 <td class="text-muted" style="font-size:0.82rem">{{ $product->created_at->format('d M Y') }}</td>
                             </tr>
                             @empty

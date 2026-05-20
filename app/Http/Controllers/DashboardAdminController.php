@@ -14,17 +14,17 @@ class DashboardAdminController extends Controller
         $totalUsers     = User::count();
 
         // Sum of all product prices as a simple "catalog value"
-        $catalogValue = Product::sum('price');
+        $catalogValue = Product::sum('harga_jual');
 
         // Top products by price (simulate "top selling")
         $topProducts = Product::with('category')
-            ->orderByDesc('price')
+            ->orderByDesc('harga_jual')
             ->take(5)
             ->get();
 
         // Low-priced products (simulate "low stock" — cheapest items)
         $lowPriceProducts = Product::with('category')
-            ->orderBy('price')
+            ->orderBy('harga_jual')
             ->take(5)
             ->get();
 

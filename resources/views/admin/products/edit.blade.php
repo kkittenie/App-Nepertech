@@ -2,12 +2,10 @@
 
 @section('title', 'Edit Produk')
 
-
 @section('content')
 
 <div class="container-fluid py-4">
 
-  
     <div class="page-header d-flex justify-content-between align-items-center mb-4">
         <div>
             <div class="edit-badge">
@@ -27,7 +25,6 @@
         </a>
     </div>
 
- 
     @if($errors->any())
     <div class="d-flex align-items-start gap-3 mb-4 p-3"
          style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:14px; animation: fadeUp 0.3s ease">
@@ -45,7 +42,6 @@
     </div>
     @endif
 
- 
     <div class="card form-card">
 
         <form action="{{ route('products.update', $product->id) }}"
@@ -57,7 +53,6 @@
             @csrf
             @method('PUT')
 
-           
             <div class="form-section">
                 <p class="section-label">Identitas Produk</p>
                 <div class="row g-3">
@@ -97,29 +92,60 @@
                 </div>
             </div>
 
-       
             <div class="form-section">
                 <p class="section-label">Harga &amp; Tautan</p>
                 <div class="row g-3">
 
-                    <div class="col-md-5">
-                        <label class="form-label">Harga <span style="color:#ef4444">*</span></label>
+                    <div class="col-md-4">
+                        <label class="form-label">Harga Jual (Lepas) <span style="color:#ef4444">*</span></label>
                         <div class="price-input-wrapper">
                             <span class="price-prefix">Rp</span>
                             <input type="number"
-                                   name="price"
-                                   class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}"
+                                   name="harga_jual"
+                                   class="form-control {{ $errors->has('harga_jual') ? 'is-invalid' : '' }}"
                                    placeholder="0"
-                                   value="{{ old('price', $product->price) }}"
+                                   value="{{ old('harga_jual', $product->harga_jual) }}"
                                    min="0"
                                    required>
                         </div>
-                        @error('price')
+                        @error('harga_jual')
                             <div class="invalid-feedback"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <div class="col-md-7">
+                    <div class="col-md-4">
+                        <label class="form-label">Harga Sewa / Bulan</label>
+                        <div class="price-input-wrapper">
+                            <span class="price-prefix">Rp</span>
+                            <input type="number"
+                                   name="harga_sewa_bulanan"
+                                   class="form-control {{ $errors->has('harga_sewa_bulanan') ? 'is-invalid' : '' }}"
+                                   placeholder="0"
+                                   value="{{ old('harga_sewa_bulanan', $product->harga_sewa_bulanan) }}"
+                                   min="0">
+                        </div>
+                        @error('harga_sewa_bulanan')
+                            <div class="invalid-feedback"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Harga Sewa / Tahun</label>
+                        <div class="price-input-wrapper">
+                            <span class="price-prefix">Rp</span>
+                            <input type="number"
+                                   name="harga_sewa_tahunan"
+                                   class="form-control {{ $errors->has('harga_sewa_tahunan') ? 'is-invalid' : '' }}"
+                                   placeholder="0"
+                                   value="{{ old('harga_sewa_tahunan', $product->harga_sewa_tahunan) }}"
+                                   min="0">
+                        </div>
+                        @error('harga_sewa_tahunan')
+                            <div class="invalid-feedback"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-12">
                         <label class="form-label">Link Produk</label>
                         <input type="url"
                                name="link"
@@ -135,32 +161,29 @@
                 </div>
             </div>
 
-        
             <div class="form-section">
-                <p class="section-label">Gambar Produk</p>
+                <p class="section-label">Display Picture (Cover)</p>
 
-            
                 <div class="current-image-card">
-                    @if($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}"
+                    @if($product->display_image)
+                        <img src="{{ asset('storage/' . $product->display_image) }}"
                              alt="{{ $product->name }}"
-                             id="currentImg">
+                             id="currentDisplayImg">
                     @else
                         <div class="img-placeholder">
                             <i class="ti ti-photo-off"></i>
                         </div>
                     @endif
                     <div class="current-image-info">
-                        <p>{{ $product->image ? basename($product->image) : 'Belum ada gambar' }}</p>
-                        <span>{{ $product->image ? 'Upload gambar baru untuk mengganti' : 'Upload gambar produk di bawah' }}</span>
+                        <p>{{ $product->display_image ? basename($product->display_image) : 'Belum ada gambar' }}</p>
+                        <span>{{ $product->display_image ? 'Upload gambar baru untuk mengganti' : 'Upload gambar cover di bawah' }}</span>
                     </div>
                 </div>
 
-             
-                <div class="upload-zone" id="uploadZone">
+                <div class="upload-zone" id="displayUploadZone">
                     <input type="file"
-                           name="image"
-                           id="imageInput"
+                           name="display_image"
+                           id="displayImageInput"
                            accept="image/*">
                     <div class="upload-icon">
                         <i class="ti ti-photo-up"></i>
@@ -171,18 +194,64 @@
                     <p class="text-muted mb-0" style="font-size:12px;">
                         PNG, JPG, WEBP hingga 2MB — kosongkan jika tidak ingin mengganti
                     </p>
-                    <div class="new-preview" id="newPreview">
-                        <img id="previewImg" src="#" alt="Preview baru">
-                        <p class="text-muted mt-2 mb-0" style="font-size:12px;" id="previewName"></p>
+                    <div class="new-preview" id="displayNewPreview">
+                        <img id="displayPreviewImg" src="#" alt="Preview baru">
+                        <p class="text-muted mt-2 mb-0" style="font-size:12px;" id="displayPreviewName"></p>
                     </div>
                 </div>
 
-                @error('image')
+                @error('display_image')
                     <div class="invalid-feedback d-flex mt-2"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
                 @enderror
             </div>
 
-       
+            <div class="form-section">
+                <p class="section-label">Foto Galeri Produk</p>
+
+                @if($product->images->count() > 0)
+                <p class="text-muted small mb-3">Gambar galeri saat ini — centang untuk menghapus:</p>
+                <div class="existing-gallery-grid">
+                    @foreach($product->images as $img)
+                    <div class="existing-gallery-item">
+                        <img src="{{ asset('storage/' . $img->image_path) }}" alt="Gallery {{ $loop->iteration }}">
+                        <label class="gallery-delete-check">
+                            <input type="checkbox" name="delete_images[]" value="{{ $img->id }}">
+                            <span><i class="ti ti-trash"></i> Hapus</span>
+                        </label>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <p class="text-muted small mb-3">Belum ada foto galeri.</p>
+                @endif
+
+                <div class="upload-zone mt-3" id="galleryUploadZone">
+                    <input type="file"
+                           name="gallery_images[]"
+                           id="galleryImageInput"
+                           accept="image/*"
+                           multiple>
+                    <div class="upload-icon">
+                        <i class="ti ti-photos"></i>
+                    </div>
+                    <p class="fw-semibold mb-1" style="color:#0a2540; font-size:14px;">
+                        Tambah foto galeri baru
+                    </p>
+                    <p class="text-muted mb-0" style="font-size:12px;">
+                        PNG, JPG, WEBP hingga 2MB per file — Pilih beberapa sekaligus
+                    </p>
+                </div>
+
+                <div class="gallery-preview-grid" id="galleryPreviewGrid"></div>
+
+                @error('gallery_images')
+                    <div class="invalid-feedback d-flex"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                @enderror
+                @error('gallery_images.*')
+                    <div class="invalid-feedback d-flex"><i class="ti ti-alert-circle"></i>{{ $message }}</div>
+                @enderror
+            </div>
+
             <div class="form-section">
                 <p class="section-label">Deskripsi</p>
                 <label class="form-label">Detail Produk <span style="color:#ef4444">*</span></label>
@@ -198,7 +267,6 @@
                 @enderror
             </div>
 
-         
             <div class="form-section" style="background:#fafbfc;">
                 <div class="d-flex align-items-center gap-3">
                     <button type="submit" class="btn-submit" id="submitBtn">
@@ -222,50 +290,85 @@
 
 @push('scripts')
 <script>
-    // ── Image Upload Preview ──
-    const imageInput = document.getElementById('imageInput');
-    const uploadZone = document.getElementById('uploadZone');
-    const newPreview = document.getElementById('newPreview');
-    const previewImg = document.getElementById('previewImg');
-    const previewName = document.getElementById('previewName');
+    // ── Display Image Preview ──
+    const displayInput = document.getElementById('displayImageInput');
+    const displayZone  = document.getElementById('displayUploadZone');
+    const displayNewPrev = document.getElementById('displayNewPreview');
+    const displayImg   = document.getElementById('displayPreviewImg');
+    const displayName  = document.getElementById('displayPreviewName');
 
-    imageInput.addEventListener('change', handleFile);
+    displayInput.addEventListener('change', handleDisplayFile);
 
-    uploadZone.addEventListener('dragover', e => {
+    displayZone.addEventListener('dragover', e => {
         e.preventDefault();
-        uploadZone.classList.add('drag-over');
+        displayZone.classList.add('drag-over');
     });
-
-    uploadZone.addEventListener('dragleave', () => {
-        uploadZone.classList.remove('drag-over');
-    });
-
-    uploadZone.addEventListener('drop', e => {
+    displayZone.addEventListener('dragleave', () => displayZone.classList.remove('drag-over'));
+    displayZone.addEventListener('drop', e => {
         e.preventDefault();
-        uploadZone.classList.remove('drag-over');
+        displayZone.classList.remove('drag-over');
         if (e.dataTransfer.files[0]) {
-            imageInput.files = e.dataTransfer.files;
-            handleFile();
+            displayInput.files = e.dataTransfer.files;
+            handleDisplayFile();
         }
     });
 
-    function handleFile() {
-        const file = imageInput.files[0];
+    function handleDisplayFile() {
+        const file = displayInput.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = e => {
-            previewImg.src = e.target.result;
-            previewName.textContent = '✓ ' + file.name;
-            newPreview.style.display = 'block';
-
-            // Update current image card preview too
-            const currentImg = document.getElementById('currentImg');
+            displayImg.src = e.target.result;
+            displayName.textContent = '✓ ' + file.name;
+            displayNewPrev.style.display = 'block';
+            const currentImg = document.getElementById('currentDisplayImg');
             if (currentImg) {
                 currentImg.style.transition = 'opacity 0.3s ease';
                 currentImg.style.opacity = '0.4';
             }
         };
         reader.readAsDataURL(file);
+    }
+
+    // ── Gallery Images Preview ──
+    const galleryInput = document.getElementById('galleryImageInput');
+    const galleryZone  = document.getElementById('galleryUploadZone');
+    const galleryGrid  = document.getElementById('galleryPreviewGrid');
+
+    galleryInput.addEventListener('change', handleGalleryFiles);
+
+    galleryZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        galleryZone.classList.add('drag-over');
+    });
+    galleryZone.addEventListener('dragleave', () => galleryZone.classList.remove('drag-over'));
+    galleryZone.addEventListener('drop', e => {
+        e.preventDefault();
+        galleryZone.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) {
+            galleryInput.files = e.dataTransfer.files;
+            handleGalleryFiles();
+        }
+    });
+
+    function handleGalleryFiles() {
+        galleryGrid.innerHTML = '';
+        const files = galleryInput.files;
+        if (!files.length) return;
+
+        Array.from(files).forEach((file, i) => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const thumb = document.createElement('div');
+                thumb.className = 'gallery-thumb';
+                thumb.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview ${i+1}">
+                    <span class="gallery-thumb-name">${file.name}</span>
+                `;
+                galleryGrid.appendChild(thumb);
+            };
+            reader.readAsDataURL(file);
+        });
     }
 
     // ── Char Counter ──

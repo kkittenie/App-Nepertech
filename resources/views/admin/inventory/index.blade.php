@@ -115,7 +115,7 @@
                             <td>{{ $product->brand }}</td>
 
                             <td>
-                                Rp {{ number_format($product->price) }}
+                                Rp {{ number_format($product->harga_jual) }}
                             </td>
 
                             <td>{{ $product->unit }}</td>

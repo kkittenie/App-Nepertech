@@ -12,14 +12,14 @@ class ReportController extends Controller
         $totalProducts   = Product::count();
         $totalCategories = Category::count();
         $totalUsers      = User::count();
-        $catalogValue    = Product::sum('price');
-        $avgPrice        = Product::avg('price') ?? 0;
-        $maxPrice        = Product::max('price') ?? 0;
-        $minPrice        = Product::min('price') ?? 0;
+        $catalogValue    = Product::sum('harga_jual');
+        $avgPrice        = Product::avg('harga_jual') ?? 0;
+        $maxPrice        = Product::max('harga_jual') ?? 0;
+        $minPrice        = Product::min('harga_jual') ?? 0;
 
         // All products with category
         $products = Product::with('category')
-            ->orderByDesc('price')
+            ->orderByDesc('harga_jual')
             ->get();
 
         // Category breakdown
@@ -39,7 +39,7 @@ class ReportController extends Controller
         }
 
         // Monthly catalog value growth
-        $monthlyValue = Product::selectRaw('MONTH(created_at) as month, SUM(price) as total')
+        $monthlyValue = Product::selectRaw('MONTH(created_at) as month, SUM(harga_jual) as total')
             ->whereYear('created_at', date('Y'))
             ->groupByRaw('MONTH(created_at)')
             ->pluck('total', 'month')

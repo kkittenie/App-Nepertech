@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +13,7 @@ class ProductController extends Controller
     {
         $search = $request->query('search');
 
-        $products = Product::with('category')
+        $products = Product::with('category', 'images')
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
                       ->orWhere('description', 'like', "%{$search}%");
@@ -34,25 +35,46 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'price'       => 'required|numeric|min:0',
-            'link'        => 'nullable|url',
-            'description' => 'required|string',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'name'               => 'required|string|max:255',
+            'category_id'        => 'required|exists:categories,id',
+            'harga_jual'         => 'required|numeric|min:0',
+            'harga_sewa_bulanan' => 'nullable|numeric|min:0',
+            'harga_sewa_tahunan' => 'nullable|numeric|min:0',
+            'link'               => 'nullable|url',
+            'description'        => 'required|string',
+            'display_image'      => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'gallery_images'     => 'nullable|array',
+            'gallery_images.*'   => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('products', 'public');
+        // Handle display image
+        if ($request->hasFile('display_image')) {
+            $validated['display_image'] = $request->file('display_image')->store('products', 'public');
         }
 
-        Product::create($validated);
+        // Remove gallery_images from validated data before creating product
+        unset($validated['gallery_images']);
+
+        $product = Product::create($validated);
+
+        // Handle gallery images
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $index => $image) {
+                $path = $image->store('products/gallery', 'public');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $path,
+                    'sort_order' => $index,
+                ]);
+            }
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function edit(Product $product)
     {
+        $product->load('images');
         $categories = Category::all();
         return view('admin.products.edit', compact('product', 'categories'));
     }
@@ -60,30 +82,70 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'price'       => 'required|numeric|min:0',
-            'link'        => 'nullable|url',
-            'description' => 'required|string',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'name'               => 'required|string|max:255',
+            'category_id'        => 'required|exists:categories,id',
+            'harga_jual'         => 'required|numeric|min:0',
+            'harga_sewa_bulanan' => 'nullable|numeric|min:0',
+            'harga_sewa_tahunan' => 'nullable|numeric|min:0',
+            'link'               => 'nullable|url',
+            'description'        => 'required|string',
+            'display_image'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'gallery_images'     => 'nullable|array',
+            'gallery_images.*'   => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+        // Handle display image
+        if ($request->hasFile('display_image')) {
+            if ($product->display_image) {
+                Storage::disk('public')->delete($product->display_image);
             }
-            $validated['image'] = $request->file('image')->store('products', 'public');
+            $validated['display_image'] = $request->file('display_image')->store('products', 'public');
         }
 
+        // Remove gallery_images from validated data
+        unset($validated['gallery_images']);
+
         $product->update($validated);
+
+        // Handle deleting specific gallery images
+        if ($request->has('delete_images')) {
+            $deleteIds = $request->input('delete_images', []);
+            $imagesToDelete = ProductImage::whereIn('id', $deleteIds)
+                ->where('product_id', $product->id)
+                ->get();
+
+            foreach ($imagesToDelete as $img) {
+                Storage::disk('public')->delete($img->image_path);
+                $img->delete();
+            }
+        }
+
+        // Handle new gallery images
+        if ($request->hasFile('gallery_images')) {
+            $maxOrder = $product->images()->max('sort_order') ?? -1;
+            foreach ($request->file('gallery_images') as $index => $image) {
+                $path = $image->store('products/gallery', 'public');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $path,
+                    'sort_order' => $maxOrder + $index + 1,
+                ]);
+            }
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diupdate.');
     }
 
     public function destroy(Product $product)
     {
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+        // Delete display image
+        if ($product->display_image) {
+            Storage::disk('public')->delete($product->display_image);
+        }
+
+        // Delete gallery images
+        foreach ($product->images as $img) {
+            Storage::disk('public')->delete($img->image_path);
         }
 
         $product->delete();

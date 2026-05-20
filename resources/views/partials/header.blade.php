@@ -42,6 +42,14 @@
             </li>
 
             <li>
+                <a href="{{ url('/project') }}" class="nav-link {{ request()->is('project') || request()->is('project/*') ? 'active' : '' }}">
+
+                    Produk
+
+                </a>
+            </li>
+
+            <li>
                 <a href="{{ url('/layanan') }}" class="nav-link {{ request()->is('layanan') ? 'active' : '' }}">
 
                     Layanan
@@ -53,14 +61,6 @@
                 <a href="{{ url('/fasilitas') }}" class="nav-link {{ request()->is('fasilitas') ? 'active' : '' }}">
 
                     Fasilitas
-
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ url('/galeri') }}" class="nav-link {{ request()->is('galeri') ? 'active' : '' }}">
-
-                    Galeri
 
                 </a>
             </li>

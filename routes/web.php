@@ -25,7 +25,8 @@ Route::get('/', [HomeController::class, 'beranda'])->name('home');
 Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
 Route::get('/layanan', [HomeController::class, 'layanan']);
 Route::get('/fasilitas', [HomeController::class, 'fasilitas']);
-Route::get('/galeri', [HomeController::class, 'galeri']);
+Route::get('/project', [HomeController::class, 'project'])->name('project');
+Route::get('/project/{slug}', [HomeController::class, 'projectDetail'])->name('project.detail');
 Route::get('/kontak', [HomeController::class, 'kontak']);
 
 Route::middleware('auth')->group(function () {
