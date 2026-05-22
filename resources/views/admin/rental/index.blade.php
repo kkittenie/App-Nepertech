@@ -509,7 +509,7 @@
                     modalTitle.textContent = 'Tolak Pengajuan Penyewaan';
                     notesLabel.textContent = 'Alasan Penolakan Pengajuan';
                     adminNotesTextarea.placeholder = 'Tuliskan alasan penolakan dengan sopan dan detail agar client mengerti...';
-                    modalActionHint.innerHTML = '<i class="fa fa-info-circle text-danger me-1"></i> Pengajuan ini akan dipindahkan ke tab Ditolak. Tidak ada notifikasi otomatis yang dikirim.';
+                    modalActionHint.innerHTML = '<i class="fab fa-whatsapp text-danger me-1"></i> Client akan mendapatkan <strong>Notifikasi WhatsApp Otomatis</strong> berisi detail penolakan dan alasan Anda.';
                     btnSubmitAction.style.background = '#dc2626';
                     btnSubmitAction.textContent = 'Tolak Pengajuan';
                     form.action = `/admin/rentals/${id}/reject`;

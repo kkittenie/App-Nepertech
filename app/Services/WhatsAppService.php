@@ -16,7 +16,7 @@ class WhatsAppService
      */
     public static function sendMessage(string $phone, string $message): array
     {
-        $token = env('FONNTE_TOKEN');
+        $token = config('services.fonnte.token');
 
         // Normalize Indonesian phone number (e.g., 0812... -> 62812...)
         $phone = preg_replace('/[^0-9]/', '', $phone);
@@ -27,7 +27,7 @@ class WhatsAppService
         }
 
         if (empty($token) || $token === 'your_fonnte_token_here') {
-            Log::info("WhatsApp Simulated Notification (No FONNTE_TOKEN in .env):\nTo: {$phone}\nMessage:\n{$message}");
+            Log::info("WhatsApp Simulated Notification (No FONNTE_TOKEN in config/services.php):\nTo: {$phone}\nMessage:\n{$message}");
             return [
                 'status' => true,
                 'simulated' => true,

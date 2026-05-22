@@ -639,11 +639,9 @@
                     </div>
                     <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
                         <label for="rentalDurationValue" class="rental-label">Durasi Sewa <span class="text-danger"></span></label>
-                        <div class="rental-duration-control">
-                            <button type="button" class="duration-btn" id="durationMinus"><i class="fas fa-minus"></i></button>
-                            <input type="number" name="duration_value" id="rentalDurationValue" class="rental-input text-center duration-input" value="1" min="1" max="120" required readonly style="border:none; box-shadow:none;">
-                            <button type="button" class="duration-btn" id="durationPlus"><i class="fas fa-plus"></i></button>
-                        </div>
+                        <select name="duration_value" id="rentalDurationValue" class="rental-select" required>
+                            <!-- Will be populated dynamically via JavaScript based on duration_type -->
+                        </select>
                     </div>
                 </div>
 
@@ -820,9 +818,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const backdrop = document.getElementById('rentalBackdrop');
     const triggers = document.querySelectorAll('.btn-rental-trigger');
 
-    const durationInput = document.getElementById('rentalDurationValue');
-    const minusBtn = document.getElementById('durationMinus');
-    const plusBtn = document.getElementById('durationPlus');
+    const durationSelect = document.getElementById('rentalDurationValue');
     const selectType = document.getElementById('rentalDurationType');
     
     const unitPriceLabel = document.getElementById('unitPriceLabel');
@@ -836,9 +832,50 @@ document.addEventListener('DOMContentLoaded', function() {
         return 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(amount);
     }
 
-    function calculateTotal() {
+    function updateDurationOptions() {
+        if (!durationSelect || !selectType) return;
+        
         const type = selectType.value;
-        const val = parseInt(durationInput.value) || 1;
+        const currentVal = durationSelect.value;
+        durationSelect.innerHTML = '';
+        
+        if (type === 'bulanan') {
+            const options = [
+                { value: '1', label: '1 Bulan' },
+                { value: '3', label: '3 Bulan' },
+                { value: '6', label: '6 Bulan' }
+            ];
+            options.forEach(opt => {
+                const el = document.createElement('option');
+                el.value = opt.value;
+                el.textContent = opt.label;
+                durationSelect.appendChild(el);
+            });
+        } else if (type === 'tahunan') {
+            const options = [
+                { value: '1', label: '1 Tahun' }
+            ];
+            options.forEach(opt => {
+                const el = document.createElement('option');
+                el.value = opt.value;
+                el.textContent = opt.label;
+                durationSelect.appendChild(el);
+            });
+        }
+
+        // Restore value if still valid, otherwise default to first option
+        if ([...durationSelect.options].some(opt => opt.value === currentVal)) {
+            durationSelect.value = currentVal;
+        } else {
+            durationSelect.selectedIndex = 0;
+        }
+    }
+
+    function calculateTotal() {
+        if (!durationSelect || !selectType) return;
+        
+        const type = selectType.value;
+        const val = parseInt(durationSelect.value) || 1;
         const pricePerUnit = type === 'tahunan' ? priceYearly : priceMonthly;
         const total = pricePerUnit * val;
 
@@ -854,7 +891,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 selectType.selectedIndex = 0;
             }
         }
-        durationInput.value = 1;
+        updateDurationOptions();
         calculateTotal();
 
         modal.classList.add('open');
@@ -877,26 +914,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
     if (backdrop) backdrop.addEventListener('click', closeModal);
 
-    if (selectType) selectType.addEventListener('change', calculateTotal);
-
-    if (minusBtn) {
-        minusBtn.addEventListener('click', () => {
-            let val = parseInt(durationInput.value) || 1;
-            if (val > 1) {
-                durationInput.value = val - 1;
-                calculateTotal();
-            }
+    if (selectType) {
+        selectType.addEventListener('change', () => {
+            updateDurationOptions();
+            calculateTotal();
         });
     }
 
-    if (plusBtn) {
-        plusBtn.addEventListener('click', () => {
-            let val = parseInt(durationInput.value) || 1;
-            if (val < 120) {
-                durationInput.value = val + 1;
-                calculateTotal();
-            }
-        });
+    if (durationSelect) {
+        durationSelect.addEventListener('change', calculateTotal);
     }
 
     // Dismiss flash alert automatically after 5 seconds
