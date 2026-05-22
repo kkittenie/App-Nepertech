@@ -43,6 +43,14 @@
         </li>
 
         <li>
+            <a class="nav-link {{ request()->routeIs('admin.rentals.*') ? 'active' : '' }}"
+               href="{{ route('admin.rentals.index') }}">
+                <i class="ti ti-calendar-event"></i>
+                <span class="nav-text">Penyewaan</span>
+            </a>
+        </li>
+
+        <li>
             <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
                href="{{ route('users.index') }}">
                 <i class="ti ti-users"></i>

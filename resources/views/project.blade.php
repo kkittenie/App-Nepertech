@@ -51,6 +51,7 @@
                 @foreach($categories as $cat)
                     @if($cat->products_count > 0)
                     <button class="project-filter-btn" data-filter="{{ $cat->id }}">
+                        <i class="{{ $cat->icon ?? 'fas fa-tag' }} me-1"></i>
                         {{ $cat->name }}
                         <span class="filter-count">{{ $cat->products_count }}</span>
                     </button>

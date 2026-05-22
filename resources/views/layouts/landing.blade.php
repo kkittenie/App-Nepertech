@@ -19,6 +19,7 @@
 
     {{-- Icons --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('css/landing/style.css') }}">

@@ -169,7 +169,7 @@
                 <div class="card card-program reveal" style="transition-delay:{{ $loop->index * 0.12 }}s">
                     <div class="card-program-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
                     <div class="card-icon-wrap">
-                        <i class="fas fa-layer-group"></i>
+                        <i class="{{ $cat->icon ?? 'fas fa-layer-group' }}"></i>
                     </div>
                     <h3>{{ $cat->name }}</h3>
                     <p>

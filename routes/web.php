@@ -28,6 +28,7 @@ Route::get('/fasilitas', [HomeController::class, 'fasilitas']);
 Route::get('/project', [HomeController::class, 'project'])->name('project');
 Route::get('/project/{slug}', [HomeController::class, 'projectDetail'])->name('project.detail');
 Route::get('/kontak', [HomeController::class, 'kontak']);
+Route::post('/rental/request', [\App\Http\Controllers\RentalController::class, 'store'])->name('rental.request');
 
 Route::middleware('auth')->group(function () {
 
@@ -78,6 +79,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
     });
 
+    Route::prefix('admin/rentals')->name('admin.rentals.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\RentalController::class, 'index'])->name('index');
+        Route::post('/{rental}/approve', [\App\Http\Controllers\RentalController::class, 'approve'])->name('approve');
+        Route::post('/{rental}/reject', [\App\Http\Controllers\RentalController::class, 'reject'])->name('reject');
+    });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

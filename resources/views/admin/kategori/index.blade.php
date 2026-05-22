@@ -71,7 +71,7 @@
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
                                             <div class="cat-icon">
-                                                <i class="ti ti-tag"></i>
+                                                <i class="{{ $item->icon ?? 'ti ti-tag' }}"></i>
                                             </div>
                                             <span class="fw-semibold" style="color:#0a2540; font-size:14px;">
                                                 {{ $item->name }}

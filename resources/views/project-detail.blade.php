@@ -18,6 +18,214 @@
             padding: 16px 24px !important;
         }
     }
+
+    /* ── Rental Request Modal ── */
+    .rental-modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .rental-modal-overlay.open {
+        display: flex;
+    }
+    .rental-modal-backdrop {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(10, 37, 64, 0.45);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: opacity 0.3s ease;
+    }
+    .rental-modal-card {
+        position: relative;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(10, 37, 64, 0.15);
+        width: 100%;
+        max-width: 680px;
+        padding: 36px;
+        max-height: 90vh;
+        overflow-y: auto;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        animation: modalReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes modalReveal {
+        from { opacity: 0; transform: scale(0.95) translateY(15px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .rental-modal-close {
+        position: absolute;
+        top: 24px; right: 24px;
+        background: rgba(10, 37, 64, 0.05);
+        border: none;
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        color: #0a2540;
+        transition: background 0.2s, color 0.2s;
+    }
+    .rental-modal-close:hover {
+        background: #0a2540;
+        color: #fff;
+    }
+    .rental-modal-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+    .rental-modal-icon-wrap {
+        width: 48px; height: 48px;
+        border-radius: 12px;
+        background: rgba(44, 107, 158, 0.1);
+        color: #2c6b9e;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px;
+    }
+    .rental-modal-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #0a2540;
+        margin-bottom: 4px;
+    }
+    .rental-modal-subtitle {
+        font-size: 14px;
+        color: #94a3b8;
+        margin: 0;
+    }
+    .rental-modal-form .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -10px;
+        margin-left: -10px;
+    }
+    .rental-modal-form .form-group {
+        padding-right: 10px;
+        padding-left: 10px;
+        margin-bottom: 20px;
+    }
+    .rental-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #0a2540;
+        margin-bottom: 8px;
+        display: block;
+    }
+    .rental-input, .rental-select, .rental-textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 1.5px solid #e2e8f0;
+        background: #fff;
+        font-size: 14px;
+        color: #0a2540;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        outline: none;
+    }
+    .rental-input:focus, .rental-select:focus, .rental-textarea:focus {
+        border-color: #2c6b9e;
+        box-shadow: 0 0 0 3px rgba(44, 107, 158, 0.12);
+    }
+    .rental-field-hint {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-top: 4px;
+        display: block;
+    }
+    .rental-duration-control {
+        display: flex;
+        align-items: center;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+    .rental-duration-control .duration-btn {
+        border: none;
+        background: transparent;
+        width: 44px; height: 44px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        color: #2c6b9e;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+    .rental-duration-control .duration-btn:hover {
+        background: rgba(44, 107, 158, 0.05);
+    }
+    .rental-duration-control .duration-input {
+        border: none;
+        padding: 0;
+        height: 44px;
+        font-weight: 600;
+    }
+    .rental-price-card {
+        background: rgba(44, 107, 158, 0.04);
+        border: 1px solid rgba(44, 107, 158, 0.1);
+        border-radius: 16px;
+        padding: 20px;
+        margin-top: 24px;
+        margin-bottom: 28px;
+        width: 100%;
+    }
+    .rental-price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .rental-price-row .price-label {
+        font-size: 13px;
+        color: #64748b;
+    }
+    .rental-price-row .price-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #0a2540;
+    }
+    .rental-price-divider {
+        height: 1px;
+        background: #e2e8f0;
+        margin: 12px 0;
+    }
+    .rental-price-row.total .price-label {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0a2540;
+    }
+    .rental-price-row.total .price-value.highlight {
+        font-size: 18px;
+        font-weight: 800;
+        color: #2c6b9e;
+    }
+    .rental-submit-btn {
+        width: 100%;
+        padding: 14px 24px;
+        border-radius: 12px;
+        background: #0a2540;
+        border: none;
+        color: #fff;
+        font-weight: 700;
+        font-size: 15px;
+        display: flex; align-items: center; justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+    }
+    .rental-submit-btn:hover {
+        background: #2c6b9e;
+        transform: translateY(-2px);
+    }
+    .rental-submit-btn:active {
+        transform: translateY(0);
+    }
 </style>
 @endpush
 
@@ -259,6 +467,9 @@
                         <h4 class="pd-price-type">Sewa / Bulan</h4>
                         <p class="pd-price-note">Langganan bulanan</p>
                         <div class="pd-price-amount">Rp {{ number_format($product->harga_sewa_bulanan, 0, ',', '.') }}</div>
+                        <button class="btn btn-primary mt-3 w-100 btn-rental-trigger" data-type="bulanan" style="background:#0a2540; border-color:#0a2540; border-radius:8px; padding:10px 16px; font-weight:600; font-size:13px;">
+                            <i class="fas fa-calendar-alt me-2"></i> Sewa Bulanan
+                        </button>
                     </div>
                     @endif
 
@@ -267,6 +478,9 @@
                         <h4 class="pd-price-type">Sewa / Tahun</h4>
                         <p class="pd-price-note">Hemat lebih banyak</p>
                         <div class="pd-price-amount">Rp {{ number_format($product->harga_sewa_tahunan, 0, ',', '.') }}</div>
+                        <button class="btn btn-primary mt-3 w-100 btn-rental-trigger" data-type="tahunan" style="background:#2c6b9e; border-color:#2c6b9e; border-radius:8px; padding:10px 16px; font-weight:600; font-size:13px;">
+                            <i class="fas fa-calendar-check me-2"></i> Sewa Tahunan
+                        </button>
                     </div>
                     @endif
                 </div>
@@ -310,6 +524,115 @@
         </div>
     </section>
     @endif
+
+    {{-- ALERT POPUPS --}}
+    @if(session('success'))
+    <div class="toast-alert toast-success" id="toastAlert" style="position: fixed; top: 100px; right: 24px; z-index: 10000; background: #dcfce7; border: 1.5px solid #86efac; border-radius: 12px; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); animation: toastEntrance 0.3s ease forwards;">
+        <div class="toast-icon" style="color: #15803d; font-size: 18px;"><i class="fas fa-check-circle"></i></div>
+        <span style="color: #166534; font-weight: 600; font-size: 14px;">{{ session('success') }}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()" style="border: none; background: transparent; cursor: pointer; color: #166534; font-size: 16px; margin-left: 12px;"><i class="fas fa-times"></i></button>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="toast-alert toast-error" id="toastAlert" style="position: fixed; top: 100px; right: 24px; z-index: 10000; background: #fee2e2; border: 1.5px solid #fca5a5; border-radius: 12px; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); animation: toastEntrance 0.3s ease forwards;">
+        <div class="toast-icon" style="color: #b91c1c; font-size: 18px;"><i class="fas fa-exclamation-circle"></i></div>
+        <span style="color: #991b1b; font-weight: 600; font-size: 14px;">{{ session('error') }}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()" style="border: none; background: transparent; cursor: pointer; color: #991b1b; font-size: 16px; margin-left: 12px;"><i class="fas fa-times"></i></button>
+    </div>
+    @endif
+
+    {{-- RENTAL REQUEST MODAL --}}
+    <div class="rental-modal-overlay" id="rentalModal">
+        <div class="rental-modal-backdrop" id="rentalBackdrop"></div>
+        <div class="rental-modal-card">
+            <button class="rental-modal-close" id="rentalClose" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="rental-modal-header">
+                <div class="rental-modal-icon-wrap">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div>
+                    <h3 class="rental-modal-title">Formulir Pengajuan Sewa</h3>
+                    <p class="rental-modal-subtitle">{{ $product->name }}</p>
+                </div>
+            </div>
+            
+            <form action="{{ route('rental.request') }}" method="POST" class="rental-modal-form" id="rentalRequestForm">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                
+                <div class="form-row">
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="rentalName" class="rental-label">Nama Lengkap <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="rentalName" class="rental-input" placeholder="Masukkan nama lengkap..." value="{{ auth()->user() ? auth()->user()->name : '' }}" required>
+                    </div>
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="rentalEmail" class="rental-label">Alamat Email <span class="text-danger">*</span></label>
+                        <input type="email" name="email" id="rentalEmail" class="rental-input" placeholder="contoh@domain.com" value="{{ auth()->user() ? auth()->user()->email : '' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="rentalWhatsApp" class="rental-label">No. WhatsApp <span class="text-danger">*</span></label>
+                        <input type="text" name="whatsapp_number" id="rentalWhatsApp" class="rental-input" placeholder="Contoh: 08123456789" required>
+                        <span class="rental-field-hint">Pastikan nomor aktif untuk notifikasi WhatsApp.</span>
+                    </div>
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="rentalStartDate" class="rental-label">Tanggal Mulai Sewa <span class="text-danger">*</span></label>
+                        <input type="date" name="start_date" id="rentalStartDate" class="rental-input" min="{{ date('Y-m-d') }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="rentalDurationType" class="rental-label">Opsi Penyewaan <span class="text-danger">*</span></label>
+                        <select name="duration_type" id="rentalDurationType" class="rental-select" required>
+                            @if($product->harga_sewa_bulanan)
+                                <option value="bulanan">Bulanan</option>
+                            @endif
+                            @if($product->harga_sewa_tahunan)
+                                <option value="tahunan">Tahunan</option>
+                            @endif
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="rentalDurationValue" class="rental-label">Durasi Sewa <span class="text-danger">*</span></label>
+                        <div class="rental-duration-control">
+                            <button type="button" class="duration-btn" id="durationMinus"><i class="fas fa-minus"></i></button>
+                            <input type="number" name="duration_value" id="rentalDurationValue" class="rental-input text-center duration-input" value="1" min="1" max="120" required readonly style="border:none; box-shadow:none;">
+                            <button type="button" class="duration-btn" id="durationPlus"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 15px; width: 100%;">
+                    <label for="clientNotes" class="rental-label">Catatan Tambahan (Opsional)</label>
+                    <textarea name="client_notes" id="clientNotes" class="rental-textarea" rows="3" placeholder="Tuliskan catatan tambahan jika ada..."></textarea>
+                </div>
+
+                {{-- Price breakdown area --}}
+                <div class="rental-price-card">
+                    <div class="rental-price-row">
+                        <span class="price-label">Biaya Sewa per Unit</span>
+                        <span class="price-value" id="unitPriceLabel">Rp 0</span>
+                    </div>
+                    <div class="rental-price-divider"></div>
+                    <div class="rental-price-row total">
+                        <span class="price-label">Estimasi Total Biaya</span>
+                        <span class="price-value highlight" id="totalPriceLabel">Rp 0</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="rental-submit-btn">
+                    <span>Ajukan Penyewaan</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
 
 @endsection
 
@@ -448,5 +771,106 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Escape') closeGalleryPreview();
     });
 })();
+
+// ── Rental Modal System ──
+(function() {
+    const modal = document.getElementById('rentalModal');
+    if (!modal) return;
+
+    const closeBtn = document.getElementById('rentalClose');
+    const backdrop = document.getElementById('rentalBackdrop');
+    const triggers = document.querySelectorAll('.btn-rental-trigger');
+
+    const durationInput = document.getElementById('rentalDurationValue');
+    const minusBtn = document.getElementById('durationMinus');
+    const plusBtn = document.getElementById('durationPlus');
+    const selectType = document.getElementById('rentalDurationType');
+    
+    const unitPriceLabel = document.getElementById('unitPriceLabel');
+    const totalPriceLabel = document.getElementById('totalPriceLabel');
+
+    // Lease prices from PHP
+    const priceMonthly = {{ $product->harga_sewa_bulanan ?? 0 }};
+    const priceYearly = {{ $product->harga_sewa_tahunan ?? 0 }};
+
+    function formatRupiah(amount) {
+        return 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(amount);
+    }
+
+    function calculateTotal() {
+        const type = selectType.value;
+        const val = parseInt(durationInput.value) || 1;
+        const pricePerUnit = type === 'tahunan' ? priceYearly : priceMonthly;
+        const total = pricePerUnit * val;
+
+        unitPriceLabel.textContent = formatRupiah(pricePerUnit) + (type === 'tahunan' ? ' / Tahun' : ' / Bulan');
+        totalPriceLabel.textContent = formatRupiah(total);
+    }
+
+    function openModal(type) {
+        if (selectType) {
+            selectType.value = type;
+            // Check if option exists, otherwise fall back to the first available
+            if (!selectType.value && selectType.options.length > 0) {
+                selectType.selectedIndex = 0;
+            }
+        }
+        durationInput.value = 1;
+        calculateTotal();
+
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    triggers.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const type = btn.dataset.type || 'bulanan';
+            openModal(type);
+        });
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (backdrop) backdrop.addEventListener('click', closeModal);
+
+    if (selectType) selectType.addEventListener('change', calculateTotal);
+
+    if (minusBtn) {
+        minusBtn.addEventListener('click', () => {
+            let val = parseInt(durationInput.value) || 1;
+            if (val > 1) {
+                durationInput.value = val - 1;
+                calculateTotal();
+            }
+        });
+    }
+
+    if (plusBtn) {
+        plusBtn.addEventListener('click', () => {
+            let val = parseInt(durationInput.value) || 1;
+            if (val < 120) {
+                durationInput.value = val + 1;
+                calculateTotal();
+            }
+        });
+    }
+
+    // Dismiss flash alert automatically after 5 seconds
+    const toast = document.getElementById('toastAlert');
+    if (toast) {
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-20px) scale(0.95)';
+            toast.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            setTimeout(() => toast.remove(), 400);
+        }, 5000);
+    }
+})();
 </script>
 @endpush
+

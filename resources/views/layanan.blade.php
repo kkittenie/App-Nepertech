@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="card-icon-wrap">
-                        <i class="fas fa-layer-group"></i>
+                        <i class="{{ $cat->icon ?? 'fas fa-layer-group' }}"></i>
                     </div>
 
                     <h3>{{ $cat->name }}</h3>
