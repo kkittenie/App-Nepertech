@@ -90,7 +90,7 @@ class RegisteredUserController extends Controller
 
             'minat' => $request->minat,
 
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
 
         ]);
 

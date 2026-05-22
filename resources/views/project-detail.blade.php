@@ -126,13 +126,37 @@
         border: 1.5px solid #e2e8f0;
         background: #fff;
         font-size: 14px;
+        font-family: 'Inter', sans-serif;
         color: #0a2540;
         transition: border-color 0.2s, box-shadow 0.2s;
         outline: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+    .rental-select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        background-size: 14px;
+        padding-right: 40px;
+        cursor: pointer;
     }
     .rental-input:focus, .rental-select:focus, .rental-textarea:focus {
         border-color: #2c6b9e;
         box-shadow: 0 0 0 3px rgba(44, 107, 158, 0.12);
+    }
+    /* ── Hide native number input spinners ── */
+    .rental-input[type="number"]::-webkit-inner-spin-button,
+    .rental-input[type="number"]::-webkit-outer-spin-button,
+    .duration-input::-webkit-inner-spin-button,
+    .duration-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .rental-input[type="number"],
+    .duration-input {
+        -moz-appearance: textfield;
     }
     .rental-field-hint {
         font-size: 11px;
@@ -147,6 +171,11 @@
         border-radius: 10px;
         background: #fff;
         overflow: hidden;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .rental-duration-control:focus-within {
+        border-color: #2c6b9e;
+        box-shadow: 0 0 0 3px rgba(44, 107, 158, 0.12);
     }
     .rental-duration-control .duration-btn {
         border: none;
@@ -157,15 +186,25 @@
         color: #2c6b9e;
         font-size: 14px;
         transition: background 0.2s;
+        flex-shrink: 0;
     }
     .rental-duration-control .duration-btn:hover {
-        background: rgba(44, 107, 158, 0.05);
+        background: rgba(44, 107, 158, 0.08);
     }
     .rental-duration-control .duration-input {
         border: none;
         padding: 0;
         height: 44px;
         font-weight: 600;
+        font-size: 15px;
+        background: transparent;
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+        appearance: none;
+    }
+    .rental-duration-control .duration-input:focus {
+        box-shadow: none;
+        border: none;
     }
     .rental-price-card {
         background: rgba(44, 107, 158, 0.04);
@@ -565,30 +604,30 @@
                 
                 <div class="form-row">
                     <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
-                        <label for="rentalName" class="rental-label">Nama Lengkap <span class="text-danger">*</span></label>
+                        <label for="rentalName" class="rental-label">Nama Lengkap <span class="text-danger"></span></label>
                         <input type="text" name="name" id="rentalName" class="rental-input" placeholder="Masukkan nama lengkap..." value="{{ auth()->user() ? auth()->user()->name : '' }}" required>
                     </div>
                     <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
-                        <label for="rentalEmail" class="rental-label">Alamat Email <span class="text-danger">*</span></label>
+                        <label for="rentalEmail" class="rental-label">Alamat Email <span class="text-danger"></span></label>
                         <input type="email" name="email" id="rentalEmail" class="rental-input" placeholder="contoh@domain.com" value="{{ auth()->user() ? auth()->user()->email : '' }}" required>
                     </div>
                 </div>
 
                 <div class="form-row" style="margin-top: 10px;">
                     <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
-                        <label for="rentalWhatsApp" class="rental-label">No. WhatsApp <span class="text-danger">*</span></label>
+                        <label for="rentalWhatsApp" class="rental-label">No. WhatsApp <span class="text-danger"></span></label>
                         <input type="text" name="whatsapp_number" id="rentalWhatsApp" class="rental-input" placeholder="Contoh: 08123456789" required>
                         <span class="rental-field-hint">Pastikan nomor aktif untuk notifikasi WhatsApp.</span>
                     </div>
                     <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
-                        <label for="rentalStartDate" class="rental-label">Tanggal Mulai Sewa <span class="text-danger">*</span></label>
+                        <label for="rentalStartDate" class="rental-label">Tanggal Mulai Sewa <span class="text-danger"></span></label>
                         <input type="date" name="start_date" id="rentalStartDate" class="rental-input" min="{{ date('Y-m-d') }}" required>
                     </div>
                 </div>
 
                 <div class="form-row" style="margin-top: 10px;">
                     <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
-                        <label for="rentalDurationType" class="rental-label">Opsi Penyewaan <span class="text-danger">*</span></label>
+                        <label for="rentalDurationType" class="rental-label">Opsi Penyewaan <span class="text-danger"></span></label>
                         <select name="duration_type" id="rentalDurationType" class="rental-select" required>
                             @if($product->harga_sewa_bulanan)
                                 <option value="bulanan">Bulanan</option>
@@ -599,7 +638,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
-                        <label for="rentalDurationValue" class="rental-label">Durasi Sewa <span class="text-danger">*</span></label>
+                        <label for="rentalDurationValue" class="rental-label">Durasi Sewa <span class="text-danger"></span></label>
                         <div class="rental-duration-control">
                             <button type="button" class="duration-btn" id="durationMinus"><i class="fas fa-minus"></i></button>
                             <input type="number" name="duration_value" id="rentalDurationValue" class="rental-input text-center duration-input" value="1" min="1" max="120" required readonly style="border:none; box-shadow:none;">
