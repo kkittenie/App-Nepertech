@@ -6,7 +6,6 @@
 
 <div class="container-fluid py-4">
 
-    
     <div class="page-header d-flex justify-content-between align-items-center mb-4">
         <div>
             <div class="edit-badge">
@@ -17,7 +16,7 @@
                 {{ $kategori->name }}
             </h2>
             <p class="text-muted mb-0 small">
-                Ubah nama kategori sesuai kebutuhan
+                Ubah nama dan icon kategori sesuai kebutuhan
             </p>
         </div>
         <a href="{{ route('kategori.index') }}" class="btn-cancel">
@@ -26,7 +25,6 @@
         </a>
     </div>
 
-    
     <div class="card form-card">
 
         <form action="{{ route('kategori.update', $kategori->id) }}"
@@ -36,18 +34,16 @@
             @csrf
             @method('PUT')
 
-            
             <div class="form-section">
                 <p class="section-label">Detail Kategori</p>
 
-                
                 <div class="current-val-card">
                     <div class="current-val-icon">
-                        <i class="ti ti-tag"></i>
+                        <i class="{{ $kategori->icon ?? 'ti ti-tag' }}"></i>
                     </div>
                     <div>
                         <p>{{ $kategori->name }}</p>
-                        <span>Nama saat ini — edit field di bawah untuk mengubah</span>
+                        <span>Kategori saat ini — edit field di bawah untuk mengubah</span>
                     </div>
                 </div>
 
@@ -72,7 +68,31 @@
                 @enderror
             </div>
 
-            
+            {{-- ===== ICON PICKER ===== --}}
+            <div class="form-section">
+                <p class="section-label">Icon Kategori</p>
+
+                @php $currentIcon = old('icon', $kategori->icon ?? 'ti ti-tag'); @endphp
+                <input type="hidden" name="icon" id="iconInput" value="{{ $currentIcon }}">
+
+                <label class="form-label">Pilih Icon</label>
+                <div class="icon-picker-trigger" id="iconPickerTrigger">
+                    <span class="icon-picker-preview">
+                        <i id="iconPreview" class="{{ $currentIcon }}"></i>
+                    </span>
+                    <span id="iconPickerLabel">{{ $currentIcon }}</span>
+                    <i class="ti ti-chevron-down ms-auto"></i>
+                </div>
+
+                <div class="icon-picker-panel" id="iconPickerPanel">
+                    <div class="icon-picker-search-wrap">
+                        <i class="ti ti-search"></i>
+                        <input type="text" class="icon-picker-search" id="iconSearch" placeholder="Cari icon...">
+                    </div>
+                    <div class="icon-picker-grid" id="iconGrid"></div>
+                </div>
+            </div>
+
             <div class="form-section" style="background:#fafbfc;">
                 <div class="d-flex align-items-center gap-3">
                     <button type="submit" class="btn-submit" id="submitBtn">
@@ -93,6 +113,89 @@
 </div>
 
 @endsection
+
+@push('styles')
+<style>
+/* ── Icon Picker ── */
+.icon-picker-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #fff;
+    font-size: 14px;
+    color: #0a2540;
+    font-weight: 500;
+    transition: border-color .2s, box-shadow .2s;
+    user-select: none;
+}
+.icon-picker-trigger:hover,
+.icon-picker-trigger.open {
+    border-color: #2c6b9e;
+    box-shadow: 0 0 0 3px rgba(44,107,158,.12);
+}
+.icon-picker-preview {
+    width: 36px; height: 36px;
+    background: rgba(10,37,64,.06);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    color: #0a2540;
+    flex-shrink: 0;
+}
+.icon-picker-panel {
+    display: none;
+    margin-top: 8px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 8px 32px rgba(10,37,64,.1);
+    overflow: hidden;
+}
+.icon-picker-panel.open { display: block; }
+.icon-picker-search-wrap {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f4f8;
+}
+.icon-picker-search-wrap i { color: #94a3b8; font-size: 16px; }
+.icon-picker-search {
+    border: none; outline: none;
+    font-size: 14px; width: 100%;
+    color: #0a2540;
+    background: transparent;
+}
+.icon-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    gap: 4px;
+    padding: 12px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+.icon-item {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 3px;
+    padding: 8px 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .15s, transform .15s;
+    font-size: 20px;
+    color: #0a2540;
+    border: 2px solid transparent;
+}
+.icon-item:hover { background: rgba(44,107,158,.08); transform: scale(1.1); }
+.icon-item.selected {
+    background: rgba(44,107,158,.12);
+    border-color: #2c6b9e;
+    color: #2c6b9e;
+}
+</style>
+@endpush
 
 @push('scripts')
 <script>
@@ -136,5 +239,114 @@
     nameInput.addEventListener('input', () => {
         if (nameInput.value.trim()) nameInput.classList.remove('is-invalid');
     });
+
+    // ── Icon Picker ──
+    const ICONS = [
+        { cls: 'ti ti-tag',            label: 'Tag' },
+        { cls: 'ti ti-code',           label: 'Code' },
+        { cls: 'ti ti-world',          label: 'Web' },
+        { cls: 'ti ti-device-desktop', label: 'Desktop' },
+        { cls: 'ti ti-device-mobile',  label: 'Mobile' },
+        { cls: 'ti ti-palette',        label: 'Desain' },
+        { cls: 'ti ti-photo',          label: 'Foto' },
+        { cls: 'ti ti-video',          label: 'Video' },
+        { cls: 'ti ti-pencil',         label: 'Tulis' },
+        { cls: 'ti ti-bulb',           label: 'Ide' },
+        { cls: 'ti ti-cpu',            label: 'CPU' },
+        { cls: 'ti ti-circuit-board',  label: 'IoT' },
+        { cls: 'ti ti-wifi',           label: 'WiFi' },
+        { cls: 'ti ti-cloud',          label: 'Cloud' },
+        { cls: 'ti ti-server',         label: 'Server' },
+        { cls: 'ti ti-database',       label: 'DB' },
+        { cls: 'ti ti-api',            label: 'API' },
+        { cls: 'ti ti-robot',          label: 'AI' },
+        { cls: 'ti ti-chart-bar',      label: 'Chart' },
+        { cls: 'ti ti-trending-up',    label: 'Trend' },
+        { cls: 'ti ti-megaphone',      label: 'Promosi' },
+        { cls: 'ti ti-brand-instagram',label: 'IG' },
+        { cls: 'ti ti-brand-facebook', label: 'FB' },
+        { cls: 'ti ti-brand-youtube',  label: 'YT' },
+        { cls: 'ti ti-movie',          label: 'Film' },
+        { cls: 'ti ti-music',          label: 'Musik' },
+        { cls: 'ti ti-microphone',     label: 'Mic' },
+        { cls: 'ti ti-camera',         label: 'Kamera' },
+        { cls: 'ti ti-printer',        label: 'Cetak' },
+        { cls: 'ti ti-file-text',      label: 'Dokumen' },
+        { cls: 'ti ti-clipboard',      label: 'Clipboard' },
+        { cls: 'ti ti-mail',           label: 'Email' },
+        { cls: 'ti ti-message',        label: 'Chat' },
+        { cls: 'ti ti-phone',          label: 'Telepon' },
+        { cls: 'ti ti-settings',       label: 'Setting' },
+        { cls: 'ti ti-tool',           label: 'Tools' },
+        { cls: 'ti ti-bolt',           label: 'Kilat' },
+        { cls: 'ti ti-star',           label: 'Bintang' },
+        { cls: 'ti ti-heart',          label: 'Hati' },
+        { cls: 'ti ti-shield',         label: 'Aman' },
+        { cls: 'ti ti-lock',           label: 'Kunci' },
+        { cls: 'ti ti-key',            label: 'Key' },
+        { cls: 'ti ti-user',           label: 'User' },
+        { cls: 'ti ti-users',          label: 'Tim' },
+        { cls: 'ti ti-building',       label: 'Gedung' },
+        { cls: 'ti ti-home',           label: 'Rumah' },
+        { cls: 'ti ti-map-pin',        label: 'Lokasi' },
+        { cls: 'ti ti-truck',          label: 'Kirim' },
+        { cls: 'ti ti-shopping-cart',  label: 'Belanja' },
+        { cls: 'ti ti-package',        label: 'Paket' },
+        { cls: 'ti ti-award',          label: 'Award' },
+        { cls: 'ti ti-certificate',    label: 'Sertif' },
+        { cls: 'ti ti-book',           label: 'Buku' },
+        { cls: 'ti ti-school',         label: 'Edu' },
+        { cls: 'ti ti-plant',          label: 'Hijau' },
+        { cls: 'ti ti-recycle',        label: 'Daur' },
+    ];
+
+    const iconInput   = document.getElementById('iconInput');
+    const iconPreview = document.getElementById('iconPreview');
+    const iconLabel   = document.getElementById('iconPickerLabel');
+    const trigger     = document.getElementById('iconPickerTrigger');
+    const panel       = document.getElementById('iconPickerPanel');
+    const grid        = document.getElementById('iconGrid');
+    const search      = document.getElementById('iconSearch');
+
+    let selectedIcon  = iconInput.value || 'ti ti-tag';
+
+    function renderGrid(filter = '') {
+        grid.innerHTML = '';
+        const q = filter.toLowerCase();
+        ICONS.filter(ic => !q || ic.label.toLowerCase().includes(q) || ic.cls.includes(q))
+             .forEach(ic => {
+                const el = document.createElement('div');
+                el.className = 'icon-item' + (ic.cls === selectedIcon ? ' selected' : '');
+                el.title = ic.label;
+                el.innerHTML = `<i class="${ic.cls}"></i>`;
+                el.addEventListener('click', () => {
+                    selectedIcon = ic.cls;
+                    iconInput.value = ic.cls;
+                    iconPreview.className = ic.cls;
+                    iconLabel.textContent = ic.cls;
+                    grid.querySelectorAll('.icon-item').forEach(e => e.classList.remove('selected'));
+                    el.classList.add('selected');
+                });
+                grid.appendChild(el);
+             });
+    }
+
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = panel.classList.toggle('open');
+        trigger.classList.toggle('open', isOpen);
+        if (isOpen) { search.value = ''; renderGrid(); search.focus(); }
+    });
+
+    search.addEventListener('input', () => renderGrid(search.value));
+
+    document.addEventListener('click', (e) => {
+        if (!panel.contains(e.target) && e.target !== trigger) {
+            panel.classList.remove('open');
+            trigger.classList.remove('open');
+        }
+    });
+
+    renderGrid();
 </script>
 @endpush

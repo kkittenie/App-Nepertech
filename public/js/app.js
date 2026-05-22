@@ -319,12 +319,44 @@ function initStaggered() {
 
 
 // ==================== NAVBAR SCROLL ====================
-window.addEventListener("scroll", () => {
-    const navbar = document.getElementById("navbar");
-    if (navbar) {
-        navbar.classList.toggle("scrolled", window.scrollY > 30);
+(function () {
+    const navbar = document.getElementById('navbar');
+    if (!navbar) return;
+
+    const SCROLL_THRESHOLD = 80;   // px from top before hide/show kicks in
+    const HYSTERESIS = 8;          // px of scroll needed to trigger a change
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function onScroll() {
+        const scrollY = window.scrollY;
+
+        if (scrollY <= SCROLL_THRESHOLD) {
+            // Near the top — always show navbar
+            navbar.classList.remove('navbar--hidden');
+        } else if (scrollY > lastScrollY + HYSTERESIS) {
+            // Scrolling DOWN — hide navbar
+            navbar.classList.add('navbar--hidden');
+        } else if (scrollY < lastScrollY - HYSTERESIS) {
+            // Scrolling UP — show navbar
+            navbar.classList.remove('navbar--hidden');
+        }
+
+        // Frosted glass effect after 30px
+        navbar.classList.toggle('scrolled', scrollY > 30);
+
+        lastScrollY = scrollY;
+        ticking = false;
     }
-}, { passive: true });
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(onScroll);
+            ticking = true;
+        }
+    }, { passive: true });
+}());
+
 
 // ==================== DOM READY ====================
 document.addEventListener("DOMContentLoaded", () => {

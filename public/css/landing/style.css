@@ -283,16 +283,21 @@ p {
     left: 0;
     width: 100%;
     z-index: 1000;
-    padding: 22px 48px;
+    padding: 34px 64px;
     animation: navSlideDown 0.7s var(--ease) forwards;
+    transition: transform 0.4s var(--ease), padding 0.3s var(--ease), background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    will-change: transform;
+}
+.navbar--hidden {
+    transform: translateY(-110%);
 }
 .navbar.scrolled {
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(16px) saturate(1.5);
-    padding: 14px 48px;
-    box-shadow:
-        0 1px 0 var(--gray-border),
-        var(--shadow-sm);
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    padding: 24px 64px;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
 }
 .nav-container {
     display: flex;
@@ -308,13 +313,13 @@ p {
     text-decoration: none;
 }
 .nav-logo-img {
-    height: 32px;
+    height: 46px;
     width: auto;
 }
 .nav-logo-name {
     font-family: "Inter", sans-serif;
-    font-size: 18px;
-    font-weight: 800;
+    font-size: 24px;
+    font-weight: 850;
     color: var(--primary);
     letter-spacing: -0.05em;
 }
@@ -333,8 +338,8 @@ p {
 .nav-link {
     color: var(--text);
     text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 16px;
     position: relative;
     transition: color 0.2s;
     letter-spacing: -0.01em;
@@ -366,9 +371,10 @@ p {
 .btn-nav-cta {
     background: var(--primary) !important;
     color: white !important;
-    padding: 9px 22px;
+    padding: 12px 28px;
     border-radius: 99px;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 16px;
     transition:
         background 0.25s,
         transform 0.25s var(--ease-spring),
@@ -392,6 +398,34 @@ p {
 }
 .menu-icon.active {
     transform: rotate(90deg);
+}
+.nav-avatar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(10, 37, 64, 0.05);
+    color: var(--primary);
+    font-size: 24px;
+    transition: background 0.3s, transform 0.3s var(--ease-spring);
+}
+.nav-profile-link:hover .nav-avatar-icon {
+    background: rgba(10, 37, 64, 0.1);
+    transform: translateY(-2px);
+}
+.nav-avatar-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s var(--ease-spring);
+}
+.nav-profile-link:hover .nav-avatar-img {
+    transform: translateY(-2px);
 }
 
 @media (max-width: 900px) {

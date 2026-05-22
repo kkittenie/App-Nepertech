@@ -92,7 +92,7 @@
                             @if(auth()->user()->photo)
                                 <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Profile" class="nav-avatar-img">
                             @else
-                                <span class="nav-avatar-initials">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                                <div class="nav-avatar-icon"><i class="fas fa-user-circle"></i></div>
                             @endif
                         </a>
                     @else
@@ -101,7 +101,7 @@
                             @if(auth()->user()->photo)
                                 <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Profile" class="nav-avatar-img">
                             @else
-                                <span class="nav-avatar-initials">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                                <div class="nav-avatar-icon"><i class="fas fa-user-circle"></i></div>
                             @endif
                         </a>
                     @endif

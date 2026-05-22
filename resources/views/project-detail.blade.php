@@ -4,6 +4,21 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/landing/project-detail.css') }}">
+<style>
+    #navbar {
+        background: rgba(255, 255, 255, 0.45) !important;
+        backdrop-filter: blur(24px) saturate(1.5) !important;
+        -webkit-backdrop-filter: blur(24px) saturate(1.5) !important;
+        padding: 24px 64px !important;
+        box-shadow: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+    }
+    @media (max-width: 900px) {
+        #navbar {
+            padding: 16px 24px !important;
+        }
+    }
+</style>
 @endpush
 
 @section('content')
