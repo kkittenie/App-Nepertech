@@ -232,4 +232,52 @@ class RentalController extends Controller
         return redirect()->route('admin.rentals.index')
             ->with('success', $successMsg . ' Pesan WhatsApp notifikasi penolakan telah dikirim.');
     }
+
+    /**
+     * Send a WhatsApp renewal reminder to the tenant (called from dashboard alert).
+     */
+    public function remind(Rental $rental)
+    {
+        $formattedPrice = 'Rp ' . number_format($rental->total_price, 0, ',', '.');
+        $endDate        = $rental->end_date->format('d M Y');
+        $daysRemaining  = $rental->days_remaining;
+        $durationLabel  = $rental->duration_label;
+
+        if ($daysRemaining < 0) {
+            $timeInfo = "masa sewa Anda sudah *BERAKHIR* sejak *{$endDate}* (" . abs($daysRemaining) . " hari yang lalu)";
+        } elseif ($daysRemaining === 0) {
+            $timeInfo = "masa sewa Anda *BERAKHIR HARI INI* ({$endDate})";
+        } else {
+            $timeInfo = "masa sewa Anda akan berakhir dalam *{$daysRemaining} hari lagi* (tanggal *{$endDate}*)";
+        }
+
+        $waMessage  = "*PENGINGAT MASA SEWA - NEPERTECH* ⏰\n\n";
+        $waMessage .= "Halo *{$rental->name}*,\n\n";
+        $waMessage .= "Kami ingin menginformasikan bahwa {$timeInfo}.\n\n";
+        $waMessage .= "*Detail Langganan:*\n";
+        $waMessage .= "• Produk: *{$rental->product->name}*\n";
+        $waMessage .= "• Durasi: *{$durationLabel}*\n";
+        $waMessage .= "• Biaya Sewa: *{$formattedPrice}*\n";
+        $waMessage .= "• Tanggal Berakhir: *{$endDate}*\n\n";
+        $waMessage .= "Jika Anda ingin *memperpanjang masa sewa*, silakan hubungi kami segera agar layanan Anda tidak terganggu.\n\n";
+        $waMessage .= "Terima kasih telah menggunakan layanan Nepertech!\n";
+        $waMessage .= "---\n";
+        $waMessage .= "*BLUD SMKN 1 Cirebon*";
+
+        $waResult = WhatsAppService::sendMessage($rental->whatsapp_number, $waMessage);
+
+        $successMsg = "Pengingat berhasil dikirim ke WhatsApp {$rental->name}.";
+
+        if (isset($waResult['simulated']) && $waResult['simulated']) {
+            return redirect()->route('dashboard')
+                ->with('success', $successMsg)
+                ->with('whatsapp_simulated', [
+                    'phone'   => $rental->whatsapp_number,
+                    'message' => $waMessage,
+                ]);
+        }
+
+        return redirect()->route('dashboard')
+            ->with('success', $successMsg . ' Pesan terkirim via WhatsApp.');
+    }
 }

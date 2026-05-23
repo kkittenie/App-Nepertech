@@ -51,6 +51,14 @@
         </li>
 
         <li>
+            <a class="nav-link {{ request()->routeIs('admin.sales.*') ? 'active' : '' }}"
+               href="{{ route('admin.sales.index') }}">
+                <i class="ti ti-shopping-cart"></i>
+                <span class="nav-text">Jual Lepas</span>
+            </a>
+        </li>
+
+        <li>
             <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
                href="{{ route('users.index') }}">
                 <i class="ti ti-users"></i>

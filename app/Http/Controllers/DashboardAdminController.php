@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Rental;
 
 class DashboardAdminController extends Controller
 {
@@ -49,6 +50,10 @@ class DashboardAdminController extends Controller
             $monthlyProducts[] = $monthlyData[$i] ?? 0;
         }
 
+        // Rental expiry alerts
+        $expiringSoonRentals = Rental::expiringSoon(30);  // expires within 30 days
+        $expiredRentals      = Rental::alreadyExpired();  // already past end date
+
         return view('admin.index', compact(
             'totalProducts',
             'totalCategories',
@@ -59,6 +64,8 @@ class DashboardAdminController extends Controller
             'recentProducts',
             'categoryBreakdown',
             'monthlyProducts',
+            'expiringSoonRentals',
+            'expiredRentals',
         ));
     }
 }

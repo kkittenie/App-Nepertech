@@ -499,6 +499,9 @@
                         <h4 class="pd-price-type">Jual Lepas</h4>
                         <p class="pd-price-note">Harga beli penuh / sekali bayar</p>
                         <div class="pd-price-amount">Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</div>
+                        <button class="btn btn-primary mt-3 w-100 btn-sale-trigger" style="background:#0a2540; border-color:#0a2540; border-radius:8px; padding:10px 16px; font-weight:600; font-size:13px;">
+                            <i class="fas fa-shopping-cart me-2"></i> Beli Sekarang
+                        </button>
                     </div>
 
                     @if($product->harga_sewa_bulanan)
@@ -672,6 +675,67 @@
     </div>
 
 @endsection
+
+    {{-- SALE REQUEST MODAL --}}
+    <div class="rental-modal-overlay" id="saleModal">
+        <div class="rental-modal-backdrop" id="saleBackdrop"></div>
+        <div class="rental-modal-card">
+            <button class="rental-modal-close" id="saleClose" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="rental-modal-header">
+                <div class="rental-modal-icon-wrap">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div>
+                    <h3 class="rental-modal-title">Formulir Pembelian</h3>
+                    <p class="rental-modal-subtitle">{{ $product->name }}</p>
+                </div>
+            </div>
+            
+            <form action="{{ route('sale.request') }}" method="POST" class="rental-modal-form" id="saleRequestForm">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                
+                <div class="form-row">
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="saleName" class="rental-label">Nama Lengkap <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="saleName" class="rental-input" placeholder="Masukkan nama lengkap..." value="{{ auth()->user() ? auth()->user()->name : '' }}" required>
+                    </div>
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="saleEmail" class="rental-label">Alamat Email <span class="text-danger">*</span></label>
+                        <input type="email" name="email" id="saleEmail" class="rental-input" placeholder="contoh@domain.com" value="{{ auth()->user() ? auth()->user()->email : '' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="form-group col-md-6" style="flex: 1 0 50%; min-width: 250px;">
+                        <label for="saleWhatsApp" class="rental-label">No. WhatsApp <span class="text-danger">*</span></label>
+                        <input type="text" name="whatsapp_number" id="saleWhatsApp" class="rental-input" placeholder="Contoh: 08123456789" required>
+                        <span class="rental-field-hint">Pastikan nomor aktif untuk notifikasi WhatsApp.</span>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 15px; width: 100%;">
+                    <label for="saleClientNotes" class="rental-label">Catatan Tambahan (Opsional)</label>
+                    <textarea name="client_notes" id="saleClientNotes" class="rental-textarea" rows="3" placeholder="Tuliskan catatan tambahan jika ada..."></textarea>
+                </div>
+
+                {{-- Price breakdown area --}}
+                <div class="rental-price-card">
+                    <div class="rental-price-row total">
+                        <span class="price-label">Total Harga (Jual Lepas)</span>
+                        <span class="price-value highlight">Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="rental-submit-btn">
+                    <span>Ajukan Pembelian</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
 
 @push('scripts')
 <script>
@@ -923,6 +987,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (durationSelect) {
         durationSelect.addEventListener('change', calculateTotal);
+    }
+
+    // ── Sale Modal System ──
+    const saleModal = document.getElementById('saleModal');
+    if (saleModal) {
+        const saleCloseBtn = document.getElementById('saleClose');
+        const saleBackdrop = document.getElementById('saleBackdrop');
+        const saleTriggers = document.querySelectorAll('.btn-sale-trigger');
+
+        function openSaleModal() {
+            saleModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSaleModal() {
+            saleModal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        saleTriggers.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openSaleModal();
+            });
+        });
+
+        if (saleCloseBtn) saleCloseBtn.addEventListener('click', closeSaleModal);
+        if (saleBackdrop) saleBackdrop.addEventListener('click', closeSaleModal);
     }
 
     // Dismiss flash alert automatically after 5 seconds

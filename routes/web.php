@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SaleController;
 
 
 Route::middleware('guest')->group(function () {
@@ -29,6 +30,9 @@ Route::get('/project', [HomeController::class, 'project'])->name('project');
 Route::get('/project/{slug}', [HomeController::class, 'projectDetail'])->name('project.detail');
 Route::get('/kontak', [HomeController::class, 'kontak']);
 Route::post('/rental/request', [\App\Http\Controllers\RentalController::class, 'store'])->name('rental.request');
+Route::post('/sale/request', [SaleController::class, 'store'])->name('sale.request');
+Route::get('/sale/payment/{token}', [SaleController::class, 'paymentPage'])->name('sale.payment');
+Route::post('/sale/payment/{token}', [SaleController::class, 'submitPayment'])->name('sale.payment.submit');
 
 Route::middleware('auth')->group(function () {
 
@@ -83,6 +87,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [\App\Http\Controllers\RentalController::class, 'index'])->name('index');
         Route::post('/{rental}/approve', [\App\Http\Controllers\RentalController::class, 'approve'])->name('approve');
         Route::post('/{rental}/reject', [\App\Http\Controllers\RentalController::class, 'reject'])->name('reject');
+        Route::post('/{rental}/remind', [\App\Http\Controllers\RentalController::class, 'remind'])->name('remind');
+    });
+
+    Route::prefix('admin/sales')->name('admin.sales.')->group(function () {
+        Route::get('/', [SaleController::class, 'index'])->name('index');
+        Route::post('/{sale}/approve', [SaleController::class, 'approve'])->name('approve');
+        Route::post('/{sale}/reject', [SaleController::class, 'reject'])->name('reject');
+        Route::post('/{sale}/approve-payment', [SaleController::class, 'approvePayment'])->name('approvePayment');
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
