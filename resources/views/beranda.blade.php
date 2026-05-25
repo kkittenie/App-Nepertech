@@ -52,30 +52,31 @@
                 </div>
 
             </div>
-        </div>
 
-        {{-- Hero visual: hidden on mobile via CSS --}}
-        <div class="hero-visual animate-scale-in" style="animation-delay:.5s" aria-hidden="true">
-            <div class="hero-card-float card-float-1"><i class="fas fa-code"></i> Software Dev</div>
-            <div class="hero-card-float card-float-2"><i class="fas fa-robot"></i> AI Solutions</div>
-            <div class="hero-card-float card-float-3"><i class="fas fa-network-wired"></i> IoT & Mobile</div>
-            <svg class="hero-ring" viewBox="0 0 400 400" fill="none">
-                <circle cx="200" cy="200" r="160" stroke="url(#ringGrad)" stroke-width="1.5" stroke-dasharray="12 6" />
-                <circle cx="200" cy="200" r="110" stroke="url(#ringGrad)" stroke-width="1" stroke-dasharray="6 8"
-                    opacity=".5" />
-                <circle cx="200" cy="200" r="60" fill="url(#centerGrad)" opacity=".15" />
-                <defs>
-                    <linearGradient id="ringGrad" x1="0" y1="0" x2="400" y2="400">
-                        <stop offset="0%" stop-color="#0a2540" />
-                        <stop offset="100%" stop-color="#2c6b9e" />
-                    </linearGradient>
-                    <radialGradient id="centerGrad">
-                        <stop offset="0%" stop-color="#0a2540" />
-                        <stop offset="100%" stop-color="transparent" />
-                    </radialGradient>
-                </defs>
-            </svg>
-            <div class="hero-center-icon"><i class="fas fa-laptop-code"></i></div>
+            {{-- Hero visual: hidden on mobile via CSS --}}
+            <div class="hero-visual animate-scale-in" style="animation-delay:.5s" aria-hidden="true">
+                <div class="hero-card-float card-float-1"><i class="fas fa-code"></i> Software Dev</div>
+                <div class="hero-card-float card-float-2"><i class="fas fa-robot"></i> AI Solutions</div>
+                <div class="hero-card-float card-float-3"><i class="fas fa-network-wired"></i> IoT & Mobile</div>
+                <svg class="hero-ring" viewBox="0 0 400 400" fill="none">
+                    <circle cx="200" cy="200" r="160" stroke="url(#ringGrad)" stroke-width="1.5" stroke-dasharray="12 6" />
+                    <circle cx="200" cy="200" r="110" stroke="url(#ringGrad)" stroke-width="1" stroke-dasharray="6 8"
+                        opacity=".5" />
+                    <circle cx="200" cy="200" r="60" fill="url(#centerGrad)" opacity=".15" />
+                    <defs>
+                        <linearGradient id="ringGrad" x1="0" y1="0" x2="400" y2="400">
+                            <stop offset="0%" stop-color="#0a2540" />
+                            <stop offset="100%" stop-color="#2c6b9e" />
+                        </linearGradient>
+                        <radialGradient id="centerGrad">
+                            <stop offset="0%" stop-color="#0a2540" />
+                            <stop offset="100%" stop-color="transparent" />
+                        </radialGradient>
+                    </defs>
+                </svg>
+                <div class="hero-center-icon"><i class="fas fa-laptop-code"></i></div>
+            </div>
+
         </div>
 
         <div class="hero-scroll-hint" aria-hidden="true">
