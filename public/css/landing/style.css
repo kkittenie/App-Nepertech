@@ -2169,6 +2169,16 @@ section {
     min-height: calc(100vh - 70px);
     margin-top: 70px; /* navbar height */
     background: var(--off-white);
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+@media (min-width: 1281px) {
+    .pd-shell {
+        border-left: 1px solid var(--gray-border);
+        border-right: 1px solid var(--gray-border);
+    }
 }
 
 /* ---- SIDEBAR ---- */
@@ -2303,31 +2313,43 @@ section {
     gap: 0;
     padding-top: 14px;
     border-top: 1px solid var(--gray-border);
+    width: 100%;
 }
 .pd-stat {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 14px;
+    padding: 0 clamp(4px, 1vw, 10px);
     flex: 1;
+    min-width: 0;
 }
 .pd-stat-num {
-    font-size: 18px;
+    font-size: clamp(14px, 1.2vw, 18px);
     font-weight: 800;
     color: var(--primary);
     letter-spacing: -0.04em;
     line-height: 1;
     margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
 }
 .pd-stat-green {
     color: #16a34a !important;
 }
 .pd-stat-lbl {
-    font-size: 10px;
+    font-size: clamp(8px, 0.8vw, 10px);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: var(--text-muted);
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
 }
 .pd-stat-sep {
     width: 1px;

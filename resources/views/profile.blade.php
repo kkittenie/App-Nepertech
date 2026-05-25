@@ -16,76 +16,78 @@
     <div class="pd-shell">
 
         {{-- ===================== SIDEBAR ===================== --}}
-        <aside class="pd-sidebar animate-fade-up" style="animation-delay:.1s">
+        <aside class="pd-sidebar">
+            <div class="animate-fade-up" style="animation-delay:.1s; display:flex; flex-direction:column; gap:16px; width:100%;">
 
-            {{-- Profile Card --}}
-            <div class="pd-profile-card">
-                <div class="pd-avatar-wrap">
-                    <div class="pd-avatar">
-                        @if($user->photo)
-                            <img src="{{ asset('storage/' . $user->photo) }}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
-                        @else
-                            <span class="pd-avatar-initials">
-                                {{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name ?? '', 0, 1)) }}
-                            </span>
-                        @endif
+                {{-- Profile Card --}}
+                <div class="pd-profile-card">
+                    <div class="pd-avatar-wrap">
+                        <div class="pd-avatar">
+                            @if($user->photo)
+                                <img src="{{ asset('storage/' . $user->photo) }}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                            @else
+                                <span class="pd-avatar-initials">
+                                    {{ strtoupper(substr($user->first_name, 0, 1)) }}{{ strtoupper(substr($user->last_name ?? '', 0, 1)) }}
+                                </span>
+                            @endif
+                        </div>
+                        <div class="pd-avatar-ring"></div>
+                        <div class="pd-avatar-ring pd-avatar-ring-2"></div>
+                        <span class="pd-avatar-status"></span>
                     </div>
-                    <div class="pd-avatar-ring"></div>
-                    <div class="pd-avatar-ring pd-avatar-ring-2"></div>
-                    <span class="pd-avatar-status"></span>
+
+                    <h2 class="pd-profile-name">{{ $user->name }}</h2>
+                    <p class="pd-profile-handle">{{ '@' . $user->username }}</p>
+
+                    @if($user->minat)
+                        <div class="pd-minat-badge">
+                            <i class="fas fa-star"></i> {{ $user->minat }}
+                        </div>
+                    @endif
+
+                    <div class="pd-stat-row">
+                        <div class="pd-stat">
+                            <span class="pd-stat-num">{{ $user->created_at->format('Y') }}</span>
+                            <span class="pd-stat-lbl">Sejak</span>
+                        </div>
+                        <div class="pd-stat-sep"></div>
+                        <div class="pd-stat">
+                            <span class="pd-stat-num">TEFA</span>
+                            <span class="pd-stat-lbl">Program</span>
+                        </div>
+                        <div class="pd-stat-sep"></div>
+                        <div class="pd-stat">
+                            <span class="pd-stat-num pd-stat-green">Aktif</span>
+                            <span class="pd-stat-lbl">Status</span>
+                        </div>
+                    </div>
                 </div>
 
-                <h2 class="pd-profile-name">{{ $user->name }}</h2>
-                <p class="pd-profile-handle">{{ '@' . $user->username }}</p>
+                {{-- Nav Menu --}}
+                <nav class="pd-nav">
+                    @foreach($navItems as $item)
+                        <a href="#{{ $item['key'] }}"
+                           class="pd-nav-item {{ $loop->first ? 'pd-nav-active' : '' }}"
+                           data-section="{{ $item['key'] }}">
+                            <span class="pd-nav-icon"><i class="fas {{ $item['icon'] }}"></i></span>
+                            <span class="pd-nav-label">{{ $item['label'] }}</span>
+                            <i class="fas fa-chevron-right pd-nav-chevron"></i>
+                        </a>
+                    @endforeach
 
-                @if($user->minat)
-                    <div class="pd-minat-badge">
-                        <i class="fas fa-star"></i> {{ $user->minat }}
-                    </div>
-                @endif
+                    <div class="pd-nav-divider"></div>
 
-                <div class="pd-stat-row">
-                    <div class="pd-stat">
-                        <span class="pd-stat-num">{{ $user->created_at->format('Y') }}</span>
-                        <span class="pd-stat-lbl">Sejak</span>
-                    </div>
-                    <div class="pd-stat-sep"></div>
-                    <div class="pd-stat">
-                        <span class="pd-stat-num">TEFA</span>
-                        <span class="pd-stat-lbl">Program</span>
-                    </div>
-                    <div class="pd-stat-sep"></div>
-                    <div class="pd-stat">
-                        <span class="pd-stat-num pd-stat-green">Aktif</span>
-                        <span class="pd-stat-lbl">Status</span>
-                    </div>
-                </div>
+                    <form method="POST" action="{{ route('logout') }}" style="margin:0">
+                        @csrf
+                        <button type="submit" class="pd-nav-item pd-nav-danger">
+                            <span class="pd-nav-icon"><i class="fas fa-sign-out-alt"></i></span>
+                            <span class="pd-nav-label">Keluar</span>
+                            <i class="fas fa-chevron-right pd-nav-chevron"></i>
+                        </button>
+                    </form>
+                </nav>
+
             </div>
-
-            {{-- Nav Menu --}}
-            <nav class="pd-nav">
-                @foreach($navItems as $item)
-                    <a href="#{{ $item['key'] }}"
-                       class="pd-nav-item {{ $loop->first ? 'pd-nav-active' : '' }}"
-                       data-section="{{ $item['key'] }}">
-                        <span class="pd-nav-icon"><i class="fas {{ $item['icon'] }}"></i></span>
-                        <span class="pd-nav-label">{{ $item['label'] }}</span>
-                        <i class="fas fa-chevron-right pd-nav-chevron"></i>
-                    </a>
-                @endforeach
-
-                <div class="pd-nav-divider"></div>
-
-                <form method="POST" action="{{ route('logout') }}" style="margin:0">
-                    @csrf
-                    <button type="submit" class="pd-nav-item pd-nav-danger">
-                        <span class="pd-nav-icon"><i class="fas fa-sign-out-alt"></i></span>
-                        <span class="pd-nav-label">Keluar</span>
-                        <i class="fas fa-chevron-right pd-nav-chevron"></i>
-                    </button>
-                </form>
-            </nav>
-
         </aside>
 
         {{-- ===================== MAIN CONTENT ===================== --}}
