@@ -114,9 +114,6 @@
                         Seluruh produk dikerjakan oleh siswa-siswi kompeten
                         di bawah bimbingan tenaga pendidik dan standar industri nyata.
                     </p>
-                    <a href="{{ url('/profil') }}" class="card-link">
-                        Selengkapnya <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
 
                 <div class="card card-hover reveal" style="transition-delay:.12s">
@@ -128,9 +125,6 @@
                         Solusi komprehensif mulai dari website, mobile, desktop,
                         game, IoT, hingga aplikasi berbasis AI yang relevan dengan kebutuhan pasar.
                     </p>
-                    <a href="{{ url('/profil') }}" class="card-link">
-                        Selengkapnya <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
 
                 <div class="card card-hover reveal" style="transition-delay:.24s">
@@ -142,9 +136,6 @@
                         Secara resmi berada di bawah naungan BLUD SMKN 1 Cirebon
                         dengan standar profesional industri dan komitmen kualitas tinggi.
                     </p>
-                    <a href="{{ url('/profil') }}" class="card-link">
-                        Selengkapnya <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
 
             </div>
