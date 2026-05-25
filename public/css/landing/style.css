@@ -717,7 +717,7 @@ section {
     display: flex;
     align-items: center;
     position: relative;
-    padding: 110px 0 40px;
+    padding: 160px 0 80px;
     background: linear-gradient(155deg, #eef4fb 0%, #f8faff 50%, #edf2f9 100%);
     overflow: hidden;
 }
@@ -813,7 +813,7 @@ section {
     width: 100%;
     flex-shrink: 0;
     text-align: left;
-    margin-top: -40px;
+    margin-top: 0;
 }
 .hero-eyebrow {
     display: flex;
@@ -1106,7 +1106,7 @@ section {
 }
 @media (min-width: 1024px) {
     .hero-inner {
-        margin-top: -40px;
+        margin-top: 0;
     }
 }
 @media (max-width: 768px) {
