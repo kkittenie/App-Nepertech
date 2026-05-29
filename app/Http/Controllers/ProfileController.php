@@ -18,10 +18,14 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         $categories = \App\Models\Category::withCount('products')->get();
+        $rentals = \App\Models\Rental::with('product')->where('user_id', auth()->id())->latest()->get();
+        $sales = \App\Models\Sale::with('product')->where('user_id', auth()->id())->latest()->get();
 
         return view('profile', [
             'user' => $request->user(),
             'categories' => $categories,
+            'rentals' => $rentals,
+            'sales' => $sales,
         ]);
     }
 

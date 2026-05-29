@@ -101,7 +101,7 @@
                         <span class="section-tag" style="margin-bottom:8px">Akun</span>
                         <h2 class="pd-section-title">Profil <span class="gradient-text">Saya</span></h2>
                     </div>
-                    <a href="{{ route('profile') }}" class="btn btn-primary btn-arrow">
+                    <a href="#pengaturan" class="btn btn-primary btn-arrow btn-edit-profile-trigger">
                         Edit Profil <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -190,67 +190,6 @@
                                 <span class="pd-info-val">{{ $user->created_at->translatedFormat('d F Y') }}</span>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                {{-- KPI Row --}}
-                <div class="pd-kpi-row animate-fade-up" style="animation-delay:.5s">
-                    <div class="pd-kpi-card">
-                        <div class="pd-kpi-icon-wrap"><i class="fas fa-laptop-code"></i></div>
-                        <div class="pd-kpi-body">
-                            <span class="pd-kpi-val">TEFA</span>
-                            <span class="pd-kpi-lbl">Program Aktif</span>
-                        </div>
-                    </div>
-                    <div class="pd-kpi-card">
-                        <div class="pd-kpi-icon-wrap"><i class="fas fa-graduation-cap"></i></div>
-                        <div class="pd-kpi-body">
-                            <span class="pd-kpi-val">SMKN 1</span>
-                            <span class="pd-kpi-lbl">Institusi</span>
-                        </div>
-                    </div>
-                    <div class="pd-kpi-card">
-                        <div class="pd-kpi-icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
-                        <div class="pd-kpi-body">
-                            <span class="pd-kpi-val">Cirebon</span>
-                            <span class="pd-kpi-lbl">Lokasi</span>
-                        </div>
-                    </div>
-                    <div class="pd-kpi-card pd-kpi-accent">
-                        <div class="pd-kpi-icon-wrap"><i class="fas fa-shield-alt"></i></div>
-                        <div class="pd-kpi-body">
-                            <span class="pd-kpi-val">Verified</span>
-                            <span class="pd-kpi-lbl">Status Email</span>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Layanan --}}
-                <div class="animate-fade-up" style="animation-delay:.55s">
-                    <div class="pd-block-header">
-                        <h3 class="pd-block-title">Layanan <span class="gradient-text">Tersedia</span></h3>
-                        <a href="{{ url('/layanan') }}" class="pd-block-link">
-                            Lihat Semua <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                    <div class="pd-layanan-grid">
-                        @forelse($categories as $cat)
-                        <div class="card card-hover" style="padding:28px;position:relative;overflow:hidden">
-                            <div class="card-program-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                            <div class="card-icon-wrap" style="margin-bottom:16px"><i class="fas fa-layer-group"></i></div>
-                            <h3 style="margin-bottom:8px;font-size:16px">{{ $cat->name }}</h3>
-                            <p style="margin-bottom:16px;font-size:13.5px">{{ $cat->products_count }} produk tersedia dalam kategori ini.</p>
-                            <a href="{{ url('/layanan') }}" class="card-link" style="font-size:13px">
-                                Detail <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                        @empty
-                        <div class="card card-hover" style="padding:28px">
-                            <div class="card-icon-wrap" style="margin-bottom:16px"><i class="fas fa-info-circle"></i></div>
-                            <h3 style="margin-bottom:8px;font-size:16px">Segera Hadir</h3>
-                            <p style="font-size:13.5px">Layanan sedang disiapkan.</p>
-                        </div>
-                        @endforelse
                     </div>
                 </div>
 
@@ -390,7 +329,7 @@
                 </div>
             </section>
 
-            {{-- =========== PLACEHOLDER SECTIONS =========== --}}
+            {{-- =========== DYNAMIC PROJECTS & NOTIFICATIONS SECTIONS =========== --}}
             <section class="pd-section pd-section-hidden" id="proyek" data-section="proyek">
                 <div class="pd-section-header">
                     <div>
@@ -398,14 +337,122 @@
                         <h2 class="pd-section-title">Proyek <span class="gradient-text">Saya</span></h2>
                     </div>
                 </div>
-                <div class="pd-content-card pd-empty-state">
-                    <div class="pd-empty-icon"><i class="fas fa-code"></i></div>
-                    <h3 style="margin-bottom:8px">Belum ada proyek</h3>
-                    <p style="color:var(--text-muted);margin:0">Proyek yang sedang atau telah dikerjakan akan tampil di sini.</p>
-                    <a href="{{ url('/kontak') }}" class="btn btn-primary btn-arrow" style="margin-top:24px">
-                        Mulai Proyek <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
+
+                @if($rentals->isEmpty() && $sales->isEmpty())
+                    <div class="pd-content-card pd-empty-state animate-fade-up">
+                        <div class="pd-empty-icon"><i class="fas fa-code"></i></div>
+                        <h3 style="margin-bottom:8px">Belum ada proyek</h3>
+                        <p style="color:var(--text-muted);margin:0">Proyek yang sedang atau telah dikerjakan akan tampil di sini.</p>
+                        <a href="{{ url('/kontak') }}" class="btn btn-primary btn-arrow" style="margin-top:24px">
+                            Mulai Proyek <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                @else
+                    <div class="pd-projects-grid">
+                        @foreach($rentals as $rental)
+                            <div class="pd-project-card animate-fade-up">
+                                <div class="pd-project-image">
+                                    @if($rental->product && $rental->product->display_image)
+                                        <img src="{{ asset('storage/' . $rental->product->display_image) }}" alt="{{ $rental->product->name }}">
+                                    @else
+                                        <div class="pd-project-image-placeholder"><i class="fas fa-laptop-code"></i></div>
+                                    @endif
+                                    <span class="pd-project-type badge-sewa">Sewa</span>
+                                </div>
+                                <div class="pd-project-body">
+                                    <h3 class="pd-project-name">{{ $rental->product->name ?? 'Produk Sewa' }}</h3>
+                                    <div class="pd-project-meta">
+                                        <div class="pd-project-meta-item">
+                                            <span class="lbl">Durasi:</span>
+                                            <span class="val fw-semibold">{{ $rental->duration_label }}</span>
+                                        </div>
+                                        <div class="pd-project-meta-item">
+                                            <span class="lbl">Mulai Sewa:</span>
+                                            <span class="val">{{ $rental->start_date->translatedFormat('d M Y') }}</span>
+                                        </div>
+                                        <div class="pd-project-meta-item">
+                                            <span class="lbl">Total Biaya:</span>
+                                            <span class="val fw-bold text-primary">Rp {{ number_format($rental->total_price, 0, ',', '.') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="pd-project-status-row">
+                                        <span class="pd-project-status badge-{{ $rental->status }}">
+                                            @if($rental->status === 'pending')
+                                                <i class="fas fa-hourglass-half me-1"></i> Ditinjau
+                                            @elseif($rental->status === 'approved')
+                                                <i class="fas fa-check-circle me-1"></i> Aktif
+                                            @elseif($rental->status === 'rejected')
+                                                <i class="fas fa-times-circle me-1"></i> Ditolak
+                                            @else
+                                                {{ ucfirst($rental->status) }}
+                                            @endif
+                                        </span>
+                                    </div>
+                                    @if($rental->admin_notes)
+                                        <div class="pd-project-notes mt-3">
+                                            <strong>Catatan Admin:</strong>
+                                            <p class="mb-0 text-muted italic">"{{ $rental->admin_notes }}"</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+
+                        @foreach($sales as $sale)
+                            <div class="pd-project-card animate-fade-up">
+                                <div class="pd-project-image">
+                                    @if($sale->product && $sale->product->display_image)
+                                        <img src="{{ asset('storage/' . $sale->product->display_image) }}" alt="{{ $sale->product->name }}">
+                                    @else
+                                        <div class="pd-project-image-placeholder"><i class="fas fa-laptop-code"></i></div>
+                                    @endif
+                                    <span class="pd-project-type badge-beli">Beli</span>
+                                </div>
+                                <div class="pd-project-body">
+                                    <h3 class="pd-project-name">{{ $sale->product->name ?? 'Produk Jual Lepas' }}</h3>
+                                    <div class="pd-project-meta">
+                                        <div class="pd-project-meta-item">
+                                            <span class="lbl">Tipe Lisensi:</span>
+                                            <span class="val fw-semibold">Beli Penuh</span>
+                                        </div>
+                                        <div class="pd-project-meta-item">
+                                            <span class="lbl">Total Harga:</span>
+                                            <span class="val fw-bold text-primary">Rp {{ number_format($sale->total_price, 0, ',', '.') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="pd-project-status-row">
+                                        <span class="pd-project-status badge-{{ $sale->status }}">
+                                            @if($sale->status === 'pending')
+                                                <i class="fas fa-hourglass-half me-1"></i> Ditinjau
+                                            @elseif($sale->status === 'awaiting_payment')
+                                                <i class="fas fa-wallet me-1"></i> Menunggu Pembayaran
+                                            @elseif($sale->status === 'payment_submitted')
+                                                <i class="fas fa-clock me-1"></i> Verifikasi Pembayaran
+                                            @elseif($sale->status === 'completed')
+                                                <i class="fas fa-check-double me-1"></i> Selesai
+                                            @elseif($sale->status === 'rejected')
+                                                <i class="fas fa-times-circle me-1"></i> Ditolak
+                                            @else
+                                                {{ ucfirst($sale->status) }}
+                                            @endif
+                                        </span>
+                                    </div>
+                                    @if($sale->status === 'awaiting_payment')
+                                        <a href="{{ route('sale.payment', $sale->payment_token) }}" class="btn btn-primary btn-arrow w-100 mt-3" style="padding: 10px; font-size: 13px; justify-content: center;">
+                                            Bayar / Unggah Bukti <i class="fas fa-arrow-right ms-1"></i>
+                                        </a>
+                                    @endif
+                                    @if($sale->admin_notes)
+                                        <div class="pd-project-notes mt-3">
+                                            <strong>Catatan Admin:</strong>
+                                            <p class="mb-0 text-muted italic">"{{ $sale->admin_notes }}"</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </section>
 
             <section class="pd-section pd-section-hidden" id="notifikasi" data-section="notifikasi">
@@ -415,11 +462,116 @@
                         <h2 class="pd-section-title">Notifikasi</h2>
                     </div>
                 </div>
-                <div class="pd-content-card pd-empty-state">
-                    <div class="pd-empty-icon"><i class="fas fa-bell"></i></div>
-                    <h3 style="margin-bottom:8px">Semua sudah terbaca</h3>
-                    <p style="color:var(--text-muted);margin:0">Belum ada notifikasi baru untuk saat ini.</p>
-                </div>
+
+                @php
+                    $notifications = collect();
+
+                    foreach($rentals as $rental) {
+                        if ($rental->status === 'pending') {
+                            $notifications->push([
+                                'type' => 'info',
+                                'title' => 'Pengajuan Sewa Terkirim',
+                                'message' => 'Pengajuan sewa Anda untuk produk "' . ($rental->product->name ?? 'Produk') . '" telah diterima dan sedang ditinjau oleh admin.',
+                                'time' => $rental->created_at,
+                                'icon' => 'fa-paper-plane',
+                            ]);
+                        } elseif ($rental->status === 'approved') {
+                            $notifications->push([
+                                'type' => 'success',
+                                'title' => 'Pengajuan Sewa Disetujui',
+                                'message' => 'Kabar baik! Pengajuan sewa produk "' . ($rental->product->name ?? 'Produk') . '" telah disetujui. Layanan Anda kini aktif.',
+                                'time' => $rental->updated_at,
+                                'icon' => 'fa-check-circle',
+                            ]);
+                        } elseif ($rental->status === 'rejected') {
+                            $notifications->push([
+                                'type' => 'danger',
+                                'title' => 'Pengajuan Sewa Ditolak',
+                                'message' => 'Mohon maaf, pengajuan sewa produk "' . ($rental->product->name ?? 'Produk') . '" ditolak. ' . ($rental->admin_notes ? 'Alasan: ' . $rental->admin_notes : ''),
+                                'time' => $rental->updated_at,
+                                'icon' => 'fa-times-circle',
+                            ]);
+                        }
+                    }
+
+                    foreach($sales as $sale) {
+                        if ($sale->status === 'pending') {
+                            $notifications->push([
+                                'type' => 'info',
+                                'title' => 'Pengajuan Pembelian Terkirim',
+                                'message' => 'Pengajuan pembelian produk "' . ($sale->product->name ?? 'Produk') . '" telah terkirim dan sedang ditinjau oleh admin.',
+                                'time' => $sale->created_at,
+                                'icon' => 'fa-shopping-cart',
+                            ]);
+                        } elseif ($sale->status === 'awaiting_payment') {
+                            $notifications->push([
+                                'type' => 'warning',
+                                'title' => 'Menunggu Pembayaran',
+                                'message' => 'Pengajuan pembelian "' . ($sale->product->name ?? 'Produk') . '" disetujui! Silakan lakukan pembayaran dan unggah bukti transfer Anda.',
+                                'time' => $sale->updated_at,
+                                'icon' => 'fa-wallet',
+                                'action_url' => route('sale.payment', $sale->payment_token),
+                                'action_label' => 'Bayar Sekarang',
+                            ]);
+                        } elseif ($sale->status === 'payment_submitted') {
+                            $notifications->push([
+                                'type' => 'info',
+                                'title' => 'Bukti Pembayaran Dikirim',
+                                'message' => 'Bukti pembayaran untuk "' . ($sale->product->name ?? 'Produk') . '" telah diunggah dan sedang divalidasi oleh tim admin kami.',
+                                'time' => $sale->updated_at,
+                                'icon' => 'fa-hourglass-half',
+                            ]);
+                        } elseif ($sale->status === 'completed') {
+                            $notifications->push([
+                                'type' => 'success',
+                                'title' => 'Pembelian Selesai',
+                                'message' => 'Pembayaran untuk "' . ($sale->product->name ?? 'Produk') . '" telah berhasil divalidasi! Tim kami akan segera menghubungi Anda.',
+                                'time' => $sale->updated_at,
+                                'icon' => 'fa-check-double',
+                            ]);
+                        } elseif ($sale->status === 'rejected') {
+                            $notifications->push([
+                                'type' => 'danger',
+                                'title' => 'Pembelian Ditolak',
+                                'message' => 'Mohon maaf, pengajuan pembelian produk "' . ($sale->product->name ?? 'Produk') . '" ditolak. ' . ($sale->admin_notes ? 'Alasan: ' . $sale->admin_notes : ''),
+                                'time' => $sale->updated_at,
+                                'icon' => 'fa-times-circle',
+                            ]);
+                        }
+                    }
+
+                    $notifications = $notifications->sortByDesc('time');
+                @endphp
+
+                @if($notifications->isEmpty())
+                    <div class="pd-content-card pd-empty-state animate-fade-up">
+                        <div class="pd-empty-icon"><i class="fas fa-bell"></i></div>
+                        <h3 style="margin-bottom:8px">Semua sudah terbaca</h3>
+                        <p style="color:var(--text-muted);margin:0">Belum ada notifikasi baru untuk saat ini.</p>
+                    </div>
+                @else
+                    <div class="pd-notifications-list">
+                        @foreach($notifications as $notif)
+                            <div class="pd-notification-item animate-fade-up pd-notif-{{ $notif['type'] }}">
+                                <div class="pd-notif-icon-wrap">
+                                    <i class="fas {{ $notif['icon'] }}"></i>
+                                </div>
+                                <div class="pd-notif-body">
+                                    <div class="pd-notif-header">
+                                        <h4 class="pd-notif-title">{{ $notif['title'] }}</h4>
+                                        <span class="pd-notif-time">{{ $notif['time']->diffForHumans() }}</span>
+                                    </div>
+                                    <p class="pd-notif-message">{{ $notif['message'] }}</p>
+                                    @if(isset($notif['action_url']))
+                                        <a href="{{ $notif['action_url'] }}" class="btn btn-primary btn-arrow btn-sm mt-2" style="font-size: 12px; padding: 6px 12px;">
+                                            {{ $notif['action_label'] }} <i class="fas fa-arrow-right ms-1"></i>
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </section>
 
         </main>
@@ -451,6 +603,18 @@
                 history.pushState(null, '', '#' + n.dataset.section);
             });
         });
+
+        // Trigger for Edit Profile button to redirect to Pengaturan tab smoothly
+        const editProfileBtn = document.querySelector('.btn-edit-profile-trigger');
+        if (editProfileBtn) {
+            editProfileBtn.addEventListener('click', e => {
+                e.preventDefault();
+                activate('pengaturan');
+                history.pushState(null, '', '#pengaturan');
+                // Scroll to top of settings for better UX
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
 
         const hash = location.hash.replace('#', '');
         if (hash) activate(hash);
