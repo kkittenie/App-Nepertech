@@ -674,8 +674,6 @@
         </div>
     </div>
 
-@endsection
-
     {{-- SALE REQUEST MODAL --}}
     <div class="rental-modal-overlay" id="saleModal">
         <div class="rental-modal-backdrop" id="saleBackdrop"></div>
@@ -736,6 +734,8 @@
             </form>
         </div>
     </div>
+
+@endsection
 
 @push('scripts')
 <script>

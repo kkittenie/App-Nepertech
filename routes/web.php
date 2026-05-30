@@ -30,6 +30,8 @@ Route::get('/project', [HomeController::class, 'project'])->name('project');
 Route::get('/project/{slug}', [HomeController::class, 'projectDetail'])->name('project.detail');
 Route::get('/kontak', [HomeController::class, 'kontak']);
 Route::post('/rental/request', [\App\Http\Controllers\RentalController::class, 'store'])->name('rental.request');
+Route::get('/rental/payment/{token}', [\App\Http\Controllers\RentalController::class, 'paymentPage'])->name('rental.payment');
+Route::post('/rental/payment/{token}', [\App\Http\Controllers\RentalController::class, 'submitPayment'])->name('rental.payment.submit');
 Route::post('/sale/request', [SaleController::class, 'store'])->name('sale.request');
 Route::get('/sale/payment/{token}', [SaleController::class, 'paymentPage'])->name('sale.payment');
 Route::post('/sale/payment/{token}', [SaleController::class, 'submitPayment'])->name('sale.payment.submit');
@@ -83,14 +85,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
     });
 
-    Route::prefix('admin/rentals')->name('admin.rentals.')->group(function () {
+    Route::prefix('admin/rentals')->name('admin.rentals.')->middleware('admin')->group(function () {
         Route::get('/', [\App\Http\Controllers\RentalController::class, 'index'])->name('index');
         Route::post('/{rental}/approve', [\App\Http\Controllers\RentalController::class, 'approve'])->name('approve');
         Route::post('/{rental}/reject', [\App\Http\Controllers\RentalController::class, 'reject'])->name('reject');
         Route::post('/{rental}/remind', [\App\Http\Controllers\RentalController::class, 'remind'])->name('remind');
+        Route::post('/{rental}/approve-payment', [\App\Http\Controllers\RentalController::class, 'approvePayment'])->name('approvePayment');
     });
 
-    Route::prefix('admin/sales')->name('admin.sales.')->group(function () {
+    Route::prefix('admin/sales')->name('admin.sales.')->middleware('admin')->group(function () {
         Route::get('/', [SaleController::class, 'index'])->name('index');
         Route::post('/{sale}/approve', [SaleController::class, 'approve'])->name('approve');
         Route::post('/{sale}/reject', [SaleController::class, 'reject'])->name('reject');

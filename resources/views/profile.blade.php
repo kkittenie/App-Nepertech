@@ -379,8 +379,12 @@
                                         <span class="pd-project-status badge-{{ $rental->status }}">
                                             @if($rental->status === 'pending')
                                                 <i class="fas fa-hourglass-half me-1"></i> Ditinjau
-                                            @elseif($rental->status === 'approved')
-                                                <i class="fas fa-check-circle me-1"></i> Aktif
+                                            @elseif($rental->status === 'awaiting_payment')
+                                                <i class="fas fa-wallet me-1"></i> Menunggu Pembayaran
+                                            @elseif($rental->status === 'payment_submitted')
+                                                <i class="fas fa-clock me-1"></i> Verifikasi Pembayaran
+                                            @elseif($rental->status === 'completed')
+                                                <i class="fas fa-check-double me-1"></i> Selesai
                                             @elseif($rental->status === 'rejected')
                                                 <i class="fas fa-times-circle me-1"></i> Ditolak
                                             @else
@@ -388,6 +392,11 @@
                                             @endif
                                         </span>
                                     </div>
+                                    @if($rental->status === 'awaiting_payment')
+                                        <a href="{{ route('rental.payment', $rental->payment_token) }}" class="btn btn-primary btn-arrow w-100 mt-3" style="padding: 10px; font-size: 13px; justify-content: center;">
+                                            Bayar / Unggah Bukti <i class="fas fa-arrow-right ms-1"></i>
+                                        </a>
+                                    @endif
                                     @if($rental->admin_notes)
                                         <div class="pd-project-notes mt-3">
                                             <strong>Catatan Admin:</strong>
@@ -475,13 +484,31 @@
                                 'time' => $rental->created_at,
                                 'icon' => 'fa-paper-plane',
                             ]);
-                        } elseif ($rental->status === 'approved') {
+                        } elseif ($rental->status === 'awaiting_payment') {
+                            $notifications->push([
+                                'type' => 'warning',
+                                'title' => 'Menunggu Pembayaran Sewa',
+                                'message' => 'Pengajuan sewa "' . ($rental->product->name ?? 'Produk') . '" disetujui! Silakan lakukan pembayaran sewa dan unggah bukti transfer Anda.',
+                                'time' => $rental->updated_at,
+                                'icon' => 'fa-wallet',
+                                'action_url' => route('rental.payment', $rental->payment_token),
+                                'action_label' => 'Bayar Sewa Sekarang',
+                            ]);
+                        } elseif ($rental->status === 'payment_submitted') {
+                            $notifications->push([
+                                'type' => 'info',
+                                'title' => 'Bukti Pembayaran Sewa Dikirim',
+                                'message' => 'Bukti pembayaran sewa untuk "' . ($rental->product->name ?? 'Produk') . '" telah diunggah dan sedang divalidasi oleh tim admin kami.',
+                                'time' => $rental->updated_at,
+                                'icon' => 'fa-hourglass-half',
+                            ]);
+                        } elseif ($rental->status === 'completed') {
                             $notifications->push([
                                 'type' => 'success',
-                                'title' => 'Pengajuan Sewa Disetujui',
-                                'message' => 'Kabar baik! Pengajuan sewa produk "' . ($rental->product->name ?? 'Produk') . '" telah disetujui. Layanan Anda kini aktif.',
+                                'title' => 'Penyewaan Selesai & Aktif',
+                                'message' => 'Pembayaran sewa untuk "' . ($rental->product->name ?? 'Produk') . '" telah berhasil divalidasi! Layanan sewa Anda sekarang aktif, dan tim kami akan segera menghubungi Anda.',
                                 'time' => $rental->updated_at,
-                                'icon' => 'fa-check-circle',
+                                'icon' => 'fa-check-double',
                             ]);
                         } elseif ($rental->status === 'rejected') {
                             $notifications->push([

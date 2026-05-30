@@ -25,12 +25,9 @@
 <div class="modal fade show" id="waSimulationModal" tabindex="-1" style="display: block; background: rgba(10, 37, 64, 0.45); backdrop-filter: blur(8px); z-index: 1050;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md); overflow: hidden;">
-            {{-- WhatsApp Premium Chat Header --}}
             <div class="d-flex align-items-center justify-content-between p-3 text-white" style="background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);">
                 <div class="d-flex align-items-center gap-2">
-                    <div class="wa-chat-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1.5px solid rgba(255, 255, 255, 0.4);">
-                        NP
-                    </div>
+                    <div class="wa-chat-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1.5px solid rgba(255, 255, 255, 0.4);">NP</div>
                     <div>
                         <h6 class="mb-0 fw-bold">Nepertech WA Gateway</h6>
                         <small class="text-white-50" style="font-size: 11px;"><i class="fa fa-circle text-success me-1" style="font-size: 9px;"></i> Simulasi Aktif (Fonnte API)</small>
@@ -38,15 +35,11 @@
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="closeWaModal()" aria-label="Close"></button>
             </div>
-            {{-- Chat Wallpaper Area --}}
             <div class="modal-body p-4" style="background-color: #efeae2; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-size: contain; min-height: 380px; max-height: 480px; overflow-y: auto;">
                 <div class="d-flex flex-column align-items-start">
-                    {{-- System Warning --}}
                     <div class="align-self-center text-center py-1 px-3 mb-3 bg-white text-muted shadow-sm rounded-pill" style="font-size: 11px; border: 1px solid rgba(0,0,0,0.05);">
                         🔒 Pesan ini disimulasikan & dicatat di laravel.log
                     </div>
-                    
-                    {{-- User message bubble --}}
                     <div class="bg-white rounded-3 shadow-sm p-3 mb-2 border-0" style="max-width: 85%; align-self: flex-start; border-top-left-radius: 0px !important; position: relative;">
                         <span class="text-secondary fw-semibold d-block mb-1" style="font-size: 11px;">Ke: +{{ session('whatsapp_simulated')['phone'] }}</span>
                         <div class="wa-message-text" style="white-space: pre-wrap; font-size: 13.5px; line-height: 1.5; color: #303030;">{!! e(session('whatsapp_simulated')['message']) !!}</div>
@@ -80,11 +73,13 @@
 
     {{-- Top Stats Cards --}}
     @php
-        $pendingCount = $pendingRentals->count();
-        $approvedCount = $approvedRentals->count();
-        $rejectedCount = $rejectedRentals->count();
-        $totalEarnings = $approvedRentals->sum('total_price');
-        $totalRequests = $pendingCount + $approvedCount + $rejectedCount;
+        $pendingCount   = $pendingRentals->count();
+        $awaitingCount  = $awaitingRentals->count();
+        $submittedCount = $submittedRentals->count();
+        $completedCount = $completedRentals->count();
+        $rejectedCount  = $rejectedRentals->count();
+        $totalEarnings  = $completedRentals->sum('total_price');
+        $totalRequests  = $pendingCount + $awaitingCount + $submittedCount + $completedCount + $rejectedCount;
     @endphp
     <div class="stats-grid mb-4">
         <div class="stat-card stat-card--primary">
@@ -92,7 +87,7 @@
                 <i class="ti ti-history"></i>
             </div>
             <div class="stat-card-body">
-                <span class="stat-card-label">Pengajuan Masuk</span>
+                <span class="stat-card-label">Total Pengajuan</span>
                 <h3 class="stat-card-value">{{ number_format($totalRequests) }}</h3>
             </div>
             <div class="stat-card-glow"></div>
@@ -114,8 +109,8 @@
                 <i class="ti ti-circle-check"></i>
             </div>
             <div class="stat-card-body">
-                <span class="stat-card-label">Sewa Disetujui</span>
-                <h3 class="stat-card-value">{{ number_format($approvedCount) }}</h3>
+                <span class="stat-card-label">Sewa Selesai</span>
+                <h3 class="stat-card-value">{{ number_format($completedCount) }}</h3>
             </div>
             <div class="stat-card-glow"></div>
         </div>
@@ -125,7 +120,7 @@
                 <i class="ti ti-currency-dollar"></i>
             </div>
             <div class="stat-card-body">
-                <span class="stat-card-label">Estimasi Omset</span>
+                <span class="stat-card-label">Total Omset Sewa</span>
                 <h3 class="stat-card-value">Rp {{ number_format($totalEarnings, 0, ',', '.') }}</h3>
             </div>
             <div class="stat-card-glow"></div>
@@ -141,9 +136,21 @@
                     <i class="ti ti-clock me-1"></i> Pending
                     <span class="tab-count">{{ $pendingCount }}</span>
                 </button>
-                <button class="filter-tab" data-tab="tab-approved">
-                    <i class="ti ti-circle-check me-1"></i> Disetujui
-                    <span class="tab-count">{{ $approvedCount }}</span>
+                <button class="filter-tab" data-tab="tab-awaiting">
+                    <i class="ti ti-credit-card me-1"></i> Menunggu Bayar
+                    <span class="tab-count">{{ $awaitingCount }}</span>
+                </button>
+                <button class="filter-tab" data-tab="tab-submitted">
+                    <i class="ti ti-file-upload me-1"></i> Bukti Masuk
+                    @if($submittedCount > 0)
+                    <span class="tab-count" style="background: #dc2626; color: white;">{{ $submittedCount }}</span>
+                    @else
+                    <span class="tab-count">0</span>
+                    @endif
+                </button>
+                <button class="filter-tab" data-tab="tab-completed">
+                    <i class="ti ti-circle-check me-1"></i> Selesai
+                    <span class="tab-count">{{ $completedCount }}</span>
                 </button>
                 <button class="filter-tab" data-tab="tab-rejected">
                     <i class="ti ti-circle-x me-1"></i> Ditolak
@@ -163,7 +170,7 @@
                                 <th class="ps-4 py-3 text-muted small uppercase" style="width: 50px;">#</th>
                                 <th class="py-3 text-muted small uppercase">Penyewa / Kontak</th>
                                 <th class="py-3 text-muted small uppercase">Produk</th>
-                                <th class="py-3 text-muted small uppercase">Durasi & Mulai</th>
+                                <th class="py-3 text-muted small uppercase">Durasi &amp; Mulai</th>
                                 <th class="py-3 text-muted small uppercase">Total Biaya</th>
                                 <th class="py-3 text-muted small uppercase text-center" style="width: 180px;">Aksi</th>
                             </tr>
@@ -207,19 +214,19 @@
                                     </td>
                                     <td class="pe-4 text-center">
                                         <div class="d-flex gap-2 justify-content-center">
-                                            <button class="btn btn-sm btn-success d-inline-flex align-items-center gap-1 btn-action-trigger" 
+                                            <button class="btn btn-sm btn-success d-inline-flex align-items-center gap-1 btn-action-trigger"
                                                     style="border-radius: 8px; padding: 6px 12px; font-weight: 600; font-size: 12.5px; background: #16a34a; border: none;"
-                                                    data-action="approve" 
-                                                    data-id="{{ $rental->id }}" 
-                                                    data-name="{{ $rental->name }}" 
+                                                    data-action="approve"
+                                                    data-id="{{ $rental->id }}"
+                                                    data-name="{{ $rental->name }}"
                                                     data-product="{{ $rental->product->name }}">
                                                 <i class="ti ti-circle-check"></i> Setujui
                                             </button>
-                                            <button class="btn btn-sm btn-danger d-inline-flex align-items-center gap-1 btn-action-trigger" 
+                                            <button class="btn btn-sm btn-danger d-inline-flex align-items-center gap-1 btn-action-trigger"
                                                     style="border-radius: 8px; padding: 6px 12px; font-weight: 600; font-size: 12.5px; background: #dc2626; border: none;"
-                                                    data-action="reject" 
-                                                    data-id="{{ $rental->id }}" 
-                                                    data-name="{{ $rental->name }}" 
+                                                    data-action="reject"
+                                                    data-id="{{ $rental->id }}"
+                                                    data-name="{{ $rental->name }}"
                                                     data-product="{{ $rental->product->name }}">
                                                 <i class="ti ti-circle-x"></i> Tolak
                                             </button>
@@ -241,9 +248,179 @@
             @endif
         </div>
 
-        {{-- ── TAB 2: APPROVED ── --}}
-        <div class="tab-content d-none" id="tab-approved">
-            @if($approvedRentals->count() > 0)
+        {{-- ── TAB 2: AWAITING PAYMENT ── --}}
+        <div class="tab-content d-none" id="tab-awaiting">
+            @if($awaitingRentals->count() > 0)
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--gray-border);">
+                                <th class="ps-4 py-3 text-muted small uppercase" style="width: 50px;">#</th>
+                                <th class="py-3 text-muted small uppercase">Penyewa / Kontak</th>
+                                <th class="py-3 text-muted small uppercase">Produk</th>
+                                <th class="py-3 text-muted small uppercase">Durasi &amp; Mulai</th>
+                                <th class="py-3 text-muted small uppercase">Total Biaya</th>
+                                <th class="py-3 text-muted small uppercase">Link Pembayaran</th>
+                                <th class="py-3 text-muted small uppercase text-center" style="width: 100px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($awaitingRentals as $index => $rental)
+                                <tr class="rental-row fade-in" style="animation-delay: {{ $index * 0.05 }}s; border-bottom: 1px solid #f1f5f9;">
+                                    <td class="ps-4 text-muted small">{{ $loop->iteration }}</td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-bold text-dark" style="font-size: 14.5px;">{{ $rental->name }}</span>
+                                            <span class="text-muted small mb-1">{{ $rental->email }}</span>
+                                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rental->whatsapp_number) }}" target="_blank" class="d-inline-flex align-items-center gap-1 text-success fw-semibold small" style="text-decoration:none;">
+                                                <i class="fab fa-whatsapp"></i> {{ $rental->whatsapp_number }}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="p-1 rounded bg-light border" style="width: 42px; height: 42px; display:flex; align-items:center; justify-content:center;">
+                                                @if($rental->product->display_image)
+                                                    <img src="{{ asset('storage/' . $rental->product->display_image) }}" alt="Img" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+                                                @else
+                                                    <i class="ti ti-package text-muted" style="font-size:20px;"></i>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-semibold text-primary" style="font-size: 14px;">{{ $rental->product->name }}</span>
+                                                <span class="badge bg-primary-subtle text-primary align-self-start mt-1" style="font-size:10px; font-weight:600; padding:2px 8px; border-radius:6px;">{{ $rental->product->category->name ?? 'Default' }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-semibold text-dark" style="font-size:13.5px;"><i class="ti ti-calendar text-accent"></i> {{ $rental->duration_label }}</span>
+                                            <span class="text-muted small mt-1">Mulai: {{ $rental->start_date->format('d M Y') }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-dark" style="font-size: 14.5px;">Rp {{ number_format($rental->total_price, 0, ',', '.') }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('rental.payment', $rental->payment_token) }}" target="_blank" class="d-inline-flex align-items-center gap-1 small fw-semibold text-primary" style="text-decoration:none; font-size:12.5px;">
+                                            <i class="ti ti-external-link"></i> Buka Halaman
+                                        </a>
+                                    </td>
+                                    <td class="pe-4 text-center">
+                                        <span class="badge px-3 py-2 fw-semibold" style="font-size:11.5px; border-radius:30px; background:#fef3c7; color:#b45309;">
+                                            <i class="ti ti-clock"></i> Menunggu
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="empty-state py-5 text-center">
+                    <div class="empty-icon bg-light rounded-circle p-4 mx-auto mb-3" style="width: 80px; height: 80px; display:flex; align-items:center; justify-content:center;">
+                        <i class="ti ti-credit-card text-muted" style="font-size:36px;"></i>
+                    </div>
+                    <h5 class="fw-semibold text-primary">Tidak Ada Menunggu Pembayaran</h5>
+                    <p class="text-muted small">Pengajuan yang sudah disetujui dan menunggu pembayaran akan tampil di sini.</p>
+                </div>
+            @endif
+        </div>
+
+        {{-- ── TAB 3: PAYMENT SUBMITTED (Bukti Masuk) ── --}}
+        <div class="tab-content d-none" id="tab-submitted">
+            @if($submittedRentals->count() > 0)
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--gray-border);">
+                                <th class="ps-4 py-3 text-muted small uppercase" style="width: 50px;">#</th>
+                                <th class="py-3 text-muted small uppercase">Penyewa / Kontak</th>
+                                <th class="py-3 text-muted small uppercase">Produk</th>
+                                <th class="py-3 text-muted small uppercase">Durasi</th>
+                                <th class="py-3 text-muted small uppercase">Total Biaya</th>
+                                <th class="py-3 text-muted small uppercase">Bukti Bayar</th>
+                                <th class="py-3 text-muted small uppercase text-center" style="width: 160px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($submittedRentals as $index => $rental)
+                                <tr class="rental-row fade-in" style="animation-delay: {{ $index * 0.05 }}s; border-bottom: 1px solid #f1f5f9;">
+                                    <td class="ps-4 text-muted small">{{ $loop->iteration }}</td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-bold text-dark" style="font-size: 14.5px;">{{ $rental->name }}</span>
+                                            <span class="text-muted small mb-1">{{ $rental->email }}</span>
+                                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rental->whatsapp_number) }}" target="_blank" class="d-inline-flex align-items-center gap-1 text-success fw-semibold small" style="text-decoration:none;">
+                                                <i class="fab fa-whatsapp"></i> {{ $rental->whatsapp_number }}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="p-1 rounded bg-light border" style="width: 42px; height: 42px; display:flex; align-items:center; justify-content:center;">
+                                                @if($rental->product->display_image)
+                                                    <img src="{{ asset('storage/' . $rental->product->display_image) }}" alt="Img" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+                                                @else
+                                                    <i class="ti ti-package text-muted" style="font-size:20px;"></i>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-semibold text-primary" style="font-size: 14px;">{{ $rental->product->name }}</span>
+                                                <span class="badge bg-primary-subtle text-primary align-self-start mt-1" style="font-size:10px; font-weight:600; padding:2px 8px; border-radius:6px;">{{ $rental->product->category->name ?? 'Default' }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-semibold text-dark" style="font-size:13.5px;">{{ $rental->duration_label }}</span>
+                                            <span class="text-muted small mt-1">Mulai: {{ $rental->start_date->format('d M Y') }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-dark" style="font-size: 14.5px;">Rp {{ number_format($rental->total_price, 0, ',', '.') }}</span>
+                                    </td>
+                                    <td>
+                                        @if($rental->payment_receipt)
+                                            <a href="{{ asset('storage/' . $rental->payment_receipt) }}" target="_blank">
+                                                <img src="{{ asset('storage/' . $rental->payment_receipt) }}"
+                                                     alt="Bukti"
+                                                     style="width: 54px; height: 54px; object-fit: cover; border-radius: 8px; border: 1.5px solid #e2e8f0; cursor: pointer; transition: transform .2s;"
+                                                     onmouseover="this.style.transform='scale(1.1)'"
+                                                     onmouseout="this.style.transform='scale(1)'">
+                                            </a>
+                                        @else
+                                            <span class="text-muted small">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="pe-4 text-center">
+                                        <button class="btn btn-sm d-inline-flex align-items-center gap-1 btn-approve-payment-trigger"
+                                                style="border-radius: 8px; padding: 6px 12px; font-weight: 600; font-size: 12.5px; background: #16a34a; border: none; color: white;"
+                                                data-id="{{ $rental->id }}"
+                                                data-name="{{ $rental->name }}"
+                                                data-product="{{ $rental->product->name }}">
+                                            <i class="ti ti-circle-check"></i> Konfirmasi
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="empty-state py-5 text-center">
+                    <div class="empty-icon bg-light rounded-circle p-4 mx-auto mb-3" style="width: 80px; height: 80px; display:flex; align-items:center; justify-content:center;">
+                        <i class="ti ti-file-upload text-muted" style="font-size:36px;"></i>
+                    </div>
+                    <h5 class="fw-semibold text-primary">Belum Ada Bukti Pembayaran</h5>
+                    <p class="text-muted small">Bukti pembayaran yang dikirim penyewa akan tampil di sini untuk dikonfirmasi.</p>
+                </div>
+            @endif
+        </div>
+
+        {{-- ── TAB 4: COMPLETED ── --}}
+        <div class="tab-content d-none" id="tab-completed">
+            @if($completedRentals->count() > 0)
                 <div class="table-responsive">
                     <table class="table mb-0 align-middle">
                         <thead>
@@ -253,12 +430,11 @@
                                 <th class="py-3 text-muted small uppercase">Produk</th>
                                 <th class="py-3 text-muted small uppercase">Masa Sewa</th>
                                 <th class="py-3 text-muted small uppercase">Total Biaya</th>
-                                <th class="py-3 text-muted small uppercase">Catatan Admin</th>
-                                <th class="py-3 text-muted small uppercase text-center" style="width: 140px;">Status</th>
+                                <th class="py-3 text-muted small uppercase text-center" style="width: 120px;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($approvedRentals as $index => $rental)
+                            @foreach($completedRentals as $index => $rental)
                                 <tr class="rental-row fade-in" style="animation-delay: {{ $index * 0.05 }}s; border-bottom: 1px solid #f1f5f9;">
                                     <td class="ps-4 text-muted small">{{ $loop->iteration }}</td>
                                     <td>
@@ -288,17 +464,14 @@
                                     <td>
                                         <div class="d-flex flex-column">
                                             <span class="fw-semibold text-dark" style="font-size:13.5px;"><i class="ti ti-calendar text-teal"></i> {{ $rental->duration_label }}</span>
-                                            <span class="text-muted small mt-1">Mulai: {{ $rental->start_date->format('d M Y') }}</span>
+                                            <span class="text-muted small mt-1">{{ $rental->start_date->format('d M Y') }} — {{ $rental->end_date->format('d M Y') }}</span>
                                         </div>
                                     </td>
                                     <td>
                                         <span class="fw-bold text-dark" style="font-size: 14.5px;">Rp {{ number_format($rental->total_price, 0, ',', '.') }}</span>
                                     </td>
-                                    <td class="text-muted small" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $rental->admin_notes }}">
-                                        {{ $rental->admin_notes ?? '—' }}
-                                    </td>
                                     <td class="pe-4 text-center">
-                                        <span class="badge bg-success-subtle text-success px-3 py-2 fw-semibold" style="font-size:11.5px; border-radius:30px;"><i class="ti ti-circle-check"></i> Aktif</span>
+                                        <span class="badge bg-success-subtle text-success px-3 py-2 fw-semibold" style="font-size:11.5px; border-radius:30px;"><i class="ti ti-circle-check"></i> Lunas</span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -310,13 +483,13 @@
                     <div class="empty-icon bg-light rounded-circle p-4 mx-auto mb-3" style="width: 80px; height: 80px; display:flex; align-items:center; justify-content:center;">
                         <i class="ti ti-circle-check text-muted" style="font-size:36px;"></i>
                     </div>
-                    <h5 class="fw-semibold text-primary">Belum Ada Penyewaan Aktif</h5>
-                    <p class="text-muted small">Semua pengajuan sewa yang Anda setujui akan muncul di tab ini.</p>
+                    <h5 class="fw-semibold text-primary">Belum Ada Sewa Selesai</h5>
+                    <p class="text-muted small">Transaksi sewa yang sudah lunas akan terekam di sini.</p>
                 </div>
             @endif
         </div>
 
-        {{-- ── TAB 3: REJECTED ── --}}
+        {{-- ── TAB 5: REJECTED ── --}}
         <div class="tab-content d-none" id="tab-rejected">
             @if($rejectedRentals->count() > 0)
                 <div class="table-responsive">
@@ -329,7 +502,7 @@
                                 <th class="py-3 text-muted small uppercase">Durasi Rencana</th>
                                 <th class="py-3 text-muted small uppercase">Estimasi Biaya</th>
                                 <th class="py-3 text-muted small uppercase">Catatan Penolakan</th>
-                                <th class="py-3 text-muted small uppercase text-center" style="width: 140px;">Status</th>
+                                <th class="py-3 text-muted small uppercase text-center" style="width: 100px;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -394,7 +567,7 @@
 </div>
 
 {{-- ── INTERACTIVE REVIEW MODAL (APPROVE / REJECT) ── --}}
-<div class="modal fade" id="reviewRentalModal" tabindex="-1" aria-labelledby="reviewRentalModalLabel" aria-hidden="true" style="background: rgba(10,37,64,0.4); backdrop-filter: blur(4px);">
+<div class="modal fade" id="reviewRentalModal" tabindex="-1" aria-hidden="true" style="background: rgba(10,37,64,0.4); backdrop-filter: blur(4px);">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
             <div class="modal-header border-bottom py-3 px-4" style="background: var(--off-white);">
@@ -409,11 +582,10 @@
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <form action="" method="POST" id="reviewRentalForm">
                 @csrf
                 <div class="modal-body p-4">
-                    {{-- Product Info Card inside modal --}}
                     <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 mb-3 border">
                         <i class="ti ti-box text-accent" style="font-size: 28px;"></i>
                         <div>
@@ -422,22 +594,62 @@
                         </div>
                     </div>
 
-                    {{-- Admin Notes Input --}}
                     <div class="mb-3">
                         <label for="adminNotes" class="form-label" id="notesLabel">Catatan Admin / WhatsApp Note</label>
                         <textarea class="form-control" name="admin_notes" id="adminNotes" rows="4" placeholder="Tulis catatan di sini..."></textarea>
-                        <div class="invalid-feedback" id="notesValidationMsg"></div>
                         <span class="text-muted small mt-2 d-block" id="modalActionHint" style="font-size: 11.5px; line-height: 1.4;">
-                            <i class="fa fa-info-circle text-accent"></i> 
-                            Pesan WhatsApp notifikasi penyewaan yang disetujui akan menyertakan catatan ini jika diisi.
+                            <i class="fa fa-info-circle text-accent"></i>
+                            Pesan WhatsApp notifikasi yang disetujui akan menyertakan catatan ini jika diisi.
                         </span>
                     </div>
                 </div>
-                
+
                 <div class="modal-footer bg-light border-0 py-3 px-4 d-flex justify-content-end gap-2">
                     <button type="button" class="btn btn-cancel py-2 px-3" data-bs-dismiss="modal" style="height: 38px; line-height: 1;">Batal</button>
                     <button type="submit" class="btn text-white fw-bold py-2 px-4" id="btnSubmitAction" style="height: 38px; line-height: 1; border: none; border-radius: var(--radius-sm);">
                         Konfirmasi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- ── CONFIRM PAYMENT MODAL ── --}}
+<div class="modal fade" id="approvePaymentModal" tabindex="-1" aria-hidden="true" style="background: rgba(10,37,64,0.4); backdrop-filter: blur(4px);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+            <div class="modal-header border-bottom py-3 px-4" style="background: var(--off-white);">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="rounded d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(22,163,74,0.1);">
+                        <i class="ti ti-receipt-2 text-success" style="font-size: 20px;"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold" style="color: var(--primary); font-size: 16px;">Konfirmasi Pembayaran Sewa</h5>
+                        <small class="text-muted" id="approvePaymentSubtitle">Penyewa: —</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="d-flex align-items-center gap-3 p-3 rounded-3 mb-3 border" style="background: #f0fdf4; border-color: #86efac !important;">
+                    <i class="ti ti-check text-success" style="font-size: 28px;"></i>
+                    <div>
+                        <span class="text-muted small d-block">Produk</span>
+                        <span class="fw-bold text-dark" id="approvePaymentProduct" style="font-size: 14.5px;">Product Name</span>
+                    </div>
+                </div>
+                <p class="text-muted small mb-0">
+                    <i class="fab fa-whatsapp text-success me-1"></i>
+                    Setelah dikonfirmasi, WA otomatis terkirim ke penyewa berisi notifikasi pembayaran diterima. Admin kemudian mengirim detail akses langsung via WA.
+                </p>
+            </div>
+            <form action="" method="POST" id="approvePaymentForm">
+                @csrf
+                <div class="modal-footer bg-light border-0 py-3 px-4 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-cancel py-2 px-3" data-bs-dismiss="modal" style="height: 38px; line-height: 1;">Batal</button>
+                    <button type="submit" class="btn text-white fw-bold py-2 px-4" style="height: 38px; line-height: 1; border: none; border-radius: var(--radius-sm); background: #16a34a;">
+                        <i class="ti ti-check me-1"></i> Konfirmasi Pembayaran
                     </button>
                 </div>
             </form>
@@ -450,7 +662,6 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Stagger list rows fade-in
         animateRows();
 
         // ── Tabs Functionality ──
@@ -459,21 +670,18 @@
 
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
-                // Remove active classes
                 tabs.forEach(t => t.classList.remove('active'));
                 contents.forEach(c => c.classList.add('d-none'));
 
-                // Add active to current
                 tab.classList.add('active');
                 const targetTabId = tab.getAttribute('data-tab');
                 document.getElementById(targetTabId).classList.remove('d-none');
-                
-                // Re-trigger stagger animation
+
                 animateRows();
             });
         });
 
-        // ── Review Modal Trigger ──
+        // ── Review Modal Trigger (Approve / Reject) ──
         const reviewModal = new bootstrap.Modal(document.getElementById('reviewRentalModal'));
         const form = document.getElementById('reviewRentalForm');
         const modalTitle = document.getElementById('reviewModalTitle');
@@ -496,20 +704,18 @@
                 adminNotesTextarea.value = '';
 
                 if (action === 'approve') {
-                    // Set up approval details
                     modalTitle.textContent = 'Setujui Pengajuan Penyewaan';
-                    notesLabel.textContent = 'Catatan Penyerahan Akses / Panduan Pembayaran';
-                    adminNotesTextarea.placeholder = 'Tulis panduan penyerahan akses produk, petunjuk lisensi, atau catatan detail lainnya di sini...';
-                    modalActionHint.innerHTML = '<i class="fab fa-whatsapp text-success me-1"></i> Client akan mendapatkan <strong>Notifikasi WhatsApp Otomatis</strong> berisi detail sewa dan catatan ini.';
+                    notesLabel.textContent = 'Catatan untuk Penyewa (Opsional)';
+                    adminNotesTextarea.placeholder = 'Tulis catatan tambahan... (Link pembayaran QRIS akan dikirim otomatis via WA)';
+                    modalActionHint.innerHTML = '<i class="fab fa-whatsapp text-success me-1"></i> Client akan mendapatkan <strong>Notifikasi WhatsApp</strong> berisi link halaman pembayaran QRIS.';
                     btnSubmitAction.style.background = '#16a34a';
-                    btnSubmitAction.textContent = 'Setujui & Kirim Notif';
+                    btnSubmitAction.textContent = 'Setujui & Kirim Link Bayar';
                     form.action = `/admin/rentals/${id}/approve`;
                 } else {
-                    // Set up rejection details
                     modalTitle.textContent = 'Tolak Pengajuan Penyewaan';
                     notesLabel.textContent = 'Alasan Penolakan Pengajuan';
-                    adminNotesTextarea.placeholder = 'Tuliskan alasan penolakan dengan sopan dan detail agar client mengerti...';
-                    modalActionHint.innerHTML = '<i class="fab fa-whatsapp text-danger me-1"></i> Client akan mendapatkan <strong>Notifikasi WhatsApp Otomatis</strong> berisi detail penolakan dan alasan Anda.';
+                    adminNotesTextarea.placeholder = 'Tuliskan alasan penolakan dengan sopan dan detail...';
+                    modalActionHint.innerHTML = '<i class="fab fa-whatsapp text-danger me-1"></i> Client akan mendapatkan <strong>Notifikasi WhatsApp</strong> berisi detail penolakan dan alasan Anda.';
                     btnSubmitAction.style.background = '#dc2626';
                     btnSubmitAction.textContent = 'Tolak Pengajuan';
                     form.action = `/admin/rentals/${id}/reject`;
@@ -519,7 +725,27 @@
             });
         });
 
-        // WhatsApp Simulated Modal auto show if it exists in DOM
+        // ── Approve Payment Modal ──
+        const approvePaymentModal = new bootstrap.Modal(document.getElementById('approvePaymentModal'));
+        const approvePaymentForm = document.getElementById('approvePaymentForm');
+        const approvePaymentSubtitle = document.getElementById('approvePaymentSubtitle');
+        const approvePaymentProduct = document.getElementById('approvePaymentProduct');
+
+        document.querySelectorAll('.btn-approve-payment-trigger').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = btn.dataset.id;
+                const name = btn.dataset.name;
+                const product = btn.dataset.product;
+
+                approvePaymentSubtitle.textContent = `Penyewa: ${name}`;
+                approvePaymentProduct.textContent = product;
+                approvePaymentForm.action = `/admin/rentals/${id}/approve-payment`;
+
+                approvePaymentModal.show();
+            });
+        });
+
+        // WhatsApp Simulated Modal auto show
         const simulatedWaModal = document.getElementById('waSimulationModal');
         if (simulatedWaModal) {
             const waModal = new bootstrap.Modal(simulatedWaModal);
@@ -530,12 +756,11 @@
     function animateRows() {
         document.querySelectorAll('.rental-row').forEach((row, i) => {
             row.classList.remove('fade-in');
-            void row.offsetWidth; // Trigger reflow to restart animation
+            void row.offsetWidth;
             setTimeout(() => row.classList.add('fade-in'), i * 35);
         });
     }
 
-    // Dismiss toast alert
     function dismissToast() {
         const toast = document.getElementById('toastAlert');
         if (!toast) return;
@@ -543,12 +768,10 @@
         setTimeout(() => toast.remove(), 300);
     }
 
-    // Dismiss WhatsApp modal manually
     function closeWaModal() {
         const waModalEl = document.getElementById('waSimulationModal');
         if (waModalEl) {
             waModalEl.remove();
-            // remove lingering backdrop if any
             const backdrops = document.querySelectorAll('.modal-backdrop');
             backdrops.forEach(b => b.remove());
             document.body.style.overflow = '';
