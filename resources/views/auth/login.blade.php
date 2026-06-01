@@ -11,47 +11,10 @@
         <div class="bg-noise"></div>
         <div class="particles" id="particles"></div>
 
-        <div class="auth-card">
+        <div class="auth-card" style="max-width: 480px; margin: 100px auto 60px;">
 
-            {{-- ===== LEFT PANEL ===== --}}
-            <div class="auth-left">
-                <div class="left-noise"></div>
-                <div class="left-ring left-ring-1"></div>
-                <div class="left-ring left-ring-2"></div>
-                <div class="left-ring left-ring-3"></div>
-
-                <div class="left-content">
-                    <div class="left-eyebrow">Selamat Datang Kembali</div>
-                    <h2 class="left-title">Akses <em>solusi</em><br>teknologi Anda</h2>
-                    <div class="left-accent-line"></div>
-                    <p class="left-desc">
-                        Masuk untuk mengelola proyek, melacak perkembangan,
-                        dan terhubung dengan tim Nepertech.
-                    </p>
-                    <div class="left-tags">
-                        <div class="left-tag"><span>🌐</span> Web Dev</div>
-                        <div class="left-tag"><span>📱</span> Mobile App</div>
-                        <div class="left-tag"><span>🤖</span> AI Solutions</div>
-                        <div class="left-tag"><span>📡</span> IoT</div>
-                    </div>
-                    <div style="height: 20px"></div>
-                    <div class="left-stats">
-                        <div class="left-stat">
-                            <div class="left-stat-icon">✅</div>
-                            <span>100+ Siswa Aktif</span>
-                        </div>
-                        <div class="left-stat">
-                            <div class="left-stat-icon">⭐</div>
-                            <span>10th Pengalaman</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="left-bottom">© {{ date('Y') }} TEFA · BLUD SMKN 1 Cirebon</div>
-            </div>
-
-            {{-- ===== RIGHT PANEL ===== --}}
-            <div class="auth-right">
+            {{-- ===== RIGHT PANEL (NOW MAIN FORM) ===== --}}
+            <div class="auth-right" style="width: 100%;">
                 <div class="auth-heading">Selamat Datang</div>
                 <p class="auth-sub">
                     Belum punya akun?
@@ -116,16 +79,6 @@
 
                 </form>
 
-                <div class="auth-divider"><span>atau lanjutkan dengan</span></div>
-
-                <div class="auth-social-btns">
-                    <button class="auth-btn-social" type="button">
-                        <i class="fab fa-google"></i> Google
-                    </button>
-                    <button class="auth-btn-social" type="button">
-                        <i class="fab fa-github"></i> GitHub
-                    </button>
-                </div>
             </div>
 
         </div>

@@ -22,9 +22,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
     {{-- CSS --}}
-    <link rel="stylesheet" href="{{ asset('css/landing/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/auth/register.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/landing/style.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/auth/register.css') }}?v={{ time() }}">
 
     @stack('styles')
 

@@ -58,14 +58,6 @@
             </li>
 
             <li>
-                <a href="{{ url('/fasilitas') }}" class="nav-link {{ request()->is('fasilitas') ? 'active' : '' }}">
-
-                    Fasilitas
-
-                </a>
-            </li>
-
-            <li>
                 <a href="{{ url('/kontak') }}" class="nav-link {{ request()->is('kontak') ? 'active' : '' }}">
 
                     Kontak

@@ -12,52 +12,10 @@
         <div class="bg-noise"></div>
         <div class="particles" id="particles"></div>
 
-        <div class="auth-card">
+        <div class="auth-card" style="max-width: 650px; margin: 0 auto;">
 
-            {{-- ===== LEFT PANEL ===== --}}
-            <div class="auth-left">
-                <div class="left-noise"></div>
-                <div class="left-ring left-ring-1"></div>
-                <div class="left-ring left-ring-2"></div>
-                <div class="left-ring left-ring-3"></div>
-
-                <div class="left-content">
-                    <span class="left-eyebrow">Bergabung Bersama Kami</span>
-                    <h2 class="left-title">Rumah bagi setiap<br><em>talenta digital</em></h2>
-                    <div class="left-accent-line"></div>
-                    <p class="left-desc">
-                        Daftarkan diri dan dapatkan akses ke ekosistem
-                        Teaching Factory profesional SMKN 1 Cirebon.
-                    </p>
-                    <div class="left-features">
-                        <div class="left-feature">
-                            <div class="left-feature-icon">🎯</div>
-                            <span>Proyek industri nyata</span>
-                        </div>
-                        <div class="left-feature">
-                            <div class="left-feature-icon">🤖</div>
-                            <span>Teknologi AI &amp; IoT terkini</span>
-                        </div>
-                        <div class="left-feature">
-                            <div class="left-feature-icon">🏆</div>
-                            <span>Standar profesional industri</span>
-                        </div>
-                        <div class="left-feature">
-                            <div class="left-feature-icon">🌐</div>
-                            <span>Jaringan talenta digital</span>
-                        </div>
-                        <div class="left-feature">
-                            <div class="left-feature-icon">📜</div>
-                            <span>Sertifikasi kompetensi</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="left-bottom">© {{ date('Y') }} TEFA · BLUD SMKN 1 Cirebon</div>
-            </div>
-
-            {{-- ===== RIGHT PANEL ===== --}}
-            <div class="auth-right">
+            {{-- ===== RIGHT PANEL (NOW MAIN FORM) ===== --}}
+            <div class="auth-right" style="width: 100%;">
                 <div class="auth-heading">Buat Akun</div>
                 <p class="auth-sub">
                     Sudah punya akun?
