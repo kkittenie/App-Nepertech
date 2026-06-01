@@ -45,9 +45,9 @@
                 <p><i class="fas fa-envelope" style="margin-right:8px;color:var(--accent)"></i><a href="mailto:info@nepertech.id" style="display:inline;padding:0;color:inherit;text-decoration:none;">info@nepertech.id</a></p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <span>© 2025 Nepertech · BLUD SMKN 1 Cirebon · All rights reserved.</span>
-            <span>Teaching Factory Software Development</span>
+        <div class="footer-bottom" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; text-align: center;">
+            <span style="display: block; width: 100%;">© {{ date('Y') }} Nepertech · BLUD SMKN 1 Cirebon · All rights reserved.</span>
+            <span style="display: block; width: 100%;">Teaching Factory Software Development</span>
         </div>
     </div>
 </footer>

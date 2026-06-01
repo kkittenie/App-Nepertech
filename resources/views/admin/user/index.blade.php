@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Manajemen User')
+@section('title', 'Manajemen Pengguna')
 
 @section('content')
 
@@ -26,9 +26,9 @@
     <div class="page-header d-flex justify-content-between align-items-start mb-4">
         <div>
             <h2 class="fw-bold mb-1" style="color:#0a2540; font-size:1.5rem;">
-                Manajemen User
+                Manajemen Pengguna
             </h2>
-            <p class="text-muted mb-0 small">Kelola semua user yang terdaftar</p>
+            <p class="text-muted mb-0 small">Kelola semua pengguna yang terdaftar</p>
         </div>
     </div>
 
@@ -39,9 +39,9 @@
            
             <div class="stats-strip">
                 <i class="ti ti-users" style="font-size:14px; color:#0a2540"></i>
-                <span>Total <strong>{{ $users->count() }}</strong> user terdaftar —
+                <span>Total <strong>{{ $users->count() }}</strong> pengguna terdaftar —
                     <strong>{{ $users->where('role', 'admin')->count() }}</strong> admin,
-                    <strong>{{ $users->where('role', '!=', 'admin')->count() }}</strong> user
+                    <strong>{{ $users->where('role', '!=', 'admin')->count() }}</strong> pengguna
                 </span>
             </div>
 
@@ -58,7 +58,7 @@
                         <span class="tab-count">{{ $users->where('role', 'admin')->count() }}</span>
                     </button>
                     <button class="filter-tab" data-filter="user">
-                        User
+                        Pengguna
                         <span class="tab-count">{{ $users->where('role', '!=', 'admin')->count() }}</span>
                     </button>
                 </div>
@@ -69,7 +69,7 @@
                         <thead>
                             <tr>
                                 <th style="width:48px">#</th>
-                                <th>User</th>
+                                <th>Pengguna</th>
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Minat</th>
@@ -110,7 +110,7 @@
 
                                 <td>
                                     <span class="badge-role {{ $user->role === 'admin' ? 'badge-admin' : 'badge-user' }}">
-                                        {{ ucfirst($user->role ?? 'user') }}
+                                        {{ $user->role === 'admin' ? 'Admin' : 'Pengguna' }}
                                     </span>
                                 </td>
 
@@ -125,7 +125,7 @@
                                     @if($user->id !== auth()->id())
                                         <form action="{{ route('users.destroy', $user->id) }}"
                                               method="POST"
-                                              onsubmit="return confirm('Hapus user {{ addslashes($user->name) }}?')">
+                                              onsubmit="return confirm('Hapus pengguna {{ addslashes($user->name) }}?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-hapus">
@@ -152,8 +152,8 @@
 
             <div class="empty-state">
                 <div class="empty-icon"><i class="ti ti-users"></i></div>
-                <h5 class="fw-semibold mb-1" style="color:#0a2540">Belum Ada User</h5>
-                <p class="text-muted small mb-0">User yang mendaftar akan muncul di sini.</p>
+                <h5 class="fw-semibold mb-1" style="color:#0a2540">Belum Ada Pengguna</h5>
+                <p class="text-muted small mb-0">Pengguna yang mendaftar akan muncul di sini.</p>
             </div>
 
         @endif

@@ -70,7 +70,7 @@
             <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
                href="{{ route('users.index') }}">
                 <i class="ti ti-users"></i>
-                <span class="nav-text">Users</span>
+                <span class="nav-text">Pengguna</span>
             </a>
         </li>
 

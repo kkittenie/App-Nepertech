@@ -13,7 +13,7 @@
                     Mitra Industri Kami
                 </h1>
 
-                <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s">
+                <p class="page-hero-sub animate-fade-up" style="animation-delay:.3s; margin-bottom: 40px;">
                     Dunia Industri Pengembangan Perangkat Lunak dan Gim adalah sektor ekonomi yang berkaitan dengan menciptakan, merancang, mengembangkan, dan menghasilkan perangkat lunak dan gim yang digunakan di berbagai perangkat elektronik.
                 </p>
             </div>

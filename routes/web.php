@@ -49,7 +49,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('admin')
         ->name('dashboard');
 
-    Route::prefix('users')->name('users.')->group(function () {
+    Route::prefix('pengguna')->name('users.')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
     });

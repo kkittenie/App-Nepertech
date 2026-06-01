@@ -28,39 +28,71 @@
         </form>
 
         {{-- Notifications --}}
+        @php
+            $pendingRentals = \App\Models\Rental::with('product')->whereIn('status', ['pending', 'payment_submitted'])->orderBy('created_at', 'desc')->get();
+            $pendingSales = \App\Models\Sale::with('product')->whereIn('status', ['pending', 'payment_submitted'])->orderBy('created_at', 'desc')->get();
+            
+            $allNotifications = collect();
+            foreach($pendingRentals as $rental) {
+                $allNotifications->push((object)[
+                    'title' => 'Sewa: ' . ($rental->product->name ?? 'Produk'),
+                    'desc' => $rental->status === 'payment_submitted' ? 'Pembayaran diunggah' : 'Menunggu persetujuan',
+                    'time' => $rental->updated_at,
+                    'link' => route('admin.rentals.index'),
+                    'icon' => 'ti-calendar-time',
+                    'color' => $rental->status === 'payment_submitted' ? 'success' : 'warning'
+                ]);
+            }
+            foreach($pendingSales as $sale) {
+                $allNotifications->push((object)[
+                    'title' => 'Beli: ' . ($sale->product->name ?? 'Produk'),
+                    'desc' => $sale->status === 'payment_submitted' ? 'Pembayaran diunggah' : 'Menunggu persetujuan',
+                    'time' => $sale->updated_at,
+                    'link' => route('admin.sales.index'),
+                    'icon' => 'ti-shopping-cart',
+                    'color' => $sale->status === 'payment_submitted' ? 'success' : 'warning'
+                ]);
+            }
+            $allNotifications = $allNotifications->sortByDesc('time')->take(5);
+            $notifCount = $allNotifications->count();
+        @endphp
         <div class="dropdown">
             <button class="topbar-btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="ti ti-bell"></i>
-                <span class="topbar-badge">2</span>
+                @if($notifCount > 0)
+                <span class="topbar-badge">{{ $notifCount }}</span>
+                @endif
             </button>
 
             <div class="dropdown-menu dropdown-menu-end topbar-dropdown p-0">
                 <div class="topbar-dropdown-header">
-                    <span class="fw-semibold">Notifications</span>
-                    <span class="topbar-dropdown-badge">2 new</span>
+                    <span class="fw-semibold">Notifikasi</span>
+                    @if($notifCount > 0)
+                    <span class="topbar-dropdown-badge">{{ $notifCount }} baru</span>
+                    @endif
                 </div>
                 <ul class="list-unstyled m-0">
-                    <li class="topbar-dropdown-item">
-                        <div class="topbar-dropdown-icon bg-primary-subtle text-primary">
-                            <i class="ti ti-package"></i>
-                        </div>
-                        <div class="topbar-dropdown-content">
-                            <p>New product added</p>
-                            <small>5 minutes ago</small>
-                        </div>
+                    @forelse($allNotifications as $notif)
+                    <li>
+                        <a href="{{ $notif->link }}" class="topbar-dropdown-item text-decoration-none text-dark" style="display:flex; padding:12px 16px;">
+                            <div class="topbar-dropdown-icon bg-{{ $notif->color }}-subtle text-{{ $notif->color }} me-3">
+                                <i class="ti {{ $notif->icon }}"></i>
+                            </div>
+                            <div class="topbar-dropdown-content flex-grow-1">
+                                <p class="mb-0 fw-semibold" style="font-size:13px;">{{ $notif->title }}</p>
+                                <p class="mb-0 text-muted" style="font-size:12px;">{{ $notif->desc }}</p>
+                                <small class="text-muted" style="font-size:11px;">{{ $notif->time->diffForHumans() }}</small>
+                            </div>
+                        </a>
                     </li>
-                    <li class="topbar-dropdown-item">
-                        <div class="topbar-dropdown-icon bg-success-subtle text-success">
-                            <i class="ti ti-user-plus"></i>
-                        </div>
-                        <div class="topbar-dropdown-content">
-                            <p>New user registered</p>
-                            <small>30 minutes ago</small>
-                        </div>
+                    @empty
+                    <li class="p-3 text-center text-muted" style="font-size:13px;">
+                        Tidak ada notifikasi baru.
                     </li>
+                    @endforelse
                 </ul>
                 <div class="topbar-dropdown-footer">
-                    <a href="#">View all notifications</a>
+                    <a href="#">Lihat semua notifikasi</a>
                 </div>
             </div>
         </div>

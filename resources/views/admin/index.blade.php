@@ -50,7 +50,7 @@
     <div class="page-header">
         <div>
             <h1 class="page-title">Dashboard</h1>
-            <p class="page-subtitle">Welcome back, {{ auth()->user()->name }} 👋</p>
+            <p class="page-subtitle">Selamat datang kembali, {{ auth()->user()->name }} 👋</p>
         </div>
         <div class="page-header-actions">
             <span class="header-date">
@@ -90,7 +90,7 @@
                 <i class="ti ti-users"></i>
             </div>
             <div class="stat-card-body">
-                <span class="stat-card-label">Total Users</span>
+                <span class="stat-card-label">Total Pengguna</span>
                 <h3 class="stat-card-value">{{ number_format($totalUsers) }}</h3>
             </div>
             <div class="stat-card-glow"></div>
@@ -124,9 +124,9 @@
                 <div class="alert-card-icon">
                     <i class="ti ti-alert-octagon"></i>
                 </div>
-                <div>
+                <div style="flex: 1; min-width: 0;">
                     <h3 class="alert-card-title">Masa Sewa Sudah Habis</h3>
-                    <p class="alert-card-subtitle">{{ $expiredRentals->count() }} penyewa perlu diperpanjang atau dinotifikasi</p>
+                    <p class="alert-card-subtitle" style="white-space: normal; word-wrap: break-word;">{{ $expiredRentals->count() }} penyewa perlu diperpanjang atau dinotifikasi</p>
                 </div>
                 <span class="alert-card-badge alert-badge--expired">{{ $expiredRentals->count() }} Kedaluwarsa</span>
             </div>
@@ -172,9 +172,9 @@
                 <div class="alert-card-icon">
                     <i class="ti ti-clock-exclamation"></i>
                 </div>
-                <div>
+                <div style="flex: 1; min-width: 0;">
                     <h3 class="alert-card-title">Masa Sewa Akan Habis</h3>
-                    <p class="alert-card-subtitle">{{ $expiringSoonRentals->count() }} penyewa dengan sisa ≤ 30 hari</p>
+                    <p class="alert-card-subtitle" style="white-space: normal; word-wrap: break-word;">{{ $expiringSoonRentals->count() }} penyewa dengan sisa ≤ 30 hari</p>
                 </div>
                 <span class="alert-card-badge alert-badge--warning">{{ $expiringSoonRentals->count() }} Segera Habis</span>
             </div>
