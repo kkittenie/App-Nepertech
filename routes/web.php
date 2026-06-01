@@ -25,7 +25,7 @@ Route::middleware('guest')->group(function () {
 Route::get('/', [HomeController::class, 'beranda'])->name('home');
 Route::get('/profil', [HomeController::class, 'profil'])->name('profil');
 Route::get('/layanan', [HomeController::class, 'layanan']);
-Route::get('/fasilitas', [HomeController::class, 'fasilitas']);
+Route::get('/mitra', [HomeController::class, 'mitra']);
 Route::get('/project', [HomeController::class, 'project'])->name('project');
 Route::get('/project/{slug}', [HomeController::class, 'projectDetail'])->name('project.detail');
 Route::get('/kontak', [HomeController::class, 'kontak']);
@@ -63,6 +63,15 @@ Route::middleware('auth')->group(function () {
         Route::put('/{product}', [ProductController::class, 'update'])->name('update');
         Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
 
+    });
+
+    Route::prefix('mitras')->name('mitras.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\MitraController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\MitraController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\MitraController::class, 'store'])->name('store');
+        Route::get('/{mitra}/edit', [\App\Http\Controllers\MitraController::class, 'edit'])->name('edit');
+        Route::put('/{mitra}', [\App\Http\Controllers\MitraController::class, 'update'])->name('update');
+        Route::delete('/{mitra}', [\App\Http\Controllers\MitraController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('kategori')->name('kategori.')->group(function () {

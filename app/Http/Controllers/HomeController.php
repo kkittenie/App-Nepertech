@@ -36,9 +36,10 @@ class HomeController extends Controller
         return view('layanan', compact('categories', 'products'));
     }
 
-    public function fasilitas()
+    public function mitra()
     {
-        return view('fasilitas');
+        $mitras = \App\Models\Mitra::latest()->get();
+        return view('mitra', compact('mitras'));
     }
 
     public function project()

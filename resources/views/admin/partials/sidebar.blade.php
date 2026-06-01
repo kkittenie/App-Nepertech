@@ -43,6 +43,14 @@
         </li>
 
         <li>
+            <a class="nav-link {{ request()->routeIs('mitras.*') ? 'active' : '' }}"
+               href="{{ route('mitras.index') }}">
+                <i class="ti ti-building-community"></i>
+                <span class="nav-text">Mitra Industri</span>
+            </a>
+        </li>
+
+        <li>
             <a class="nav-link {{ request()->routeIs('admin.rentals.*') ? 'active' : '' }}"
                href="{{ route('admin.rentals.index') }}">
                 <i class="ti ti-calendar-event"></i>

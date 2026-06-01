@@ -8,7 +8,6 @@
             ['icon' => 'fa-user',        'label' => 'Profil Saya',    'key' => 'profil'],
             ['icon' => 'fa-code',        'label' => 'Proyek Saya',    'key' => 'proyek'],
             ['icon' => 'fa-bell',        'label' => 'Notifikasi',     'key' => 'notifikasi'],
-            ['icon' => 'fa-shield-alt',  'label' => 'Keamanan',       'key' => 'keamanan'],
             ['icon' => 'fa-cog',         'label' => 'Pengaturan',     'key' => 'pengaturan'],
         ];
     @endphp
@@ -38,12 +37,6 @@
 
                     <h2 class="pd-profile-name">{{ $user->name }}</h2>
                     <p class="pd-profile-handle">{{ '@' . $user->username }}</p>
-
-                    @if($user->minat)
-                        <div class="pd-minat-badge">
-                            <i class="fas fa-star"></i> {{ $user->minat }}
-                        </div>
-                    @endif
 
                     <div class="pd-stat-row">
                         <div class="pd-stat">
@@ -121,7 +114,7 @@
                         <div>
                             <div class="hero-badge" style="margin-bottom:12px;width:fit-content;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.12)">
                                 <span class="hero-badge-dot"></span>
-                                {{ $user->minat ?? 'Anggota Nepertech' }}
+                                Anggota Nepertech
                             </div>
                             <h3 style="color:white;font-size:clamp(22px,3vw,32px);margin-bottom:6px;letter-spacing:-0.03em">
                                 {{ $user->name }}
@@ -174,15 +167,6 @@
                                 <span class="pd-info-val">{{ $user->email }}</span>
                             </div>
                         </div>
-                        @if($user->minat)
-                        <div class="pd-info-item">
-                            <div class="pd-info-icon-wrap"><i class="fas fa-star"></i></div>
-                            <div>
-                                <span class="pd-info-lbl">Minat / Keahlian</span>
-                                <span class="pd-info-val">{{ $user->minat }}</span>
-                            </div>
-                        </div>
-                        @endif
                         <div class="pd-info-item">
                             <div class="pd-info-icon-wrap"><i class="fas fa-calendar-alt"></i></div>
                             <div>
@@ -304,7 +288,7 @@
                             </div>
                         </div>
 
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
                             <div>
                                 <label for="username" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Username</label>
                                 <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" class="form-control" required style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;">
@@ -313,11 +297,6 @@
                                 <label for="email" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Email</label>
                                 <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" class="form-control" required style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;">
                             </div>
-                        </div>
-
-                        <div class="form-group" style="margin-bottom:24px;">
-                            <label for="minat" style="display:block; margin-bottom:6px; font-size:14px; font-weight:500;">Minat / Keahlian</label>
-                            <input type="text" name="minat" id="minat" value="{{ old('minat', $user->minat) }}" class="form-control" style="width:100%; padding:10px 14px; border:1px solid var(--gray-border); border-radius:8px;" placeholder="Contoh: Web Developer, UI/UX Designer">
                         </div>
 
                         <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between">

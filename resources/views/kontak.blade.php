@@ -51,8 +51,8 @@
                     <h3>Alamat</h3>
 
                     <p>
-                        BLUD SMKN 1 Cirebon<br>
-                        Kota Cirebon, Jawa Barat
+                        SMKN 1 Cirebon<br>
+                        Jl. Perjuangan, Sunyaragi, Kec. Kesambi, Kota Cirebon, Jawa Barat 45132
                     </p>
 
                 </div>
@@ -67,8 +67,7 @@
                     <h3>Telepon</h3>
 
                     <p>
-                        +62 XXX XXXX XXXX<br>
-                        Senin–Jumat 08.00–16.00
+                        +62 851 2993 5749 <br>
                     </p>
 
                 </div>
@@ -84,7 +83,7 @@
 
                     <p>
                         info@nepertech.id<br>
-                        project@nepertech.id
+                        info@smkn1-cirebon.sch.id
                     </p>
 
                 </div>
@@ -110,11 +109,11 @@
 
                     <form id="contactForm" class="contact-form">
 
-                        <input type="text" placeholder="Nama Lengkap / Instansi" required>
+                        <input type="text" id="contactName" placeholder="Nama Lengkap / Instansi" required>
 
-                        <input type="email" placeholder="Alamat Email" required>
+                        <input type="email" id="contactEmail" placeholder="Alamat Email" required>
 
-                        <textarea rows="5" placeholder="Ceritakan kebutuhan proyek Anda..." required></textarea>
+                        <textarea id="contactMessage" rows="5" placeholder="Ceritakan kebutuhan proyek Anda..." required></textarea>
 
                         <button type="submit" class="btn btn-primary">
 
@@ -142,5 +141,21 @@
         </section>
 
     </div>
+
+@push('scripts')
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var name = document.getElementById('contactName').value;
+        var email = document.getElementById('contactEmail').value;
+        var message = document.getElementById('contactMessage').value;
+        
+        var subject = encodeURIComponent('Pesan dari ' + name);
+        var body = encodeURIComponent('Nama/Instansi: ' + name + '\nEmail: ' + email + '\n\nPesan:\n' + message);
+        
+        window.location.href = 'mailto:info@nepertech.id?subject=' + subject + '&body=' + body;
+    });
+</script>
+@endpush
 
 @endsection

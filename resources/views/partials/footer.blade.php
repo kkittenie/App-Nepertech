@@ -19,26 +19,30 @@
             </div>
             <div class="footer-col">
                 <h4>Layanan</h4>
-                <a href="#">Website Development</a>
-                <a href="#">Mobile App</a>
-                <a href="#">Desktop Development</a>
-                <a href="#">Game Development</a>
-                <a href="#">IoT Solutions</a>
+                @forelse(\App\Models\Category::all() as $cat)
+                    <a href="{{ url('/layanan') }}">{{ $cat->name }}</a>
+                @empty
+                    <a href="{{ url('/layanan') }}">Website Development</a>
+                    <a href="{{ url('/layanan') }}">Mobile App</a>
+                    <a href="{{ url('/layanan') }}">Desktop Development</a>
+                    <a href="{{ url('/layanan') }}">Game Development</a>
+                    <a href="{{ url('/layanan') }}">IoT Solutions</a>
+                @endforelse
             </div>
             <div class="footer-col">
                 <h4>Perusahaan</h4>
-                <a href="#">Profil</a>
-                <a href="#">Visi & Misi</a>
-                <a href="#">Nilai Perusahaan</a>
-                <a href="{{ url('/project') }}">Project</a>
-                <a href="#">Kontak</a>
+                <a href="{{ url('/') }}">Beranda</a>
+                <a href="{{ url('/profil') }}">Profil</a>
+                <a href="{{ url('/project') }}">Produk</a>
+                <a href="{{ url('/layanan') }}">Layanan</a>
+                <a href="{{ url('/mitra') }}">Mitra</a>
+                <a href="{{ url('/kontak') }}">Kontak</a>
             </div>
             <div class="footer-col">
                 <h4>Kontak</h4>
-                <p><i class="fas fa-map-marker-alt" style="margin-right:8px;color:var(--accent)"></i>BLUD SMKN 1 Cirebon
-                </p>
-                <p><i class="fas fa-phone" style="margin-right:8px;color:var(--accent)"></i>+62 XXX XXXX XXXX</p>
-                <p><i class="fas fa-envelope" style="margin-right:8px;color:var(--accent)"></i>info@nepertech.id</p>
+                <p><i class="fas fa-map-marker-alt" style="margin-right:8px;color:var(--accent)"></i>SMKN 1 Cirebon, Jl. Perjuangan, Kota Cirebon, Jawa Barat 45132</p>
+                <p><i class="fas fa-phone" style="margin-right:8px;color:var(--accent)"></i><a href="tel:+6285129935749" style="display:inline;padding:0;color:inherit;text-decoration:none;">+62 851 2993 5749</a></p>
+                <p><i class="fas fa-envelope" style="margin-right:8px;color:var(--accent)"></i><a href="mailto:info@nepertech.id" style="display:inline;padding:0;color:inherit;text-decoration:none;">info@nepertech.id</a></p>
             </div>
         </div>
         <div class="footer-bottom">

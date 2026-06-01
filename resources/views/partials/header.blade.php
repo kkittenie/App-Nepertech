@@ -58,6 +58,14 @@
             </li>
 
             <li>
+                <a href="{{ url('/mitra') }}" class="nav-link {{ request()->is('mitra') ? 'active' : '' }}">
+
+                    Mitra
+
+                </a>
+            </li>
+
+            <li>
                 <a href="{{ url('/kontak') }}" class="nav-link {{ request()->is('kontak') ? 'active' : '' }}">
 
                     Kontak

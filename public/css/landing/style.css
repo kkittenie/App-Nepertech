@@ -1165,6 +1165,7 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 48px;
 }
 .page-hero h1 {
     margin: 12px 0 0;
@@ -1172,6 +1173,8 @@ section {
 .page-hero-sub {
     font-size: 18px;
     margin-top: 14px;
+    max-width: 620px;
+    line-height: 1.65;
 }
 
 /* ---- Page Hero Visual (decorative right side) ---- */
