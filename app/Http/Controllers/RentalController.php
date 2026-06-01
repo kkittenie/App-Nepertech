@@ -6,6 +6,7 @@ use App\Models\Rental;
 use App\Models\Product;
 use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class RentalController extends Controller
 {
@@ -42,8 +43,8 @@ class RentalController extends Controller
         $product = Product::findOrFail($request->product_id);
 
         // Calculate total price based on duration and pricing columns
-        $pricePerUnit = $request->duration_type === 'tahunan' 
-            ? $product->harga_sewa_tahunan 
+        $pricePerUnit = $request->duration_type === 'tahunan'
+            ? $product->harga_sewa_tahunan
             : $product->harga_sewa_bulanan;
 
         if (!$pricePerUnit || $pricePerUnit <= 0) {
@@ -65,7 +66,8 @@ class RentalController extends Controller
             'total_price'      => $totalPrice,
             'start_date'       => $request->start_date,
             'status'           => 'pending',
-            'admin_notes'      => $request->client_notes, // Store client message in notes temporarily or as a request note
+            'admin_notes'      => $request->client_notes,
+            'payment_token'    => Str::random(32),
         ]);
 
         // Formulate and send dynamic WhatsApp notification to the Client
@@ -110,7 +112,7 @@ class RentalController extends Controller
         }
 
         return redirect()->back()
-            ->with('success', 'Pengajuan sewa Anda berhasil dikirim! Kami telah mengirimkan detail pengajuan ke WhatsApp Anda.');
+            ->with('success', 'Pengajuan sewa Anda berhasil dikirim! Kami telah mengirimkan detail pengajuan ke WhatsApp Anda. Silakan tunggu konfirmasi dari admin.');
     }
 
     /**
@@ -118,15 +120,23 @@ class RentalController extends Controller
      */
     public function index(Request $request)
     {
-        $pendingRentals  = Rental::with('product', 'user')->where('status', 'pending')->latest()->get();
-        $approvedRentals = Rental::with('product', 'user')->where('status', 'approved')->latest()->get();
-        $rejectedRentals = Rental::with('product', 'user')->where('status', 'rejected')->latest()->get();
+        $pendingRentals   = Rental::with('product', 'user')->where('status', 'pending')->latest()->get();
+        $awaitingRentals  = Rental::with('product', 'user')->where('status', 'awaiting_payment')->latest()->get();
+        $submittedRentals = Rental::with('product', 'user')->where('status', 'payment_submitted')->latest()->get();
+        $completedRentals = Rental::with('product', 'user')->where('status', 'completed')->latest()->get();
+        $rejectedRentals  = Rental::with('product', 'user')->where('status', 'rejected')->latest()->get();
 
-        return view('admin.rental.index', compact('pendingRentals', 'approvedRentals', 'rejectedRentals'));
+        return view('admin.rental.index', compact(
+            'pendingRentals',
+            'awaitingRentals',
+            'submittedRentals',
+            'completedRentals',
+            'rejectedRentals'
+        ));
     }
 
     /**
-     * Admin action to approve a rental request and trigger WhatsApp notification.
+     * Admin action to approve a rental request and trigger WhatsApp with payment link.
      */
     public function approve(Request $request, Rental $rental)
     {
@@ -135,16 +145,16 @@ class RentalController extends Controller
         ]);
 
         $rental->update([
-            'status'      => 'approved',
+            'status'      => 'awaiting_payment',
             'admin_notes' => $request->admin_notes,
         ]);
 
-        // Formulate professional WhatsApp message in Indonesian
         $formattedPrice = 'Rp ' . number_format($rental->total_price, 0, ',', '.');
         $formattedDate  = $rental->start_date->format('d M Y');
         $durationLabel  = $rental->duration_label;
+        $paymentLink    = route('rental.payment', $rental->payment_token);
 
-        $waMessage = "*PEMBERITAHUAN PENYEWAAN NEPERTECH* 🚀\n\n";
+        $waMessage = "*PEMBERITAHUAN PENYEWAAN NEPERTECH* 🎉\n\n";
         $waMessage .= "Halo *{$rental->name}*,\n\n";
         $waMessage .= "Kabar baik! Pengajuan penyewaan Anda untuk produk *{$rental->product->name}* telah *DISETUJUI* oleh Admin Nepertech.\n\n";
         $waMessage .= "*Detail Penyewaan:*\n";
@@ -158,12 +168,13 @@ class RentalController extends Controller
             $waMessage .= "\"{$request->admin_notes}\"\n\n";
         }
 
-        $waMessage .= "Admin kami akan menghubungi Anda segera melalui WhatsApp ini untuk proses administrasi lebih lanjut, penyerahan akses/lisensi produk, serta petunjuk pembayaran.\n\n";
+        $waMessage .= "⚠️ *LANGKAH SELANJUTNYA - PEMBAYARAN*\n";
+        $waMessage .= "Silakan klik link berikut untuk melihat instruksi pembayaran dan mengunggah bukti transfer Anda:\n";
+        $waMessage .= "👉 {$paymentLink}\n\n";
         $waMessage .= "Terima kasih telah mempercayai Nepertech!\n";
         $waMessage .= "---\n";
         $waMessage .= "*BLUD SMKN 1 Cirebon*";
 
-        // Dispatch WhatsApp notification
         $waResult = WhatsAppService::sendMessage($rental->whatsapp_number, $waMessage);
 
         $successMsg = 'Pengajuan sewa berhasil disetujui.';
@@ -177,7 +188,7 @@ class RentalController extends Controller
         }
 
         return redirect()->route('admin.rentals.index')
-            ->with('success', $successMsg . ' Pesan WhatsApp notifikasi telah dikirim.');
+            ->with('success', $successMsg . ' Pesan WhatsApp dengan link pembayaran telah dikirim.');
     }
 
     /**
@@ -194,7 +205,6 @@ class RentalController extends Controller
             'admin_notes' => $request->admin_notes,
         ]);
 
-        // Formulate and send dynamic WhatsApp notification to the Client for rejection
         $durationLabel  = $rental->duration_label;
         $formattedPrice = 'Rp ' . number_format($rental->total_price, 0, ',', '.');
 
@@ -216,7 +226,6 @@ class RentalController extends Controller
         $clientMessage .= "---\n";
         $clientMessage .= "*BLUD SMKN 1 Cirebon*";
 
-        // Dispatch WhatsApp notification
         $waResult = WhatsAppService::sendMessage($rental->whatsapp_number, $clientMessage);
 
         $successMsg = 'Pengajuan sewa telah ditolak.';
@@ -231,6 +240,99 @@ class RentalController extends Controller
 
         return redirect()->route('admin.rentals.index')
             ->with('success', $successMsg . ' Pesan WhatsApp notifikasi penolakan telah dikirim.');
+    }
+
+    /**
+     * Show payment page to the renter (accessed via unique token link).
+     */
+    public function paymentPage($token)
+    {
+        $rental = Rental::with('product')->where('payment_token', $token)->firstOrFail();
+        return view('rental.payment', compact('rental'));
+    }
+
+    /**
+     * Renter submits payment receipt (screenshot upload).
+     */
+    public function submitPayment(Request $request, $token)
+    {
+        $rental = Rental::where('payment_token', $token)->firstOrFail();
+
+        $request->validate([
+            'receipt' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // Max 5MB
+        ]);
+
+        if ($request->hasFile('receipt')) {
+            $path = $request->file('receipt')->store('payments/rentals', 'public');
+            $rental->update([
+                'payment_receipt' => $path,
+                'status'          => 'payment_submitted',
+            ]);
+
+            // ── WhatsApp notification to Admin ──
+            $adminPhone = config('services.fonnte.admin_phone');
+            if (!empty($adminPhone)) {
+                $formattedPrice = 'Rp ' . number_format($rental->total_price, 0, ',', '.');
+                $adminMessage  = "*BUKTI PEMBAYARAN SEWA MASUK - NEPERTECH* 📸\n\n";
+                $adminMessage .= "Halo Admin,\n\n";
+                $adminMessage .= "User *{$rental->name}* telah mengirimkan bukti pembayaran untuk transaksi sewa berikut:\n\n";
+                $adminMessage .= "*Detail Transaksi:*\n";
+                $adminMessage .= "• Penyewa: *{$rental->name}* ({$rental->whatsapp_number})\n";
+                $adminMessage .= "• Produk: *{$rental->product->name}*\n";
+                $adminMessage .= "• Durasi: *{$rental->duration_label}*\n";
+                $adminMessage .= "• Total: *{$formattedPrice}*\n\n";
+                $adminMessage .= "Silakan cek dashboard untuk memverifikasi dan mengkonfirmasi pembayaran.\n";
+                $adminMessage .= "Link Dashboard: " . route('admin.rentals.index') . "\n\n";
+                $adminMessage .= "---\n";
+                $adminMessage .= "*Sistem Otomatis Nepertech*";
+
+                WhatsAppService::sendMessage($adminPhone, $adminMessage);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Bukti pembayaran berhasil dikirim! Silakan tunggu konfirmasi dari admin kami.');
+    }
+
+    /**
+     * Admin approves payment and sends final confirmation WA to renter.
+     */
+    public function approvePayment(Request $request, Rental $rental)
+    {
+        $rental->update([
+            'status' => 'completed',
+        ]);
+
+        $formattedPrice = 'Rp ' . number_format($rental->total_price, 0, ',', '.');
+        $formattedDate  = $rental->start_date->format('d M Y');
+        $endDate        = $rental->end_date->format('d M Y');
+
+        $waMessage = "*PEMBAYARAN SEWA BERHASIL DIVALIDASI* ✅\n\n";
+        $waMessage .= "Halo *{$rental->name}*,\n\n";
+        $waMessage .= "Kami telah menerima dan memverifikasi pembayaran Anda sebesar *{$formattedPrice}* untuk penyewaan produk *{$rental->product->name}*.\n\n";
+        $waMessage .= "*Detail Penyewaan Anda:*\n";
+        $waMessage .= "• Produk: *{$rental->product->name}*\n";
+        $waMessage .= "• Durasi: *{$rental->duration_label}*\n";
+        $waMessage .= "• Mulai Sewa: *{$formattedDate}*\n";
+        $waMessage .= "• Berakhir: *{$endDate}*\n\n";
+        $waMessage .= "Tim Nepertech akan segera menghubungi Anda secara personal melalui nomor WhatsApp ini untuk menyerahkan detail akses, link, username, dan password produk.\n\n";
+        $waMessage .= "Terima kasih banyak atas kepercayaan Anda!\n";
+        $waMessage .= "---\n";
+        $waMessage .= "*BLUD SMKN 1 Cirebon*";
+
+        $waResult = WhatsAppService::sendMessage($rental->whatsapp_number, $waMessage);
+
+        $successMsg = 'Pembayaran sewa berhasil diverifikasi.';
+        if (isset($waResult['simulated']) && $waResult['simulated']) {
+            return redirect()->route('admin.rentals.index')
+                ->with('success', $successMsg)
+                ->with('whatsapp_simulated', [
+                    'phone'   => $rental->whatsapp_number,
+                    'message' => $waMessage,
+                ]);
+        }
+
+        return redirect()->route('admin.rentals.index')
+            ->with('success', $successMsg . ' Pesan konfirmasi berhasil dikirim ke penyewa.');
     }
 
     /**

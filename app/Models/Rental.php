@@ -19,8 +19,10 @@ class Rental extends Model
         'duration_value',
         'total_price',
         'start_date',
-        'status',
+        'status',        // pending | awaiting_payment | payment_submitted | completed | rejected
         'admin_notes',
+        'payment_token',
+        'payment_receipt',
     ];
 
     protected $casts = [

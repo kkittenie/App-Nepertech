@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'Pembayaran ' . $sale->product->name . ' — Nepertech')
+@section('title', 'Pembayaran Sewa ' . $rental->product->name . ' — Nepertech')
 
 @push('styles')
 <style>
@@ -250,7 +250,7 @@
     }
     .step-item {
         flex: 1;
-        min-width: 120px;
+        min-width: 110px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -465,13 +465,42 @@
     .btn-mengerti:hover i {
         transform: translateX(4px);
     }
+
+    /* ── Rental Info Box ── */
+    .rental-info-box {
+        background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+        border: 1.5px solid #bae6fd;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    .rental-info-item {
+        flex: 1;
+        min-width: 140px;
+    }
+    .rental-info-item .info-label {
+        font-size: 11px;
+        color: #0284c7;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+    }
+    .rental-info-item .info-value {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0c4a6e;
+    }
 </style>
 @endpush
 
 @section('content')
 
 {{-- ── SCREENSHOT WARNING MODAL (auto-show on awaiting_payment) ── --}}
-@if($sale->status === 'awaiting_payment')
+@if($rental->status === 'awaiting_payment')
 <div class="screenshot-modal-overlay" id="screenshotWarningModal">
     <div class="screenshot-modal-box">
         <div class="screenshot-modal-header">
@@ -499,13 +528,13 @@
                     <div class="li-icon li-icon-3">
                         <i class="fas fa-hourglass-half"></i>
                     </div>
-                    <span>Setelah upload, tunggu <strong>konfirmasi dari admin</strong> via WhatsApp untuk mendapatkan detail akses web.</span>
+                    <span>Setelah upload, tunggu <strong>konfirmasi dari admin</strong> via WhatsApp untuk mendapatkan detail akses produk.</span>
                 </li>
                 <li>
                     <div class="li-icon li-icon-4">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <span>Admin akan mengirimkan link, username & password langsung <strong>via WhatsApp</strong> setelah pembayaran diverifikasi.</span>
+                    <span>Admin akan mengirimkan link, username &amp; password langsung <strong>via WhatsApp</strong> setelah pembayaran diverifikasi.</span>
                 </li>
             </ul>
         </div>
@@ -522,8 +551,8 @@
 <div class="payment-container">
     <div class="payment-card">
         <div class="payment-header">
-            <h2>Halaman Pembayaran</h2>
-            <p>ID Transaksi: #{{ str_pad($sale->id, 5, '0', STR_PAD_LEFT) }} &nbsp;·&nbsp; {{ $sale->product->name }}</p>
+            <h2>Halaman Pembayaran Sewa</h2>
+            <p>ID Transaksi: #{{ str_pad($rental->id, 5, '0', STR_PAD_LEFT) }} &nbsp;·&nbsp; {{ $rental->product->name }}</p>
         </div>
 
         <div class="payment-body">
@@ -540,11 +569,11 @@
 
             {{-- Status Badge --}}
             <div class="text-center">
-                @if($sale->status === 'awaiting_payment')
+                @if($rental->status === 'awaiting_payment')
                     <span class="status-badge status-awaiting"><i class="fas fa-clock"></i> Menunggu Pembayaran</span>
-                @elseif($sale->status === 'payment_submitted')
+                @elseif($rental->status === 'payment_submitted')
                     <span class="status-badge status-submitted"><i class="fas fa-spinner fa-spin"></i> Bukti Sedang Diverifikasi</span>
-                @elseif($sale->status === 'completed')
+                @elseif($rental->status === 'completed')
                     <span class="status-badge status-completed"><i class="fas fa-check-circle"></i> Pembayaran Dikonfirmasi</span>
                 @endif
             </div>
@@ -555,47 +584,63 @@
                     <div class="step-num">✓</div>
                     <span>Request Disetujui</span>
                 </div>
-                <div class="step-item {{ $sale->status === 'awaiting_payment' ? 'active-step' : 'done-step' }}">
-                    <div class="step-num">{{ $sale->status === 'awaiting_payment' ? '2' : '✓' }}</div>
-                    <span>Scan & Bayar QRIS</span>
+                <div class="step-item {{ $rental->status === 'awaiting_payment' ? 'active-step' : 'done-step' }}">
+                    <div class="step-num">{{ $rental->status === 'awaiting_payment' ? '2' : '✓' }}</div>
+                    <span>Scan &amp; Bayar QRIS</span>
                 </div>
-                <div class="step-item {{ $sale->status === 'payment_submitted' ? 'active-step' : ($sale->status === 'completed' ? 'done-step' : '') }}">
-                    <div class="step-num">{{ $sale->status === 'completed' ? '✓' : '3' }}</div>
+                <div class="step-item {{ $rental->status === 'payment_submitted' ? 'active-step' : ($rental->status === 'completed' ? 'done-step' : '') }}">
+                    <div class="step-num">{{ $rental->status === 'completed' ? '✓' : '3' }}</div>
                     <span>Upload Bukti</span>
                 </div>
-                <div class="step-item {{ $sale->status === 'completed' ? 'done-step' : '' }}">
-                    <div class="step-num">{{ $sale->status === 'completed' ? '✓' : '4' }}</div>
+                <div class="step-item {{ $rental->status === 'completed' ? 'done-step' : '' }}">
+                    <div class="step-num">{{ $rental->status === 'completed' ? '✓' : '4' }}</div>
                     <span>Terima Akses</span>
                 </div>
             </div>
 
             {{-- Buyer Info --}}
-            <div class="row mb-4">
+            <div class="row mb-3">
                 <div class="col-md-6">
                     <p class="text-muted small mb-1" style="font-weight:600; text-transform:uppercase; letter-spacing:.04em;">Produk</p>
-                    <h5 class="fw-bold" style="color:#0f172a;">{{ $sale->product->name }}</h5>
+                    <h5 class="fw-bold" style="color:#0f172a;">{{ $rental->product->name }}</h5>
                 </div>
                 <div class="col-md-6 text-md-end mt-3 mt-md-0">
                     <p class="text-muted small mb-1" style="font-weight:600; text-transform:uppercase; letter-spacing:.04em;">Atas Nama</p>
-                    <h5 class="fw-bold" style="color:#0f172a;">{{ $sale->name }}</h5>
+                    <h5 class="fw-bold" style="color:#0f172a;">{{ $rental->name }}</h5>
+                </div>
+            </div>
+
+            {{-- Rental Detail Info --}}
+            <div class="rental-info-box">
+                <div class="rental-info-item">
+                    <div class="info-label">Durasi Sewa</div>
+                    <div class="info-value">{{ $rental->duration_label }}</div>
+                </div>
+                <div class="rental-info-item">
+                    <div class="info-label">Mulai Sewa</div>
+                    <div class="info-value">{{ $rental->start_date->format('d M Y') }}</div>
+                </div>
+                <div class="rental-info-item">
+                    <div class="info-label">Berakhir</div>
+                    <div class="info-value">{{ $rental->end_date->format('d M Y') }}</div>
                 </div>
             </div>
 
             {{-- Price Box --}}
             <div class="price-box">
                 <p>Total yang Harus Dibayar</p>
-                <h3>Rp {{ number_format($sale->total_price, 0, ',', '.') }}</h3>
+                <h3>Rp {{ number_format($rental->total_price, 0, ',', '.') }}</h3>
             </div>
 
             {{-- ── AWAITING PAYMENT STATE ── --}}
-            @if($sale->status === 'awaiting_payment')
+            @if($rental->status === 'awaiting_payment')
 
                 {{-- Reminder Warning --}}
                 <div class="screenshot-warning">
                     <div class="warn-icon">📸</div>
                     <div>
                         <h5>Harap Screenshot Bukti Pembayaran!</h5>
-                        <p>Setelah scan & bayar QRIS di bawah, <strong>segera screenshot/foto bukti pembayaran</strong> sebelum menutup halaman ini. Upload bukti di form bawah agar admin dapat memverifikasi dan mengirim akses produk ke WhatsApp Anda.</p>
+                        <p>Setelah scan &amp; bayar QRIS di bawah, <strong>segera screenshot/foto bukti pembayaran</strong> sebelum menutup halaman ini. Upload bukti di form bawah agar admin dapat memverifikasi dan mengirim akses produk ke WhatsApp Anda.</p>
                     </div>
                 </div>
 
@@ -614,7 +659,7 @@
 
                 {{-- Upload Form --}}
                 <h5 class="fw-bold mb-3 text-center" style="color:#0f172a;">Upload Bukti Pembayaran</h5>
-                <form action="{{ route('sale.payment.submit', $sale->payment_token) }}" method="POST" enctype="multipart/form-data" id="paymentForm">
+                <form action="{{ route('rental.payment.submit', $rental->payment_token) }}" method="POST" enctype="multipart/form-data" id="paymentForm">
                     @csrf
 
                     <div class="upload-box mb-3" onclick="document.getElementById('receiptFile').click()">
@@ -639,10 +684,10 @@
                 </form>
 
             {{-- ── PAYMENT SUBMITTED STATE ── --}}
-            @elseif($sale->status === 'payment_submitted')
+            @elseif($rental->status === 'payment_submitted')
                 <div class="text-center py-4">
                     <div class="mb-4">
-                        <img src="{{ asset('storage/' . $sale->payment_receipt) }}"
+                        <img src="{{ asset('storage/' . $rental->payment_receipt) }}"
                              alt="Bukti Pembayaran"
                              style="max-width: 280px; border-radius: 14px; border: 1.5px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
                     </div>
@@ -656,14 +701,14 @@
                 </div>
 
             {{-- ── COMPLETED STATE ── --}}
-            @elseif($sale->status === 'completed')
+            @elseif($rental->status === 'completed')
                 <div class="text-center py-4">
                     <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background: #dcfce7; color: #16a34a; font-size: 36px;">
                         <i class="fas fa-check"></i>
                     </div>
                     <h5 class="fw-bold text-dark">Pembayaran Telah Dikonfirmasi!</h5>
                     <p class="text-muted" style="max-width: 400px; margin: 8px auto 0; line-height: 1.7;">
-                        Terima kasih atas pembelian Anda! Tim kami sudah / akan segera menghubungi Anda via <strong>WhatsApp</strong> untuk menyerahkan detail akses produk web.
+                        Terima kasih atas pembayaran Anda! Tim kami sudah / akan segera menghubungi Anda via <strong>WhatsApp</strong> untuk menyerahkan detail akses, link, username, dan password produk.
                     </p>
                     <div class="mt-4 p-3 rounded-3 d-inline-block" style="background: #f0fdf4; border: 1.5px solid #86efac;">
                         <i class="fab fa-whatsapp text-success me-2"></i>
