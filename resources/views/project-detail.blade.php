@@ -494,6 +494,14 @@
                     <p class="pd-pricing-desc">Pilih model yang sesuai dengan kebutuhan bisnis Anda.</p>
                 </div>
                 <div class="pd-pricing-cards">
+                    @if(!$product->isAvailable())
+                    <div style="background: rgba(220, 38, 38, 0.1); border: 1px solid rgba(220, 38, 38, 0.2); border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; width: 100%;">
+                        <i class="fas fa-lock" style="font-size: 24px; color: #dc2626; margin-bottom: 12px;"></i>
+                        <h4 style="color: #991b1b; margin: 0 0 8px 0; font-size: 16px;">Produk Tidak Tersedia</h4>
+                        <p style="margin: 0; color: #b91c1c; font-size: 13.5px;">Produk ini sedang disewa aktif atau telah terjual secara permanen.</p>
+                    </div>
+                    @else
+                    @if($product->harga_jual)
                     <div class="pd-price-card pd-price-card--featured">
                         <span class="pd-price-badge">Populer</span>
                         <h4 class="pd-price-type">Jual Lepas</h4>
@@ -503,6 +511,7 @@
                             <i class="fas fa-shopping-cart me-2"></i> Beli Sekarang
                         </button>
                     </div>
+                    @endif
 
                     @if($product->harga_sewa_bulanan)
                     <div class="pd-price-card">
@@ -524,6 +533,7 @@
                             <i class="fas fa-calendar-check me-2"></i> Sewa Tahunan
                         </button>
                     </div>
+                    @endif
                     @endif
                 </div>
             </div>

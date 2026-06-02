@@ -297,4 +297,13 @@ class SaleController extends Controller
         return redirect()->route('admin.sales.index')
             ->with('success', $successMsg . ' Pesan konfirmasi berhasil dikirim.');
     }
+
+    /**
+     * Delete a sale record (for testing purposes or canceling a permanent sale).
+     */
+    public function destroy(Sale $sale)
+    {
+        $sale->delete();
+        return redirect()->back()->with('success', 'Data penjualan berhasil dihapus. Produk kembali tersedia.');
+    }
 }

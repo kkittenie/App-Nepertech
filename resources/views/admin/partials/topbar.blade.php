@@ -91,9 +91,6 @@
                     </li>
                     @endforelse
                 </ul>
-                <div class="topbar-dropdown-footer">
-                    <a href="#">Lihat semua notifikasi</a>
-                </div>
             </div>
         </div>
 

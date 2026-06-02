@@ -470,9 +470,11 @@
                                     <td>
                                         <span class="fw-bold text-dark" style="font-size: 14.5px;">Rp {{ number_format($rental->total_price, 0, ',', '.') }}</span>
                                     </td>
-                                    <td class="pe-4 text-center">
-                                        <span class="badge bg-success-subtle text-success px-3 py-2 fw-semibold" style="font-size:11.5px; border-radius:30px;"><i class="ti ti-circle-check"></i> Lunas</span>
-                                    </td>
+                                     <td class="pe-4 text-center">
+                                        <div class="d-flex flex-column align-items-center gap-2">
+                                            <span class="badge bg-success-subtle text-success px-3 py-2 fw-semibold" style="font-size:11.5px; border-radius:30px;"><i class="ti ti-circle-check"></i> Lunas</span>
+                                        </div>
+                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>

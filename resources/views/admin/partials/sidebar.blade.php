@@ -51,6 +51,14 @@
         </li>
 
         <li>
+            <a class="nav-link {{ request()->routeIs('structures.*') ? 'active' : '' }}"
+               href="{{ route('structures.index') }}">
+                <i class="ti ti-hierarchy-2"></i>
+                <span class="nav-text">Struktur Organisasi</span>
+            </a>
+        </li>
+
+        <li>
             <a class="nav-link {{ request()->routeIs('admin.rentals.*') ? 'active' : '' }}"
                href="{{ route('admin.rentals.index') }}">
                 <i class="ti ti-calendar-event"></i>

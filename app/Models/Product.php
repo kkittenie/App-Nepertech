@@ -63,4 +63,32 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
+
+    /**
+     * Check if the product is currently available for rent or purchase.
+     */
+    public function isAvailable(): bool
+    {
+        // 1. Check if there is an active rental (status: completed, and days_remaining >= 0)
+        $activeRentals = Rental::where('product_id', $this->id)
+            ->where('status', 'completed')
+            ->get();
+            
+        foreach ($activeRentals as $rental) {
+            if ($rental->days_remaining >= 0) {
+                return false; // Currently being rented
+            }
+        }
+        
+        // 2. Check if it has been permanently sold (status: completed)
+        $isSold = Sale::where('product_id', $this->id)
+            ->where('status', 'completed')
+            ->exists();
+            
+        if ($isSold) {
+            return false; // Already sold permanently
+        }
+        
+        return true;
+    }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\StructureController;
 
 
 Route::middleware('guest')->group(function () {
@@ -76,6 +77,15 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{mitra}', [\App\Http\Controllers\MitraController::class, 'destroy'])->name('destroy');
     });
 
+    Route::prefix('structures')->name('structures.')->group(function () {
+        Route::get('/', [StructureController::class, 'index'])->name('index');
+        Route::get('/create', [StructureController::class, 'create'])->name('create');
+        Route::post('/', [StructureController::class, 'store'])->name('store');
+        Route::get('/{structure}/edit', [StructureController::class, 'edit'])->name('edit');
+        Route::put('/{structure}', [StructureController::class, 'update'])->name('update');
+        Route::delete('/{structure}', [StructureController::class, 'destroy'])->name('destroy');
+    });
+
     Route::prefix('kategori')->name('kategori.')->group(function () {
 
     Route::get('/', [KategoriController::class, 'index'])->name('index');
@@ -100,13 +110,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/{rental}/reject', [\App\Http\Controllers\RentalController::class, 'reject'])->name('reject');
         Route::post('/{rental}/remind', [\App\Http\Controllers\RentalController::class, 'remind'])->name('remind');
         Route::post('/{rental}/approve-payment', [\App\Http\Controllers\RentalController::class, 'approvePayment'])->name('approvePayment');
+        Route::post('/{rental}/stop', [\App\Http\Controllers\RentalController::class, 'stop'])->name('stop');
     });
 
     Route::prefix('admin/sales')->name('admin.sales.')->middleware('admin')->group(function () {
-        Route::get('/', [SaleController::class, 'index'])->name('index');
-        Route::post('/{sale}/approve', [SaleController::class, 'approve'])->name('approve');
-        Route::post('/{sale}/reject', [SaleController::class, 'reject'])->name('reject');
-        Route::post('/{sale}/approve-payment', [SaleController::class, 'approvePayment'])->name('approvePayment');
+        Route::get('/', [\App\Http\Controllers\SaleController::class, 'index'])->name('index');
+        Route::post('/{sale}/approve', [\App\Http\Controllers\SaleController::class, 'approve'])->name('approve');
+        Route::post('/{sale}/reject', [\App\Http\Controllers\SaleController::class, 'reject'])->name('reject');
+        Route::post('/{sale}/approve-payment', [\App\Http\Controllers\SaleController::class, 'approvePayment'])->name('approvePayment');
+        Route::delete('/{sale}', [\App\Http\Controllers\SaleController::class, 'destroy'])->name('destroy');
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

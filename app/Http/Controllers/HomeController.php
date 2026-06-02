@@ -25,7 +25,8 @@ class HomeController extends Controller
 
     public function profil()
     {
-        return view('profil');
+        $structures = \App\Models\Structure::orderBy('order', 'asc')->get();
+        return view('profil', compact('structures'));
     }
 
     public function layanan()

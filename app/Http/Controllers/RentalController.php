@@ -382,4 +382,16 @@ class RentalController extends Controller
         return redirect()->route('dashboard')
             ->with('success', $successMsg . ' Pesan terkirim via WhatsApp.');
     }
+
+    /**
+     * Admin action to stop an active rental.
+     */
+    public function stop(Rental $rental)
+    {
+        $rental->update([
+            'status' => 'terminated',
+        ]);
+
+        return redirect()->back()->with('success', 'Masa sewa berhasil dihentikan. Produk sekarang tersedia kembali.');
+    }
 }

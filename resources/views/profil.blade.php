@@ -380,6 +380,10 @@
 
             <div class="section-header reveal">
 
+                <span class="section-tag">
+                    Tim Kami
+                </span>
+
                 <h2>
                     Struktur
                     <span class="gradient-text">
@@ -387,59 +391,87 @@
                     </span>
                 </h2>
 
-            </div>
-
-            <div class="grid-3">
-
-                <!-- CARD 1 -->
-                <div class="card reveal" style="transition-delay:0s">
-
-                    <div class="card-icon-wrap">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-
-                    <h3>Nama Kepala TEFA</h3>
-
-                    <p>
-                        Kepala TEFA<br>
-                        BLUD SMKN 1 Cirebon
-                    </p>
-
-                </div>
-
-                <!-- CARD 2 -->
-                <div class="card reveal" style="transition-delay:.12s">
-
-                    <div class="card-icon-wrap">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-
-                    <h3>Nama Koordinator</h3>
-
-                    <p>
-                        Koordinator Proyek<br>
-                        BLUD SMKN 1 Cirebon
-                    </p>
-
-                </div>
-
-                <!-- CARD 3 -->
-                <div class="card reveal" style="transition-delay:.24s">
-
-                    <div class="card-icon-wrap">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-
-                    <h3>Nama Pembimbing</h3>
-
-                    <p>
-                        Pembimbing Teknis<br>
-                        BLUD SMKN 1 Cirebon
-                    </p>
-
-                </div>
+                <p class="section-desc">
+                    Jajaran kepemimpinan dan tim yang menggerakkan Nepertech.
+                </p>
 
             </div>
+
+            @if($structures->count() > 0)
+
+            @php
+                $topMembers = $structures->take(3);
+                $bottomMembers = $structures->slice(3);
+            @endphp
+
+            <div class="org-chart reveal">
+
+                {{-- Top 3 members: each displayed individually, stacked vertically --}}
+                @foreach($topMembers as $idx => $member)
+
+                <div class="org-top">
+                    <div class="org-card {{ $idx === 0 ? 'org-card-leader' : '' }}">
+                        <div class="org-card-avatar">
+                            @if($member->image)
+                                <img src="{{ asset('storage/' . $member->image) }}" alt="{{ $member->name }}">
+                            @else
+                                <div class="org-card-avatar-fallback">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                            @endif
+                        </div>
+                        <h3 class="org-card-name">{{ $member->name }}</h3>
+                        <p class="org-card-position">{{ $member->position }}</p>
+                        <div class="org-card-bar"></div>
+                    </div>
+                </div>
+
+                {{-- Connector line between each top member --}}
+                @if(!$loop->last || $bottomMembers->count() > 0)
+                <div class="org-connector">
+                    <div class="org-connector-line"></div>
+                </div>
+                @endif
+
+                @endforeach
+
+                {{-- Bottom members: 4+ displayed in rows of 3 --}}
+                @if($bottomMembers->count() > 0)
+
+                <div class="org-members org-cols-{{ min(3, $bottomMembers->count()) }}">
+                    @foreach($bottomMembers as $member)
+                    <div class="org-member-col">
+                        <div class="org-member-vline"></div>
+                        <div class="org-card">
+                            <div class="org-card-avatar">
+                                @if($member->image)
+                                    <img src="{{ asset('storage/' . $member->image) }}" alt="{{ $member->name }}">
+                                @else
+                                    <div class="org-card-avatar-fallback">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <h3 class="org-card-name">{{ $member->name }}</h3>
+                            <p class="org-card-position">{{ $member->position }}</p>
+                            <div class="org-card-bar"></div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+                @endif
+
+            </div>
+
+            @else
+
+            <div class="reveal" style="text-align:center; padding:60px 20px; color:var(--text-muted);">
+                <i class="fas fa-users" style="font-size:48px; opacity:0.3; margin-bottom:16px; display:block;"></i>
+                <p>Data struktur organisasi belum tersedia.</p>
+            </div>
+
+            @endif
 
         </section>
 

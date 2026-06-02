@@ -4023,3 +4023,277 @@ html {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* ==================== ORG CHART ==================== */
+.org-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.org-top {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.org-card {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition:
+        transform 0.4s var(--ease-spring),
+        box-shadow 0.4s var(--ease),
+        border-color 0.3s;
+    min-width: 200px;
+    max-width: 280px;
+    width: 100%;
+}
+
+.org-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.org-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.org-card:hover::before {
+    opacity: 1;
+}
+
+/* Leader card - prominent */
+.org-card-leader {
+    min-width: 260px;
+    max-width: 320px;
+    padding: 40px 32px 32px;
+    border: 2px solid rgba(10, 37, 64, 0.12);
+    box-shadow: 0 8px 32px rgba(10, 37, 64, 0.08);
+}
+
+.org-card-leader::before {
+    opacity: 1;
+    height: 4px;
+}
+
+.org-card-leader .org-card-avatar {
+    width: 90px;
+    height: 90px;
+}
+
+.org-card-leader .org-card-avatar-fallback {
+    font-size: 32px;
+}
+
+.org-card-leader .org-card-name {
+    font-size: 18px;
+}
+
+/* Avatar */
+.org-card-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    overflow: hidden;
+    border: 3px solid rgba(10, 37, 64, 0.08);
+    transition: border-color 0.3s, transform 0.3s var(--ease-spring);
+}
+
+.org-card:hover .org-card-avatar {
+    border-color: var(--primary);
+    transform: scale(1.05);
+}
+
+.org-card-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.org-card-avatar-fallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(10, 37, 64, 0.06), rgba(44, 107, 158, 0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: var(--primary);
+    transition: background 0.3s;
+}
+
+.org-card:hover .org-card-avatar-fallback {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+}
+
+.org-card-name {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+}
+
+.org-card-position {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+
+.org-card-bar {
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 99px;
+    margin: 0 auto;
+    opacity: 0.4;
+    transition: opacity 0.3s, width 0.3s var(--ease-spring);
+}
+
+.org-card:hover .org-card-bar {
+    opacity: 1;
+    width: 60px;
+}
+
+/* Connectors */
+.org-connector {
+    display: flex;
+    justify-content: center;
+    height: 40px;
+}
+
+.org-connector-line {
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary), var(--accent));
+    border-radius: 2px;
+    opacity: 0.3;
+}
+
+.org-members {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.org-members.org-cols-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1000px;
+}
+
+.org-members.org-cols-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 660px;
+}
+
+.org-members.org-cols-1 {
+    display: flex;
+    justify-content: center;
+    max-width: 300px;
+}
+
+/* Horizontal connector line on desktop */
+.org-members.org-cols-3::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(16.666% - 8px);
+    right: calc(16.666% - 8px);
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--primary), var(--accent));
+    opacity: 0.3;
+}
+
+.org-members.org-cols-2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(25% - 6px);
+    right: calc(25% - 6px);
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--primary), var(--accent));
+    opacity: 0.3;
+}
+
+.org-member-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.org-member-vline {
+    width: 2px;
+    height: 32px;
+    background: linear-gradient(180deg, var(--primary), var(--accent));
+    border-radius: 2px;
+    opacity: 0.3;
+}
+
+/* Hide vertical lines for row 2+ on desktop */
+.org-members.org-cols-3 > .org-member-col:nth-child(n+4) .org-member-vline {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .org-members.org-cols-3,
+    .org-members.org-cols-2 {
+        grid-template-columns: 1fr;
+        gap: 0;
+        max-width: 280px;
+    }
+
+    .org-members.org-cols-1 {
+        max-width: 280px;
+    }
+
+    /* Hide horizontal lines on mobile */
+    .org-members.org-cols-3::before,
+    .org-members.org-cols-2::before {
+        display: none;
+    }
+
+    /* Show all vertical lines on mobile to create a single vertical chain */
+    .org-members > .org-member-col .org-member-vline {
+        display: block !important;
+        height: 24px;
+    }
+
+    .org-connector {
+        height: 24px;
+    }
+
+    .org-card {
+        min-width: 0;
+    }
+
+    .org-card-leader {
+        min-width: 0;
+    }
+}

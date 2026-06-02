@@ -78,11 +78,11 @@ class Rental extends Model
     // ── Static Helpers (for controller use) ────────────────────────────────
 
     /**
-     * Return approved rentals expiring within $days days (inclusive of today).
+     * Return active rentals expiring within $days days (inclusive of today).
      */
     public static function expiringSoon(int $days = 7)
     {
-        return static::where('status', 'approved')
+        return static::where('status', 'completed')
             ->with(['product', 'user'])
             ->get()
             ->filter(fn($r) => $r->days_remaining >= 0 && $r->days_remaining <= $days)
@@ -91,11 +91,11 @@ class Rental extends Model
     }
 
     /**
-     * Return approved rentals that have already passed their end date.
+     * Return active rentals that have already passed their end date.
      */
     public static function alreadyExpired()
     {
-        return static::where('status', 'approved')
+        return static::where('status', 'completed')
             ->with(['product', 'user'])
             ->get()
             ->filter(fn($r) => $r->days_remaining < 0)
